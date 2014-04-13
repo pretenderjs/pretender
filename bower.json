@@ -12,9 +12,12 @@
     "test",
     "tests"
   ],
+  "main": [
+    "./index.js"
+  ],
   "dependencies": {
     "FakeXMLHttpRequest": "~0.0.1",
-    "route-recognizer": "*",
+    "route-recognizer": "*"
   },
   "devDependencies": {
     "jquery": "~2.1.0"
