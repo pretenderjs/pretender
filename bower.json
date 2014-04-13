@@ -1,0 +1,22 @@
+{
+  "name": "pretender",
+  "version": "0.0.0",
+  "authors": [
+    "Trek Glowacki <trek.glowacki@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "FakeXMLHttpRequest": "~0.0.1",
+    "route-recognizer": "*",
+  },
+  "devDependencies": {
+    "jquery": "~2.1.0"
+  }
+}
