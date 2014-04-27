@@ -13,7 +13,7 @@
     "tests"
   ],
   "main": [
-    "./index.js"
+    "./pretender.js"
   ],
   "dependencies": {
     "FakeXMLHttpRequest": "~0.0.1",

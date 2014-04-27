@@ -1,6 +1,7 @@
 var forEach = [].forEach;
 
 function Pretender(maps){
+  maps = maps || function(){};
   // Herein we keep track of RouteRecognizer instances
   // keyed by HTTP method
   this.registry = {};
@@ -53,13 +54,19 @@ Pretender.prototype = {
     registry.add([{path: path, handler: handler}])
   },
   handleRequest: function handleRequest(request){
-    var registry = this.registry[request.method],
-        match = registry.recognize(request.url)[0];
+    var registry = this.registry[request.method], match;
+
+    if (registry) {
+      var matches = registry.recognize(request.url)[0],
+          match = matches ? matches[0] : null;
+    };
+
+
     if (match) {
       request.params = match.params;
       request.respond.apply(request, match.handler(request));
     } else {
-      request.reply(404, {}, "");
+      request.respond(404, {}, "");
     }
   },
   shutdown: function shutdown(){
