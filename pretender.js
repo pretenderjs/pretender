@@ -4,7 +4,14 @@ function Pretender(maps){
   maps = maps || function(){};
   // Herein we keep track of RouteRecognizer instances
   // keyed by HTTP method
-  this.registry = {};
+  this.registry = {
+    GET: new RouteRecognizer(),
+    PUT: new RouteRecognizer(),
+    POST: new RouteRecognizer(),
+    DELETE: new RouteRecognizer(),
+    PATCH: new RouteRecognizer(),
+    HEAD: new RouteRecognizer()
+  };
 
   this.defaultHeaders = {};
 
@@ -50,16 +57,13 @@ Pretender.prototype = {
   patch: verbify('PATCH'),
   head: verbify('HEAD'),
   register: function register(verb, path, handler){
-    var registry = this.registry[verb] = this.registry[verb] || new RouteRecognizer();
+    var registry = this.registry[verb];
     registry.add([{path: path, handler: handler}])
   },
   handleRequest: function handleRequest(request){
-    var registry = this.registry[request.method];
-
-    if (registry) {
-      var matches = registry.recognize(request.url),
-          match = matches ? matches[0] : null;
-    };
+    var registry = this.registry[request.method.toUpperCase()],
+        matches = registry.recognize(request.url),
+        match = matches ? matches[0] : null;
 
 
     if (match) {

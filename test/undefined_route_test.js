@@ -17,5 +17,5 @@ test("errors the response", function(){
       equal(status, "error");
       ok(true, "calls 404");
     }
-  })
+  });
 });
