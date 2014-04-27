@@ -54,10 +54,10 @@ Pretender.prototype = {
     registry.add([{path: path, handler: handler}])
   },
   handleRequest: function handleRequest(request){
-    var registry = this.registry[request.method], match;
+    var registry = this.registry[request.method];
 
     if (registry) {
-      var matches = registry.recognize(request.url)[0],
+      var matches = registry.recognize(request.url),
           match = matches ? matches[0] : null;
     };
 

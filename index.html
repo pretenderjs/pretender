@@ -4,7 +4,7 @@
   <script type="text/javascript" src="bower_components/FakeXMLHttpRequest/fake_xml_http_request.js"></script>
   <script type="text/javascript" src="bower_components/route-recognizer/dist/route-recognizer.js"></script>
   <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
-  <script type="text/javascript" src="index.js"></script>
+  <script type="text/javascript" src="pretender.js"></script>
   <script type="text/javascript">
     // handlers should accept headers {}, body ""
     // handlers must return [status 000, headers {}, and body ""]
@@ -19,6 +19,7 @@
     $.ajax({
       url:'/messages/10',
       error: function(){
+        debugger;
         console.log("e");
       },
       success: function(){
