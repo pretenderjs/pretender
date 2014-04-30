@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "FakeXMLHttpRequest": "~0.0.1",
-    "route-recognizer": "*"
+    "route-recognizer": "~0.1.1"
   },
   "devDependencies": {
     "jquery": "~2.1.0"
