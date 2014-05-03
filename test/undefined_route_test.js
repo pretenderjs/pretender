@@ -9,13 +9,21 @@ module("pretender route not defined", {
   }
 });
 
-test("errors the response", function(){
+test("calls unhandledRequest", function(){
+  pretender.unhandledRequest = function(verb, path){
+    equal('GET', verb);
+    equal('not-defined', path);
+    ok(true);
+  }
+
   $.ajax({
-    url: 'not-defined',
-    error: function(xhr, status, text){
-      equal(text, "Not Found");
-      equal(status, "error");
-      ok(true, "calls 404");
-    }
+    url: 'not-defined'
   });
+});
+
+test("errors by default", function(){
+  var verb = 'GET', path = '/foo/bar'
+  throws( function() {
+    pretender.unhandledRequest(verb, path);
+  }, 'Pretender intercepted GET /foo/bar but no handler was defined for this type of request');
 });
