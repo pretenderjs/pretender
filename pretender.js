@@ -70,8 +70,11 @@ Pretender.prototype = {
       request.params = match.params;
       request.respond.apply(request, match.handler(request));
     } else {
-      request.respond(404, {}, "");
+      this.unhandledRequest(request.method.toUpperCase(), request.url, request);
     }
+  },
+  unhandledRequest: function(verb, path, req) {
+    throw new Error("Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request")
   },
   shutdown: function shutdown(){
     window.XMLHttpRequest = this._nativeXMLHttpRequest
