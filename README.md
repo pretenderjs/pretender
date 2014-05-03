@@ -20,7 +20,7 @@ var PHOTOS = {
 
 var server = new Pretender(function(){
   this.get('/photos', function(request){
-    var all =  JSON.stringify(Object.keys(PHOTOS).map(function(k){return PHOTOS[k]})
+    var all =  JSON.stringify(Object.keys(PHOTOS).map(function(k){return PHOTOS[k]}))
     return [200, {"Content-Type": "application/json"}, all]
   });
 
