@@ -3,7 +3,7 @@ var forEach = [].forEach;
 function Pretender(maps){
   maps = maps || function(){};
   // Herein we keep track of RouteRecognizer instances
-  // keyed by HTTP method
+  // keyed by HTTP method. Feel free to add more as needed.
   this.registry = {
     GET: new RouteRecognizer(),
     PUT: new RouteRecognizer(),
@@ -12,8 +12,6 @@ function Pretender(maps){
     PATCH: new RouteRecognizer(),
     HEAD: new RouteRecognizer()
   };
-
-  this.defaultHeaders = {};
 
   // reference the native XMLHttpRequest object so
   // it can be restored later
@@ -61,20 +59,27 @@ Pretender.prototype = {
     registry.add([{path: path, handler: handler}])
   },
   handleRequest: function handleRequest(request){
-    var registry = this.registry[request.method.toUpperCase()],
-        matches = registry.recognize(request.url),
-        match = matches ? matches[0] : null;
+    var handler = this._handlerFor(request);
 
-
-    if (match) {
-      request.params = match.params;
-      request.respond.apply(request, match.handler(request));
+    if (handler) {
+      request.respond.apply(request, handler.handler(request));
     } else {
       this.unhandledRequest(request.method.toUpperCase(), request.url, request);
     }
   },
-  unhandledRequest: function(verb, path, req) {
+  unhandledRequest: function(verb, path, request) {
     throw new Error("Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request")
+  },
+  _handlerFor: function(request){
+    var registry = this.registry[request.method.toUpperCase()];
+    var matches = registry.recognize(request.url);
+
+    var match = matches ? matches[0] : null;
+    if (match) {
+      request.params = match.params;
+    }
+
+    return match;
   },
   shutdown: function shutdown(){
     window.XMLHttpRequest = this._nativeXMLHttpRequest
