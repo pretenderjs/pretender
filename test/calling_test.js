@@ -28,3 +28,13 @@ test("params are passed", function(){
   $.ajax({url: '/some/path/1'});
   equal(params.id, 1);
 });
+
+test("queryParams are passed", function(){
+  var params;
+  pretender.get('/some/path', function(request){
+    params = request.queryParams
+  });
+
+  $.ajax({url: '/some/path?zulu=nation'});
+  equal(params.zulu, 'nation');
+});
