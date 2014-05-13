@@ -52,7 +52,7 @@ var server = new Pretender(function(){
     request // the xhr object
     request.params // {song_id: 'the id passed in the url'}
 
-    return [202, {"Content-Type": "application/json", "{}"}]
+    return [202, {"Content-Type": "application/json"}, "{}"]
   });
 });
 
