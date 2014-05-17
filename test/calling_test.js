@@ -18,3 +18,23 @@ test("a mapping function is optional", function(){
   $.ajax({url: '/some/path'});
   ok(wasCalled);
 });
+
+test("params are passed", function(){
+  var params;
+  pretender.get('/some/path/:id', function(request){
+    params = request.params
+  });
+
+  $.ajax({url: '/some/path/1'});
+  equal(params.id, 1);
+});
+
+test("queryParams are passed", function(){
+  var params;
+  pretender.get('/some/path', function(request){
+    params = request.queryParams
+  });
+
+  $.ajax({url: '/some/path?zulu=nation'});
+  equal(params.zulu, 'nation');
+});

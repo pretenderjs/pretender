@@ -77,6 +77,7 @@ Pretender.prototype = {
     var match = matches ? matches[0] : null;
     if (match) {
       request.params = match.params;
+      request.queryParams = matches.queryParams;
     }
 
     return match;
