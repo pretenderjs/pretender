@@ -51,6 +51,7 @@ var server = new Pretender(function(){
   this.put('/api/songs/:song_id', function(request){
     request // the xhr object
     request.params // {song_id: 'the id passed in the url'}
+    request.queryParams // any query params on the request, here just {}
 
     return [202, {"Content-Type": "application/json", "{}"}]
   });
