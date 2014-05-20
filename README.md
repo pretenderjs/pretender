@@ -59,6 +59,21 @@ var server = new Pretender(function(){
 
 ```
 
+## Using the Native XMLHttpRequest Object for Unhandled Routes
+
+By default, pretender will throw an error if it doesn't know how to handle a route.
+You can optionally have the browser handle these requests by specifying `passthroughUnhandledRequests = true`:
+
+```js
+var pretender = new Pretender(function(){
+  // routes go here
+});
+pretender.passthroughUnhandledRequests = true;
+$.ajax('/something/on/the/server')
+```
+
+This is useful when using asynchronous script loaders such as Require.js.
+
 ### Clean up
 When you're done mocking, be sure to call `shutdown()` to restore the native XMLHttpRequest object:
 
