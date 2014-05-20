@@ -27,3 +27,12 @@ test("errors by default", function(){
     pretender.unhandledRequest(verb, path);
   }, 'Pretender intercepted GET /foo/bar but no handler was defined for this type of request');
 });
+
+test("adds the request to the array of unhandled requests by default", function(){
+  $.ajax({
+    url: 'not-defined'
+  });
+
+  var req = pretender.unhandledRequests[0];
+  equal(req.url, 'not-defined')
+});

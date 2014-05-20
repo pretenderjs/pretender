@@ -38,3 +38,16 @@ test("queryParams are passed", function(){
   $.ajax({url: '/some/path?zulu=nation'});
   equal(params.zulu, 'nation');
 });
+
+test("adds requests to the list of handled requests", function(){
+  var params;
+  pretender.get('/some/path', function(request){
+    params = request.queryParams
+  });
+
+  $.ajax({url: '/some/path'});
+
+  var req = pretender.handledRequests[0];
+  equal(req.url, '/some/path');
+});
+

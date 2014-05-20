@@ -13,6 +13,9 @@ function Pretender(maps){
     HEAD: new RouteRecognizer()
   };
 
+  this.handledRequests = [];
+  this.unhandledRequests = [];
+
   // reference the native XMLHttpRequest object so
   // it can be restored later
   this._nativeXMLHttpRequest = window.XMLHttpRequest;
@@ -62,8 +65,10 @@ Pretender.prototype = {
     var handler = this._handlerFor(request);
 
     if (handler) {
+      this.handledRequests.push(request);
       request.respond.apply(request, handler.handler(request));
     } else {
+      this.unhandledRequests.push(request);
       this.unhandledRequest(request.method.toUpperCase(), request.url, request);
     }
   },
