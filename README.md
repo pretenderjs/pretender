@@ -43,6 +43,9 @@ triggered this request).
 If there were dynamic portions of the url, these well be attached to the request object as a `params`
 property with keys matching the dynamic portion and values with the matching value from the url.
 
+If there were query parameters in the request, these well be attached to the request object as a `queryParams`
+property.
+
 You must return an array from this handler that includes the http status code, an object literal
 of response headers and a string body.
 
@@ -58,6 +61,16 @@ var server = new Pretender(function(){
 });
 
 ```
+
+###
+
+### Tracking Requests
+Your pretender instance will track handlers and requests on a few array properties.
+All handlers are stored on `handlers` property and incoming requests will be tracked in one of
+two properties: `handledRequests` and `unhandledRequests`. This is useful if you want to build
+testing infrastructure on top of pretender and need to fail tests that have handlers without requests.
+
+Each handler keeps a count of the number of requests is successfuly served.
 
 ### Clean up
 When you're done mocking, be sure to call `shutdown()` to restore the native XMLHttpRequest object:

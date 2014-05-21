@@ -51,3 +51,13 @@ test("adds requests to the list of handled requests", function(){
   equal(req.url, '/some/path');
 });
 
+test("increments the handler's request count", function(){
+  var handler = function(req){}
+
+  pretender.get('/some/path', handler);
+
+  $.ajax({url: '/some/path'});
+
+  equal(handler.numberOfCalls, 1);
+});
+

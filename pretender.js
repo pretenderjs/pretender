@@ -13,6 +13,7 @@ function Pretender(maps){
     HEAD: new RouteRecognizer()
   };
 
+  this.handlers = [];
   this.handledRequests = [];
   this.unhandledRequests = [];
 
@@ -58,6 +59,9 @@ Pretender.prototype = {
   patch: verbify('PATCH'),
   head: verbify('HEAD'),
   register: function register(verb, path, handler){
+    handler.numberOfCalls = 0;
+    this.handlers.push(handler);
+
     var registry = this.registry[verb];
     registry.add([{path: path, handler: handler}])
   },
@@ -65,6 +69,7 @@ Pretender.prototype = {
     var handler = this._handlerFor(request);
 
     if (handler) {
+      handler.handler.numberOfCalls++;
       this.handledRequests.push(request);
       request.respond.apply(request, handler.handler(request));
     } else {
