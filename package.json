@@ -1,0 +1,8 @@
+{
+  "name": "pretender",
+  "devDependencies": {
+    "karma-qunit": "^0.1.1",
+    "karma": "^0.12.16",
+    "karma-chrome-launcher": "^0.1.3"
+  }
+}
