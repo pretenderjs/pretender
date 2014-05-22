@@ -25,7 +25,7 @@ var server = new Pretender(function(){
   });
 
   this.get('/photos/:id', function(request){
-    return [200, {"Content-Type": "application/json"}, JSON.stringify(FAKE_PHOTOS[request.params.id])]
+    return [200, {"Content-Type": "application/json"}, JSON.stringify(PHOTOS[request.params.id])]
   });
 });
 
