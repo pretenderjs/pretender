@@ -95,4 +95,4 @@ Pretender.prototype = {
   shutdown: function shutdown(){
     window.XMLHttpRequest = this._nativeXMLHttpRequest
   }
-}
+};
