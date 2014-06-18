@@ -62,6 +62,18 @@ var server = new Pretender(function(){
 
 ```
 
+### Pass-through Routes
+It is possible to configure Pretender so that the matching route request is passed through to the ```XmlHTTPRequest``` object and a real AJAX call is made. This is done on a route by route basis, just as you would using the Server DSL, but specifying ```this.passthrough``` as the handler:
+
+```
+var server = new Pretender(function(){
+  this.get('/photos/:id', this.passthrough);
+});
+
+// Makes real request to the route
+$.get('/photos/12', {success: function(){ ... }})
+```
+
 ###
 
 ### Tracking Requests
