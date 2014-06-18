@@ -13,6 +13,20 @@ function Pretender(maps){
     HEAD: new RouteRecognizer()
   };
 
+  // A handler for pass-through operations
+  this.passthrough = function(context) {
+    return function passthrough(request) {
+      try {
+        var req = new context._nativeXMLHttpRequest();
+        req.onload = request.onload;
+        req.open(request.method, request.url, request.async);
+        req.send();
+      } catch (error) {
+        console.log("Pretender passed-through a request to " + request.url + " and received an AJAX Error: " + error.message);
+      }
+    }
+  }(this);
+
   this.handlers = [];
   this.handledRequests = [];
   this.unhandledRequests = [];
@@ -58,6 +72,7 @@ Pretender.prototype = {
   'delete': verbify('DELETE'),
   patch: verbify('PATCH'),
   head: verbify('HEAD'),
+
   register: function register(verb, path, handler){
     handler.numberOfCalls = 0;
     this.handlers.push(handler);
