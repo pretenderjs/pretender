@@ -1,3 +1,6 @@
+var isNode = typeof process !== 'undefined' && process.toString() === '[object process]';
+var RouteRecognizer = isNode ? require('route-recognizer') : window.RouteRecognizer;
+var FakeXMLHttpRequest = isNode ? require('./bower_components/FakeXMLHttpRequest/fake_xml_http_request') : window.FakeXMLHttpRequest;
 var forEach = [].forEach;
 
 function Pretender(maps){
@@ -96,3 +99,7 @@ Pretender.prototype = {
     window.XMLHttpRequest = this._nativeXMLHttpRequest
   }
 };
+
+if (isNode) {
+  module.exports = Pretender;
+}
