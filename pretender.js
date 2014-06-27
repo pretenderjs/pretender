@@ -81,7 +81,11 @@ Pretender.prototype = {
     }
   },
   unhandledRequest: function(verb, path, request) {
-    throw new Error("Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request")
+    var message = "Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request";
+    if (console.log) {
+      console.log(message);
+    }
+    throw new Error(message);
   },
   _handlerFor: function(request){
     var registry = this.registry[request.method.toUpperCase()];
