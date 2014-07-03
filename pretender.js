@@ -85,7 +85,11 @@ Pretender.prototype = {
     }
   },
   unhandledRequest: function(verb, path, request) {
-    throw new Error("Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request")
+    var message = "Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request";
+    if (console.log) {
+      console.log(message);
+    }
+    throw new Error(message);
   },
   erroredRequest: function(verb, path, request, error){
     error.message = "Pretender intercepted "+verb+" "+path+" but encountered an error: " + error.message;
