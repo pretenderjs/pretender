@@ -74,7 +74,11 @@ Pretender.prototype = {
     if (handler) {
       handler.handler.numberOfCalls++;
       this.handledRequests.push(request);
-      request.respond.apply(request, handler.handler(request));
+      try {
+        request.respond.apply(request, handler.handler(request));
+      } catch (error) {
+        this.erroredRequest(request.method.toUpperCase(), request.url, request, error);
+      }
     } else {
       this.unhandledRequests.push(request);
       this.unhandledRequest(request.method.toUpperCase(), request.url, request);
@@ -82,6 +86,10 @@ Pretender.prototype = {
   },
   unhandledRequest: function(verb, path, request) {
     throw new Error("Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request")
+  },
+  erroredRequest: function(verb, path, request, error){
+    error.message = "Pretender intercepted "+verb+" "+path+" but encountered an error: " + error.message;
+    throw error;
   },
   _handlerFor: function(request){
     var registry = this.registry[request.method.toUpperCase()];
