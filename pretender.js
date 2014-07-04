@@ -38,10 +38,10 @@ function interceptor(pretender) {
     FakeXMLHttpRequest.call(this);
   }
   // extend
-  var proto = new FakeXMLHttpRequest;
+  var proto = new FakeXMLHttpRequest();
   proto.send = function send(){
     FakeXMLHttpRequest.prototype.send.apply(this, arguments);
-    pretender.handleRequest(this)
+    pretender.handleRequest(this);
   };
 
   FakeRequest.prototype = proto;
@@ -66,7 +66,7 @@ Pretender.prototype = {
     this.handlers.push(handler);
 
     var registry = this.registry[verb];
-    registry.add([{path: path, handler: handler}])
+    registry.add([{path: path, handler: handler}]);
   },
   handleRequest: function handleRequest(request){
     var handler = this._handlerFor(request);
