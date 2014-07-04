@@ -85,7 +85,7 @@ Pretender.prototype = {
     }
   },
   unhandledRequest: function(verb, path, request) {
-    throw new Error("Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request")
+    throw new Error("Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request");
   },
   erroredRequest: function(verb, path, request, error){
     error.message = "Pretender intercepted "+verb+" "+path+" but encountered an error: " + error.message;
@@ -104,7 +104,7 @@ Pretender.prototype = {
     return match;
   },
   shutdown: function shutdown(){
-    window.XMLHttpRequest = this._nativeXMLHttpRequest
+    window.XMLHttpRequest = this._nativeXMLHttpRequest;
   }
 };
 

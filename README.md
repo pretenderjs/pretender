@@ -46,8 +46,8 @@ property with keys matching the dynamic portion and values with the matching val
 If there were query parameters in the request, these well be attached to the request object as a `queryParams`
 property.
 
-You must return an array from this handler that includes the http status code, an object literal
-of response headers and a string body.
+You must return an array from this handler that includes the HTTP status code, an object literal
+of response headers, and a string body.
 
 ```javascript
 var server = new Pretender(function(){
@@ -62,49 +62,52 @@ var server = new Pretender(function(){
 
 ```
 
+### Unhandled Requests
+Your server will call a `unhandledRequest` method with the HTTP `verb`, `path`, and original `request`,
+object if your server receives a request for a route that doesn't have a handler. By default, this method
+will throw an error. You can override this method to supply your own behavior:
+
+```javascript
+var server = new Pretender(function(){
+  // no routes
+});
+
+server.unhandledRequest = function(verb, path, request) {
+  console.log("what is this I don't even...");
+}
+
+$.getJSON("/these/arent/the/droids");
+```
+
+
+### Error Requests
+
+Your server will call a `erroredRequest` method with the HTTP `verb`, `path`, original `request`,
+and the original `error` object if your handler code causes an error:
+
+By default, this will augment the error message with some information about which handler caused
+the error and then throw the error again. You can override this method to supply your own behavior:
+
+```javascript
+var server = new Pretender(function(){
+  this.get('/api/songs', function(request){
+    undefinedWat("this is no function!");
+  });
+});
+
+server.unhandledRequest = function(verb, path, request, error) {
+  SomeTestFramework.failTest();
+  console.warn("There was an error", error);
+}
+```
+
 ### Tracking Requests
 Your pretender instance will track handlers and requests on a few array properties.
 All handlers are stored on `handlers` property and incoming requests will be tracked in one of
 two properties: `handledRequests` and `unhandledRequests`. This is useful if you want to build
 testing infrastructure on top of pretender and need to fail tests that have handlers without requests.
 
-Each handler keeps a count of the number of requests is successfuly served.
-
-### Hooks
-
-You can override specific hooks in pretender.
-
-```javascript
-var server = new Pretender(function(){
-  this.get('/api/songs', function(request){
-    throw new Error('something broke!');
-  });
-});
-
-// fires when a request is made
-// that does not match a route
-server.unhandledRequest = function(verb, path, request){
-  verb; // HTTP verb
-  path; // path requested
-  request; // xhr object
-
-  // default behavior
-  throw new Error("Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request")
-};
-
-// first when a request handler
-// throws an error
-server.erroredRequest = function(verb, path, request, error){
-  verb; // HTTP verb
-  path; // path requested
-  request; // xhr object
-  error; // error object
-
-  // default behavior
-  error.message = "Pretender intercepted "+verb+" "+path+" but encountered an error: " + error.message;
-  throw error;
-};
-```
+Each handler keeps a count of the number of requests is successfully served.
 
 ### Clean up
 When you're done mocking, be sure to call `shutdown()` to restore the native XMLHttpRequest object:
