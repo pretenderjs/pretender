@@ -62,6 +62,25 @@ var server = new Pretender(function(){
 
 ```
 
+### Handled Requests
+In addition to responding to the request, tour server will call a `handledRequest` method with
+the HTTP `verb`, `path`, and original `request`. By default this method does nothing. You can
+override this method to supply your own behavior like logging or test framework integration:
+
+```javascript
+var server = new Pretender(function(){
+  this.put('/api/songs/:song_id', function(request){
+    return [202, {"Content-Type": "application/json"}, "{}"]
+  });
+});
+
+server.handledRequest = function(verb, path, request) {
+  console.log("a request was responded to");
+}
+
+$.getJSON("/api/songs/12");
+```
+
 ### Unhandled Requests
 Your server will call a `unhandledRequest` method with the HTTP `verb`, `path`, and original `request`,
 object if your server receives a request for a route that doesn't have a handler. By default, this method
@@ -81,7 +100,6 @@ $.getJSON("/these/arent/the/droids");
 
 
 ### Error Requests
-
 Your server will call a `erroredRequest` method with the HTTP `verb`, `path`, original `request`,
 and the original `error` object if your handler code causes an error:
 

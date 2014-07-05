@@ -61,3 +61,10 @@ test("increments the handler's request count", function(){
   equal(handler.numberOfCalls, 1);
 });
 
+test("handledRequest is called", function(){
+  pretender.get('/some/path', function(){});
+  pretender.handledRequest = function(){
+    ok(true, "handledRequest hook was called");
+  }
+  $.ajax({url: '/some/path'});
+});

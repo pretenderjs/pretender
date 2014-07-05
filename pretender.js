@@ -74,6 +74,7 @@ Pretender.prototype = {
     if (handler) {
       handler.handler.numberOfCalls++;
       this.handledRequests.push(request);
+      this.handledRequest(request.method.toUpperCase(), request.url, request);
       try {
         request.respond.apply(request, handler.handler(request));
       } catch (error) {
@@ -84,6 +85,7 @@ Pretender.prototype = {
       this.unhandledRequest(request.method.toUpperCase(), request.url, request);
     }
   },
+  handledRequest: function(verb, path, request){/* no-op */},
   unhandledRequest: function(verb, path, request) {
     throw new Error("Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request");
   },
