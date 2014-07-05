@@ -69,20 +69,22 @@ Pretender.prototype = {
     registry.add([{path: path, handler: handler}]);
   },
   handleRequest: function handleRequest(request){
-    var handler = this._handlerFor(request);
+    var verb = request.method.toUpperCase();
+    var path = request.url;
+    var handler = this._handlerFor(verb, path, request);
 
     if (handler) {
       handler.handler.numberOfCalls++;
       this.handledRequests.push(request);
-      this.handledRequest(request.method.toUpperCase(), request.url, request);
+      this.handledRequest(verb, path, request);
       try {
         request.respond.apply(request, handler.handler(request));
       } catch (error) {
-        this.erroredRequest(request.method.toUpperCase(), request.url, request, error);
+        this.erroredRequest(verb, path, request, error);
       }
     } else {
       this.unhandledRequests.push(request);
-      this.unhandledRequest(request.method.toUpperCase(), request.url, request);
+      this.unhandledRequest(verb, path, request);
     }
   },
   handledRequest: function(verb, path, request){/* no-op */},
@@ -93,9 +95,9 @@ Pretender.prototype = {
     error.message = "Pretender intercepted "+verb+" "+path+" but encountered an error: " + error.message;
     throw error;
   },
-  _handlerFor: function(request){
-    var registry = this.registry[request.method.toUpperCase()];
-    var matches = registry.recognize(request.url);
+  _handlerFor: function(verb, path, request){
+    var registry = this.registry[verb];
+    var matches = registry.recognize(path);
 
     var match = matches ? matches[0] : null;
     if (match) {
