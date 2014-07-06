@@ -9,7 +9,7 @@ module("pretender errored requests", {
   }
 });
 
-test("errors are captured in route handlers", function(){
+test("calls erroredRequest", function(){
   pretender.get('/some/path', function(){
     throw new Error('something in this handler broke!');
   });
