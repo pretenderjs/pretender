@@ -14,7 +14,7 @@ test("calls unhandledRequest", function(){
     equal('GET', verb);
     equal('not-defined', path);
     ok(true);
-  }
+  };
 
   $.ajax({
     url: 'not-defined'
@@ -22,7 +22,7 @@ test("calls unhandledRequest", function(){
 });
 
 test("errors by default", function(){
-  var verb = 'GET', path = '/foo/bar'
+  var verb = 'GET', path = '/foo/bar';
   throws( function() {
     pretender.unhandledRequest(verb, path);
   }, 'Pretender intercepted GET /foo/bar but no handler was defined for this type of request');
@@ -34,5 +34,5 @@ test("adds the request to the array of unhandled requests by default", function(
   });
 
   var req = pretender.unhandledRequests[0];
-  equal(req.url, 'not-defined')
+  equal(req.url, 'not-defined');
 });

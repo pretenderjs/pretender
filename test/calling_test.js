@@ -12,7 +12,7 @@ module("pretender invoking", {
 test("a mapping function is optional", function(){
   var wasCalled;
   pretender.get('/some/path', function(){
-    wasCalled = true
+    wasCalled = true;
   });
 
   $.ajax({url: '/some/path'});
@@ -22,7 +22,7 @@ test("a mapping function is optional", function(){
 test("params are passed", function(){
   var params;
   pretender.get('/some/path/:id', function(request){
-    params = request.params
+    params = request.params;
   });
 
   $.ajax({url: '/some/path/1'});
@@ -32,7 +32,7 @@ test("params are passed", function(){
 test("queryParams are passed", function(){
   var params;
   pretender.get('/some/path', function(request){
-    params = request.queryParams
+    params = request.queryParams;
   });
 
   $.ajax({url: '/some/path?zulu=nation'});
@@ -42,7 +42,7 @@ test("queryParams are passed", function(){
 test("adds requests to the list of handled requests", function(){
   var params;
   pretender.get('/some/path', function(request){
-    params = request.queryParams
+    params = request.queryParams;
   });
 
   $.ajax({url: '/some/path'});
@@ -52,7 +52,7 @@ test("adds requests to the list of handled requests", function(){
 });
 
 test("increments the handler's request count", function(){
-  var handler = function(req){}
+  var handler = function(req){};
 
   pretender.get('/some/path', handler);
 
@@ -65,6 +65,6 @@ test("handledRequest is called", function(){
   pretender.get('/some/path', function(){});
   pretender.handledRequest = function(){
     ok(true, "handledRequest hook was called");
-  }
+  };
   $.ajax({url: '/some/path'});
 });
