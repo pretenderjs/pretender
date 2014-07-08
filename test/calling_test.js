@@ -68,3 +68,18 @@ test("handledRequest is called", function(){
   };
   $.ajax({url: '/some/path'});
 });
+
+test("prepareBody is called", function(){
+  var obj = {foo: 'bar'};
+  pretender.prepareBody = JSON.stringify;
+  pretender.get('/some/path', function(req){
+    return [200, {}, obj];
+  });
+
+  $.ajax({
+    url: '/some/path',
+    success: function(resp){
+      deepEqual(JSON.parse(resp), obj);
+    }
+  });
+});

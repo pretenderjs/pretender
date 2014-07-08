@@ -77,8 +77,15 @@ Pretender.prototype = {
       handler.handler.numberOfCalls++;
       this.handledRequests.push(request);
       this.handledRequest(verb, path, request);
+
+
       try {
-        request.respond.apply(request, handler.handler(request));
+        var statusHeadersAndBody = handler.handler(request),
+            status = statusHeadersAndBody[0],
+            headers = statusHeadersAndBody[1],
+            body = this.prepareBody(statusHeadersAndBody[2]);
+
+        request.respond(status, headers, body);
       } catch (error) {
         this.erroredRequest(verb, path, request, error);
       }
@@ -87,6 +94,7 @@ Pretender.prototype = {
       this.unhandledRequest(verb, path, request);
     }
   },
+  prepareBody: function(body){ return body; },
   handledRequest: function(verb, path, request){/* no-op */},
   unhandledRequest: function(verb, path, request) {
     throw new Error("Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request");
