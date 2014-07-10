@@ -88,7 +88,7 @@ test("will use the latest defined handler", function(){
   expect(1);
   var latestHandlerWasCalled = false;
   pretender.get('/some/path', function(request){
-    // no op
+    ok(false);
   });
   pretender.get('/some/path', function(request){
     latestHandlerWasCalled = true
