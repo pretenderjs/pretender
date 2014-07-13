@@ -83,3 +83,16 @@ test("prepareBody is called", function(){
     }
   });
 });
+
+test("will use the latest defined handler", function(){
+  expect(1);
+  var latestHandlerWasCalled = false;
+  pretender.get('/some/path', function(request){
+    ok(false);
+  });
+  pretender.get('/some/path', function(request){
+    latestHandlerWasCalled = true
+  });
+  $.ajax({url: '/some/path'});
+  ok(latestHandlerWasCalled, 'calls the latest handler');
+});
