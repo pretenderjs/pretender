@@ -1,6 +1,6 @@
 {
   "name": "pretender",
-  "version": "0.0.11",
+  "version": "0.1.0",
   "authors": [
     "Trek Glowacki <trek.glowacki@gmail.com>"
   ],
@@ -16,7 +16,7 @@
     "./pretender.js"
   ],
   "dependencies": {
-    "FakeXMLHttpRequest": "~0.0.1",
+    "FakeXMLHttpRequest": "~1.0.0",
     "route-recognizer": "~0.1.1"
   },
   "devDependencies": {
