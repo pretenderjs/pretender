@@ -5,16 +5,7 @@ var forEach = [].forEach;
 
 function Pretender(maps){
   maps = maps || function(){};
-  // Herein we keep track of RouteRecognizer instances
-  // keyed by HTTP method. Feel free to add more as needed.
-  this.registry = {
-    GET: new RouteRecognizer(),
-    PUT: new RouteRecognizer(),
-    POST: new RouteRecognizer(),
-    DELETE: new RouteRecognizer(),
-    PATCH: new RouteRecognizer(),
-    HEAD: new RouteRecognizer()
-  };
+  this.registry = {};
 
   this.handlers = [];
   this.handledRequests = [];
@@ -49,8 +40,8 @@ function interceptor(pretender) {
 }
 
 function verbify(verb){
-  return function(path, handler){
-    this.register(verb, path, handler);
+  return function(url, handler){
+    this.register(verb, url, handler);
   };
 }
 
@@ -61,11 +52,12 @@ Pretender.prototype = {
   'delete': verbify('DELETE'),
   patch: verbify('PATCH'),
   head: verbify('HEAD'),
-  register: function register(verb, path, handler){
+  register: function register(verb, url, handler){
     handler.numberOfCalls = 0;
     this.handlers.push(handler);
 
-    var registry = this.registry[verb];
+    var registry = this._registryFor(verb, url);
+    var path = this._splitUrl(url)[1];
     registry.add([{path: path, handler: handler}]);
   },
   handleRequest: function handleRequest(request){
@@ -103,8 +95,9 @@ Pretender.prototype = {
     error.message = "Pretender intercepted "+verb+" "+path+" but encountered an error: " + error.message;
     throw error;
   },
-  _handlerFor: function(verb, path, request){
-    var registry = this.registry[verb];
+  _handlerFor: function(verb, url, request){
+    var registry = this._registryFor(verb, url);
+    var path = this._splitUrl(url)[1];
     var matches = registry.recognize(path);
 
     var match = matches ? matches[0] : null;
@@ -114,6 +107,19 @@ Pretender.prototype = {
     }
 
     return match;
+  },
+  _registryFor: function(verb, url) {
+    var origin = this._splitUrl(url)[0] || window.location.origin;
+    this.registry[origin] = this.registry[origin] || {};
+    this.registry[origin][verb] = this.registry[origin][verb] || new RouteRecognizer();
+    return this.registry[origin][verb];
+  },
+  _splitUrl: function(url) {
+    if (/^(http)/.test(url)) {
+      return (url.match(/^(https?\:\/\/[^\/?#]+)(?:[^\/#]*)(.*)/i) || []).slice(1);
+    } else {
+      return [null, url];
+    }
   },
   shutdown: function shutdown(){
     window.XMLHttpRequest = this._nativeXMLHttpRequest;
