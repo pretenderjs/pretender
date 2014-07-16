@@ -62,6 +62,7 @@ var server = new Pretender(function(){
 
 ```
 
+## Hooks
 ### Handled Requests
 In addition to responding to the request, tour server will call a `handledRequest` method with
 the HTTP `verb`, `path`, and original `request`. By default this method does nothing. You can
@@ -119,7 +120,36 @@ server.unhandledRequest = function(verb, path, request, error) {
 }
 ```
 
-### Tracking Requests
+### Mutating the body
+Pretender is response format neutral, so you normally need to supply a string body as the
+third part of a response:
+
+```javascript
+this.get('/api/songs', function(request){
+  return [200, {}, "{'id': 12}"];
+});
+```
+
+This can become tiresome if you know, for example, that all your responses are
+going to be JSON. The body of a response will be passed through a
+`prepareBody` hook before being passed to the fake response object.
+`prepareBody` defaults to an empty function, but can be overriden:
+
+```javascript
+var server = new Pretender(function(){
+  this.get('/api/songs', function(request){
+    return [200, {}, {id: 12}];
+  });
+});
+
+server.prepareBody = function(body){
+  return body ? JSON.stringify(body) : '{"error": "not found"}';
+}
+```
+
+
+
+## Tracking Requests
 Your pretender instance will track handlers and requests on a few array properties.
 All handlers are stored on `handlers` property and incoming requests will be tracked in one of
 two properties: `handledRequests` and `unhandledRequests`. This is useful if you want to build
@@ -127,7 +157,7 @@ testing infrastructure on top of pretender and need to fail tests that have hand
 
 Each handler keeps a count of the number of requests is successfully served.
 
-### Clean up
+## Clean up
 When you're done mocking, be sure to call `shutdown()` to restore the native XMLHttpRequest object:
 
 ```javascript
