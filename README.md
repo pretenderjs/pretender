@@ -64,7 +64,7 @@ var server = new Pretender(function(){
 
 ## Hooks
 ### Handled Requests
-In addition to responding to the request, tour server will call a `handledRequest` method with
+In addition to responding to the request, your server will call a `handledRequest` method with
 the HTTP `verb`, `path`, and original `request`. By default this method does nothing. You can
 override this method to supply your own behavior like logging or test framework integration:
 
