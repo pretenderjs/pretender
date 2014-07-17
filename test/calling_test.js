@@ -96,3 +96,19 @@ test("will use the latest defined handler", function(){
   $.ajax({url: '/some/path'});
   ok(latestHandlerWasCalled, 'calls the latest handler');
 });
+
+test("recognizes cross domain requests", function(){
+  var wasCalled;
+  var wasNotCalled = true;
+  pretender.get('http://some-other-domain.com/some/path', function() {
+    wasCalled = true;
+  });
+  pretender.get('/some/path', function() {
+    wasNotCalled = false;
+  });
+
+  $.ajax({url: 'http://some-other-domain.com/some/path'});
+
+  ok(wasCalled);
+  ok(wasNotCalled);
+});
