@@ -61,11 +61,20 @@ test("increments the handler's request count", function(){
   equal(handler.numberOfCalls, 1);
 });
 
-test("handledRequest is called", function(){
-  pretender.get('/some/path', function(){});
-  pretender.handledRequest = function(){
+asyncTest("handledRequest is called", function(){
+  var json = "{foo: 'bar'}";
+  pretender.get('/some/path', function(req){
+    return [200, {}, obj];
+  });
+  pretender.handledRequest = function(verb, path, request){
     ok(true, "handledRequest hook was called");
+    equal(verb, "GET");
+    equal(path, "/some/path");
+    equal(request.responseText, json);
+    equal(request.responseStatus, "200");
+    QUnit.start();
   };
+
   $.ajax({url: '/some/path'});
 });
 

@@ -77,16 +77,14 @@ Pretender.prototype = {
     if (handler) {
       handler.handler.numberOfCalls++;
       this.handledRequests.push(request);
-      this.handledRequest(verb, path, request);
-
 
       try {
         var statusHeadersAndBody = handler.handler(request),
             status = statusHeadersAndBody[0],
             headers = statusHeadersAndBody[1],
             body = this.prepareBody(statusHeadersAndBody[2]);
-
         request.respond(status, headers, body);
+        this.handledRequest(verb, path, request);
       } catch (error) {
         this.erroredRequest(verb, path, request, error);
       }
