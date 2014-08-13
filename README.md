@@ -114,7 +114,7 @@ var server = new Pretender(function(){
   });
 });
 
-server.unhandledRequest = function(verb, path, request, error) {
+server.erroredRequest = function(verb, path, request, error) {
   SomeTestFramework.failTest();
   console.warn("There was an error", error);
 }
