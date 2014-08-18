@@ -29,13 +29,33 @@ test("params are passed", function(){
   equal(params.id, 1);
 });
 
-test("queryParams are passed", function(){
+test("queryParams are passed with GET", function(){
   var params;
   pretender.get('/some/path', function(request){
     params = request.queryParams;
   });
 
   $.ajax({url: '/some/path?zulu=nation'});
+  equal(params.zulu, 'nation');
+});
+
+test("queryParams are passed with POST", function(){
+  var params;
+  pretender.post('/some/path', function(request){
+    params = request.queryParams;
+  });
+
+  $.ajax({url: '/some/path', type: 'POST', data: { zulu: 'nation' }});
+  equal(params.zulu, 'nation');
+});
+
+test("queryParams are passed with PUT", function(){
+  var params;
+  pretender.put('/some/path', function(request){
+    params = request.queryParams;
+  });
+
+  $.ajax({url: '/some/path', type: 'PUT', data: { zulu: 'nation' }});
   equal(params.zulu, 'nation');
 });
 
