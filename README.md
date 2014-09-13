@@ -190,6 +190,23 @@ server.prepareBody = function(body){
 }
 ```
 
+### Mutating the headers
+Response headers can be mutated for the entire service instance by implementing a
+`prepareHeaders` method:
+
+```javascript
+var server = new Pretender(function(){
+  this.get('/api/songs', function(request){
+    return [200, {}, '{"id": 12}''];
+  });
+});
+
+server.prepareHeaders = function(headers){
+  headers['content-type'] = 'application/javascript';
+  return headers;
+};
+```
+
 ## Tracking Requests
 Your pretender instance will track handlers and requests on a few array properties.
 All handlers are stored on `handlers` property and incoming requests will be tracked in one of
