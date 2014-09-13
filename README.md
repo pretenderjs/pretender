@@ -36,31 +36,74 @@ $.get('/photos/12', {success: function(){ ... }})
 ## The Server DSL
 The server DSL is inspired by express/sinatra. Pass a function to the Pretender constructor
 that will be invoked with the Pretender instance as its context. Available methods are
-`get`, `put`, `post`, `'delete'`, `patch`, and `head`. Each of these methods takes a url pattern
+`get`, `put`, `post`, `'delete'`, `patch`, and `head`. Each of these methods takes a path pattern
 and a callback. The callback will be invoked with a single argument (the XMLHttpRequest instance that
-triggered this request).
-
-If there were dynamic portions of the url, these well be attached to the request object as a `params`
-property with keys matching the dynamic portion and values with the matching value from the url.
-
-If there were query parameters in the request, these well be attached to the request object as a `queryParams`
-property.
-
-You must return an array from this handler that includes the HTTP status code, an object literal
-of response headers, and a string body.
+triggered this request) and must return an array containing the HTTP status code, headers object, and body as a string.
 
 ```javascript
 var server = new Pretender(function(){
-  this.put('/api/songs/:song_id', function(request){
-    request // the xhr object
-    request.params // {song_id: 'the id passed in the url'}
-    request.queryParams // any query params on the request, here just {}
-
-    return [202, {"Content-Type": "application/json"}, "{}"]
+  this.put('/api/songs/99', function(request){
+    return [404, {}, ""];
   });
 });
 
 ```
+
+### Paths
+Paths can either be hard-coded (`this.get('/api/songs/12')`) or contain dynamic segments
+(`this.get('/api/songs/:song_id'`). If there were dynamic segments of the path,
+these well be attached to the request object as a `params` property with keys matching
+the dynamic portion and values with the matching value from the path.
+
+```javascript
+var server = new Pretender(function(){
+  this.get('/api/songs/:song_id', function(request){
+    request.params.song_id;
+  });
+});
+
+$.get('/api/songs/871') // params.song_id will be '871'
+
+```
+
+Pretender will *only* handle requests to paths (`/some/kind/of/path`) and not fully qualified URLs
+(`https://mydomain.tld/some/kind/of/path`). There are many
+[CSP](http://www.html5rocks.com/en/tutorials/security/content-security-policy/) behaviors that cannot
+be consistenly simulated when using full URLs (calls to `http` from an `https` page, requests to
+external domains which may not implement CORS, etc).
+
+### Query Parameters
+If there were query parameters in the request, these well be attached to the request object as a `queryParams`
+property.
+
+```javascript
+var server = new Pretender(function(){
+  this.get('/api/songs', function(request){
+    request.queryParams.sortOrder;
+  });
+});
+
+// typical jQuery-style uses you've probably seen.
+// queryParams.sortOrder will be 'asc' for both styles.
+$.get({url: '/api/songs', data: {sortOrder: 'asc'});
+$.get('/api/songs?sortOrder=asc');
+
+```
+
+
+### Responding
+You must return an array from this handler that includes the HTTP status code, an object literal
+of response headers, and a string body.
+
+var server = new Pretender(function(){
+  this.get('/api/songs', function(request){
+    return [
+      200,
+      {'content-type': 'application/javascript'},
+      '[{"id": 12}, {"id": 14}]'
+    ];
+  });
+});
 
 ## Hooks
 ### Handled Requests
@@ -146,8 +189,6 @@ server.prepareBody = function(body){
   return body ? JSON.stringify(body) : '{"error": "not found"}';
 }
 ```
-
-
 
 ## Tracking Requests
 Your pretender instance will track handlers and requests on a few array properties.
