@@ -93,6 +93,23 @@ test("prepareBody is called", function(){
   });
 });
 
+test("prepareHeaders is called", function(){
+  pretender.prepareHeaders = function(headers){
+    headers['X-WAS-CALLED'] = 'YES';
+    return headers;
+  };
+  pretender.get('/some/path', function(req){
+    return [200, {}, ''];
+  });
+
+  $.ajax({
+    url: '/some/path',
+    complete: function(){
+      equal(xhr.getResponseHeader('X-WAS-CALLED'), 'YES');
+    }
+  });
+});
+
 test("will use the latest defined handler", function(){
   expect(1);
   var latestHandlerWasCalled = false;
@@ -104,4 +121,15 @@ test("will use the latest defined handler", function(){
   });
   $.ajax({url: '/some/path'});
   ok(latestHandlerWasCalled, 'calls the latest handler');
+});
+
+test("will error when using fully qualified URLs instead of paths", function(){
+  pretender.get('/some/path', function(request){
+    return [200, {}, ''];
+  });
+
+  throws(function(){
+    pretender.handleRequest({url: 'http://myserver.com/some/path'});
+  });
+
 });

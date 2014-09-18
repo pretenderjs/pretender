@@ -55,6 +55,20 @@ function verbify(verb){
   };
 }
 
+function throwIfURLDetected(url){
+  var HTTP_REGEXP = /^https?/;
+  var message;
+
+  if(HTTP_REGEXP.test(url)) {
+    var parser = window.document.createElement('a');
+    parser.href = url;
+
+    message = "Pretender will not respond to requests for URLs. It is not possible to accurately simluate the browser's CSP. "+
+              "Remove the " + parser.protocol +"//"+ parser.hostname +" from " + url + " and try again";
+    throw new Error(message)
+  }
+}
+
 Pretender.prototype = {
   get: verbify('GET'),
   post: verbify('POST'),
@@ -72,6 +86,9 @@ Pretender.prototype = {
   handleRequest: function handleRequest(request){
     var verb = request.method.toUpperCase();
     var path = request.url;
+
+    throwIfURLDetected(path);
+
     var handler = this._handlerFor(verb, path, request);
 
     if (handler) {
