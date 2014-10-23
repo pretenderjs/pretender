@@ -197,7 +197,7 @@ Response headers can be mutated for the entire service instance by implementing 
 ```javascript
 var server = new Pretender(function(){
   this.get('/api/songs', function(request){
-    return [200, {}, '{"id": 12}''];
+    return [200, {}, '{"id": 12}'];
   });
 });
 
