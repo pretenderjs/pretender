@@ -95,6 +95,7 @@ $.get('/api/songs?sortOrder=asc');
 You must return an array from this handler that includes the HTTP status code, an object literal
 of response headers, and a string body.
 
+```javascript
 var server = new Pretender(function(){
   this.get('/api/songs', function(request){
     return [
@@ -104,6 +105,7 @@ var server = new Pretender(function(){
     ];
   });
 });
+```
 
 ## Hooks
 ### Handled Requests
