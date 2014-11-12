@@ -15,3 +15,13 @@ test("restores the native XMLHttpRequest object", function(){
   pretender.shutdown();
   equal(window.XMLHttpRequest, nativeXMLHttpRequest);
 });
+
+test("warns if requests attempt to respond after shutdown", function(){
+  pretender = new Pretender();
+  var request = new XMLHttpRequest();
+  pretender.shutdown();
+
+  throws( function() {
+    request.send();
+  });
+});

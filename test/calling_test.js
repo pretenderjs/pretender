@@ -64,14 +64,16 @@ test("increments the handler's request count", function(){
 asyncTest("handledRequest is called", function(){
   var json = "{foo: 'bar'}";
   pretender.get('/some/path', function(req){
-    return [200, {}, obj];
+    return [200, {}, json];
   });
+
   pretender.handledRequest = function(verb, path, request){
+
     ok(true, "handledRequest hook was called");
     equal(verb, "GET");
     equal(path, "/some/path");
     equal(request.responseText, json);
-    equal(request.responseStatus, "200");
+    equal(request.status, "200");
     QUnit.start();
   };
 
@@ -93,19 +95,21 @@ test("prepareBody is called", function(){
   });
 });
 
-test("prepareHeaders is called", function(){
+asyncTest("prepareHeaders is called", function(){
   pretender.prepareHeaders = function(headers){
     headers['X-WAS-CALLED'] = 'YES';
     return headers;
   };
+
   pretender.get('/some/path', function(req){
     return [200, {}, ''];
   });
 
   $.ajax({
     url: '/some/path',
-    complete: function(){
+    complete: function(xhr){
       equal(xhr.getResponseHeader('X-WAS-CALLED'), 'YES');
+      QUnit.start();
     }
   });
 });

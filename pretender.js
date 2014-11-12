@@ -29,6 +29,9 @@ function Pretender(maps){
   // the route map.
   window.XMLHttpRequest = interceptor(this);
 
+  // "start" the server
+  this.running = true;
+
   // trigger the route map DSL.
   maps.call(this);
 }
@@ -41,6 +44,12 @@ function interceptor(pretender) {
   // extend
   var proto = new FakeXMLHttpRequest();
   proto.send = function send(){
+    if (!pretender.running) {
+      throw('You shut down a Pretender instance while there was a pending request. '+
+            'That request just tried to complete. Check to see if you accidentally shut down '+
+            'a pretender earlier than you intended to');
+    }
+
     FakeXMLHttpRequest.prototype.send.apply(this, arguments);
     pretender.handleRequest(this);
   };
@@ -101,6 +110,7 @@ Pretender.prototype = {
             headers = this.prepareHeaders(statusHeadersAndBody[1]),
             body = this.prepareBody(statusHeadersAndBody[2]);
         request.respond(status, headers, body);
+
         this.handledRequest(verb, path, request);
       } catch (error) {
         this.erroredRequest(verb, path, request, error);
@@ -134,6 +144,9 @@ Pretender.prototype = {
   },
   shutdown: function shutdown(){
     window.XMLHttpRequest = this._nativeXMLHttpRequest;
+
+    // "stop" the server
+    this.running = false;
   }
 };
 
