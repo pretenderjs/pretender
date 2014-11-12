@@ -45,7 +45,7 @@ function interceptor(pretender) {
   var proto = new FakeXMLHttpRequest();
   proto.send = function send(){
     if (!pretender.running) {
-      throw('You shut down a Pretender instance while there was a pending request. '+
+      throw new Error('You shut down a Pretender instance while there was a pending request. '+
             'That request just tried to complete. Check to see if you accidentally shut down '+
             'a pretender earlier than you intended to');
     }
