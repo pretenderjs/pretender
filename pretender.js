@@ -20,6 +20,7 @@ function Pretender(maps){
   this.handlers = [];
   this.handledRequests = [];
   this.unhandledRequests = [];
+  this.endpointList = [];
 
   // reference the native XMLHttpRequest object so
   // it can be restored later
@@ -88,6 +89,7 @@ Pretender.prototype = {
   register: function register(verb, path, handler){
     handler.numberOfCalls = 0;
     this.handlers.push(handler);
+	 this.endpointList.push({verb: verb, path: path});
 
     var registry = this.registry[verb];
     registry.add([{path: path, handler: handler}]);
@@ -141,6 +143,9 @@ Pretender.prototype = {
     }
 
     return match;
+  },
+  endpoints: function() {
+	return this.endpointList;
   },
   shutdown: function shutdown(){
     window.XMLHttpRequest = this._nativeXMLHttpRequest;
