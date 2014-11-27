@@ -108,8 +108,8 @@ var server = new Pretender(function(){
 ```
 
 ### Pass-Through
-To set certain paths that should be ignored by the interceptor and made as real XHR requests, these
-can be enabled by specifying pass-through routes:
+You can specify paths that should be ignored by pretender and made as real XHR requests.
+Enable these by specifying pass-through routes with `pretender.passthrough`:
 
 ```javascript
 var server = new Pretender(function(){
