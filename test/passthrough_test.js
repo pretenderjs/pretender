@@ -20,6 +20,9 @@ asyncTest("allows matched paths to be pass-through", function(){
 
   $.ajax({
     url: '/some/path',
+    headers: {
+      'test-header': 'value'
+    },
     error: function(xhr) {
       equal(xhr.status, 404);
       ok(passthroughInvoked);
