@@ -107,6 +107,16 @@ var server = new Pretender(function(){
 });
 ```
 
+### Pass-Through
+To set certain paths that should be ignored by the interceptor and made as real XHR requests, these
+can be enabled by specifying pass-through routes:
+
+```javascript
+var server = new Pretender(function(){
+  this.get('/photos/:id', this.passthrough);
+});
+```
+
 ## Hooks
 ### Handled Requests
 In addition to responding to the request, your server will call a `handledRequest` method with
@@ -142,6 +152,19 @@ server.unhandledRequest = function(verb, path, request) {
 }
 
 $.getJSON("/these/arent/the/droids");
+```
+
+### Pass-through Requests
+Requests set to be handled by pass-through will trigger the `passthroughRequest` hook:
+
+```javascript
+var server = new Pretender(function(){
+  this.get('/some/path', this.passthrough);
+});
+
+server.passthroughRequest = function(verb, path, request) {
+  console.log('request ' + path + ' sucessfully sent for passthrough');
+}
 ```
 
 
