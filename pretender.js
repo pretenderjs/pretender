@@ -86,6 +86,9 @@ function interceptor(pretender) {
     xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
     xhr.timeout = fakeXHR.timeout;
     xhr.withCredentials = fakeXHR.withCredentials;
+    for (var h in fakeXHR.requestHeaders) {
+      xhr.setRequestHeader(h, fakeXHR.requestHeaders[h]);
+    }
     return xhr;
   }
   proto._passthroughCheck = function(method, arguments) {
