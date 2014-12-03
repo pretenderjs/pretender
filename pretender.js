@@ -51,8 +51,8 @@ function interceptor(pretender) {
             'a pretender earlier than you intended to');
     }
 
+    FakeXMLHttpRequest.prototype.send.apply(this, arguments);
     if (!pretender.checkPassthrough(this)) {
-      FakeXMLHttpRequest.prototype.send.apply(this, arguments);
       pretender.handleRequest(this);
     }
     else {
