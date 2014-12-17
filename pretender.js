@@ -141,6 +141,10 @@ Pretender.prototype = {
   patch: verbify('PATCH'),
   head: verbify('HEAD'),
   register: function register(verb, path, handler){
+    if (!handler) {
+      throw new Error("The function you tried passing to Pretender to handle " + verb + " " + path + " is undefined or missing.");
+    }
+
     handler.numberOfCalls = 0;
     this.handlers.push(handler);
 
