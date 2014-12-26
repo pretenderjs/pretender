@@ -11,6 +11,7 @@ module("pretender invoking", {
 
 test("a mapping function is optional", function(){
   var wasCalled;
+
   pretender.get('/some/path', function(){
     wasCalled = true;
   });
@@ -61,26 +62,29 @@ test("increments the handler's request count", function(){
   equal(handler.numberOfCalls, 1);
 });
 
-asyncTest("handledRequest is called", function(){
+test("handledRequest is called", function(assert){
+  var done = assert.async();
+
   var json = "{foo: 'bar'}";
   pretender.get('/some/path', function(req){
     return [200, {}, json];
   });
 
   pretender.handledRequest = function(verb, path, request){
-
     ok(true, "handledRequest hook was called");
     equal(verb, "GET");
     equal(path, "/some/path");
     equal(request.responseText, json);
     equal(request.status, "200");
-    QUnit.start();
+    done();
   };
 
   $.ajax({url: '/some/path'});
 });
 
-test("prepareBody is called", function(){
+test("prepareBody is called", function(assert){
+  var done = assert.async();
+
   var obj = {foo: 'bar'};
   pretender.prepareBody = JSON.stringify;
   pretender.get('/some/path', function(req){
@@ -91,11 +95,14 @@ test("prepareBody is called", function(){
     url: '/some/path',
     success: function(resp){
       deepEqual(JSON.parse(resp), obj);
+      done();
     }
   });
 });
 
-asyncTest("prepareHeaders is called", function(){
+test("prepareHeaders is called", function(assert){
+  var done = assert.async();
+
   pretender.prepareHeaders = function(headers){
     headers['X-WAS-CALLED'] = 'YES';
     return headers;
@@ -109,7 +116,7 @@ asyncTest("prepareHeaders is called", function(){
     url: '/some/path',
     complete: function(xhr){
       equal(xhr.getResponseHeader('X-WAS-CALLED'), 'YES');
-      QUnit.start();
+      done();
     }
   });
 });
@@ -136,4 +143,138 @@ test("will error when using fully qualified URLs instead of paths", function(){
     pretender.handleRequest({url: 'http://myserver.com/some/path'});
   });
 
+});
+
+test("is resolved asynchronously", function(assert){
+  var done = assert.async();
+  var val = 'unset';
+
+  pretender.get('/some/path', function(request){
+    return [200, {}, ''];
+  });
+
+  $.ajax({
+    url: '/some/path',
+    complete: function() {
+      equal(val, 'set');
+      done();
+    }
+  });
+
+  equal(val, 'unset');
+  val = 'set';
+});
+
+test("can be resolved synchronous", function() {
+  var val = 0;
+
+  pretender.get('/some/path', function(request){
+    return [200, {}, ''];
+  }, false);
+
+  $.ajax({
+    url: '/some/path',
+    complete: function() {
+      equal(val, 0);
+      val++;
+    }
+  });
+
+  equal(val, 1);
+});
+
+test("can be both asynchronous or synchronous based on an async function", function(assert) {
+  var done = assert.async();
+
+  var isAsync = false;
+  var val = 0;
+
+  pretender.get('/some/path', function(request) {
+    return [200, {}, ''];
+  }, function() {
+    return isAsync;
+  });
+
+  $.ajax({
+    url: '/some/path',
+    complete: function() {
+      equal(val, 0);
+      val++;
+    }
+  });
+
+  equal(val, 1);
+  val++;
+
+  isAsync = 0;
+
+  $.ajax({
+    url: '/some/path',
+    complete: function() {
+      equal(val, 3);
+      done();
+    }
+  });
+
+  equal(val, 2);
+  val++;
+});
+
+test("can be configured to resolve after a specified time", function(assert) {
+  var done = assert.async();
+
+  var val = 0;
+
+  pretender.get('/some/path', function(request) {
+    return [200, {}, ''];
+  }, 10);
+
+  $.ajax({
+    url: '/some/path',
+    complete: function() {
+      equal(val, 1);
+      done();
+    }
+  });
+
+  setTimeout(function() {
+    equal(val, 0);
+    val++;
+  }, 0);
+});
+
+test("can be configured to require manually resolution", function() {
+  var val = 0;
+  var req = $.ajaxSettings.xhr();
+
+  pretender.get('/some/path', function(request) {
+    return [200, {}, ''];
+  }, true);
+
+  $.ajax({
+    url: '/some/path',
+    xhr: function() {
+      // use the xhr we already made and have a reference to
+      return req;
+    },
+    complete: function() {
+      equal(val, 1);
+      val++;
+    }
+  });
+
+  equal(val, 0);
+  val++;
+
+  pretender.resolve(req);
+
+  equal(val, 2);
+});
+
+test("requiresManualResolution returns true for endpoints configured with `true` for async", function() {
+  pretender.get('/some/path', function(request) {}, true);
+  pretender.get('/some/other/path', function() {});
+
+  ok(pretender.requiresManualResolution('get', '/some/path'));
+  ok(!pretender.requiresManualResolution('get', '/some/other/path'));
 });

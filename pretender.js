@@ -21,6 +21,7 @@ function Pretender(maps){
   this.handledRequests = [];
   this.passthroughRequests = [];
   this.unhandledRequests = [];
+  this.requestReferences = [];
 
   // reference the native XMLHttpRequest object so
   // it can be restored later
@@ -112,8 +113,8 @@ function interceptor(pretender) {
 }
 
 function verbify(verb){
-  return function(path, handler){
-    this.register(verb, path, handler);
+  return function(path, handler, async){
+    this.register(verb, path, handler, async);
   };
 }
 
@@ -140,12 +141,13 @@ Pretender.prototype = {
   'delete': verbify('DELETE'),
   patch: verbify('PATCH'),
   head: verbify('HEAD'),
-  register: function register(verb, path, handler){
+  register: function register(verb, path, handler, async){
     if (!handler) {
       throw new Error("The function you tried passing to Pretender to handle " + verb + " " + path + " is undefined or missing.");
     }
 
     handler.numberOfCalls = 0;
+    handler.async = async;
     this.handlers.push(handler);
 
     var registry = this.registry[verb];
@@ -178,23 +180,64 @@ Pretender.prototype = {
 
     if (handler) {
       handler.handler.numberOfCalls++;
+      var async = handler.handler.async;
       this.handledRequests.push(request);
 
       try {
         var statusHeadersAndBody = handler.handler(request),
             status = statusHeadersAndBody[0],
             headers = this.prepareHeaders(statusHeadersAndBody[1]),
-            body = this.prepareBody(statusHeadersAndBody[2]);
-        request.respond(status, headers, body);
+            body = this.prepareBody(statusHeadersAndBody[2]),
+            pretender = this;
 
-        this.handledRequest(verb, path, request);
+        this.handleResponse(request, async, function() {
+          request.respond(status, headers, body);
+          pretender.handledRequest(verb, path, request);
+        });
       } catch (error) {
         this.erroredRequest(verb, path, request, error);
+        this.resolve(request);
       }
     } else {
       this.unhandledRequests.push(request);
       this.unhandledRequest(verb, path, request);
     }
+  },
+  handleResponse: function handleResponse(request, strategy, callback) {
+    strategy = typeof strategy === 'function' ? strategy() : strategy;
+
+    if (strategy === false) {
+      callback();
+    } else {
+      var pretender = this;
+      pretender.requestReferences.push({
+        request: request,
+        callback: callback
+      });
+
+      if (strategy !== true) {
+        setTimeout(function() {
+          pretender.resolve(request);
+        }, typeof strategy === 'number' ? strategy : 0);
+      }
+    }
+  },
+  resolve: function resolve(request) {
+    for(var i = 0, len = this.requestReferences.length; i < len; i++) {
+      var res = this.requestReferences[i];
+      if (res.request === request) {
+        res.callback();
+        this.requestReferences.splice(i, 1);
+        break;
+      }
+    }
+  },
+  requiresManualResolution: function(verb, path) {
+    var handler = this._handlerFor(verb.toUpperCase(), path, {});
+    if (!handler) { return false; }
+
+    var async = handler.handler.async;
+    return typeof async === 'function' ? async() === true : async === true;
   },
   prepareBody: function(body) { return body; },
   prepareHeaders: function(headers) { return headers; },
