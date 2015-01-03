@@ -240,6 +240,16 @@ testing infrastructure on top of pretender and need to fail tests that have hand
 
 Each handler keeps a count of the number of requests is successfully served.
 
+## Other config
+**latency (ms)**
+Set an artificial delay on all your responses with `this.latency`.
+
+```javascript
+var server = new Pretender(function(){
+  this.latency = 200;
+});
+```
+
 ## Clean up
 When you're done mocking, be sure to call `shutdown()` to restore the native XMLHttpRequest object:
 
