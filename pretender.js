@@ -22,6 +22,9 @@ function Pretender(maps){
   this.passthroughRequests = [];
   this.unhandledRequests = [];
 
+  // default latency
+  this.latency = this.latency || 0;
+
   // reference the native XMLHttpRequest object so
   // it can be restored later
   this._nativeXMLHttpRequest = window.XMLHttpRequest;
@@ -53,7 +56,11 @@ function interceptor(pretender) {
 
     FakeXMLHttpRequest.prototype.send.apply(this, arguments);
     if (!pretender.checkPassthrough(this)) {
-      pretender.handleRequest(this);
+      var _this = this;
+
+      setTimeout(function() {
+        pretender.handleRequest(_this);
+      }, pretender.latency);
     }
     else {
       var xhr = createPassthrough(this);
