@@ -1,6 +1,6 @@
 # Pretender
 
-Pretender is a mock server library in the style of Sinon (but built from microlibs. Because javascript)
+Pretender is a mock server library in the style of Sinon (but built from microlibs. Because JavaScript)
 that comes with an express/sinatra style syntax for defining routes and their handlers.
 
 Pretender will temporarily replace the native XMLHttpRequest object, intercept all requests, and direct them
@@ -119,9 +119,9 @@ var server = new Pretender(function(){
 ```
 
 ### Timing Parameter
-The timing parameter is used to control *how* a request responds. By default, a request responds
-asynchronously on the next frame of the event loop. A request can also be configured to respond
-synchronously, after a set amount of time, or never, (i.e., it needs to be manually resolved).
+The timing parameter is used to control when a request responds. By default, a request responds
+asynchronously on the next frame of the browser's event loop. A request can also be configured to respond
+synchronously, after a defined amount of time, or never (i.e., it needs to be manually resolved).
 
 **Default**
 ```javascript
@@ -158,12 +158,9 @@ var server = new Pretender(function(){
 server.resolve(theXMLHttpRequestThatRequestedTheSongsRoute);
 ```
 
-Pretender is a standalone library, and as such, offers no convenience methods for capturing
-XHRs that another library makes.
-
 #### Using functions for the timing parameter
 You may want the timing behavior of a response to change from request to request. This can be
-done by using a function for the timing parameter.
+done by providing a function as the timing parameter.
 
 ```javascript
 var externalState = 'idle';
