@@ -36,9 +36,10 @@ $.get('/photos/12', {success: function(){ ... }})
 ## The Server DSL
 The server DSL is inspired by express/sinatra. Pass a function to the Pretender constructor
 that will be invoked with the Pretender instance as its context. Available methods are
-`get`, `put`, `post`, `'delete'`, `patch`, and `head`. Each of these methods takes a path pattern
-and a callback. The callback will be invoked with a single argument (the XMLHttpRequest instance that
-triggered this request) and must return an array containing the HTTP status code, headers object, and body as a string.
+`get`, `put`, `post`, `'delete'`, `patch`, and `head`. Each of these methods takes a path pattern,
+a callback, and an optional [timing parameter](#timing-parameter). The callback will be invoked with a
+single argument (the XMLHttpRequest instance that triggered this request) and must return an array
+containing the HTTP status code, headers object, and body as a string.
 
 ```javascript
 var server = new Pretender(function(){
@@ -116,6 +117,75 @@ var server = new Pretender(function(){
   this.get('/photos/:id', this.passthrough);
 });
 ```
+
+### Timing Parameter
+The timing parameter is used to control *how* a request responds. By default, a request responds
+asynchronously on the next frame of the event loop. A request can also be configured to respond
+synchronously, after a set amount of time, or never, (i.e., it needs to be manually resolved).
+
+**Default**
+```javascript
+var server = new Pretender(function(){
+  // songHandler will execute the frame after receiving a request (async)
+  this.get('/api/songs', songHandler);
+});
+```
+
+**Synchronous**
+```javascript
+var server = new Pretender(function(){
+  // songHandler will execute immediately after receiving a request (sync)
+  this.get('/api/songs', songHandler, false);
+});
+```
+
+**Delay**
+```javascript
+var server = new Pretender(function(){
+  // songHandler will execute two seconds after receiving a request (async)
+  this.get('/api/songs', songHandler, 2000);
+});
+```
+
+**Manual**
+```javascript
+var server = new Pretender(function(){
+  // songHandler will only execute once you manually resolve the request
+  this.get('/api/songs', songHandler, true);
+});
+
+// resolve a request like this
+server.resolve(theXMLHttpRequestThatRequestedTheSongsRoute);
+```
+
+Pretender is a standalone library, and as such, offers no convenience methods for capturing
+XHRs that another library makes.
+
+#### Using functions for the timing parameter
+You may want the timing behavior of a response to change from request to request. This can be
+done by using a function for the timing parameter.
+
+```javascript
+var externalState = 'idle';
+
+function throttler() {
+  if (externalState === 'OH NO DOS ATTACK') {
+    return 15000;
+  }
+}
+
+var server = new Pretender(function(){
+  // songHandler will only execute based on the result of throttler
+  this.get('/api/songs', songHandler, throttler);
+});
+```
+
+Now whenever the songs route is requested, its timing behavior will be determined by the result
+of the call to `throttler`. When `externalState` is idle, `throttler` returns `undefined`, which
+means the route will use the default behavior.
+
+When the time is right, you can set `externalState` to `"OH NO DOS ATTACK"` which will make all
+future requests take 15 seconds to respond.
 
 ## Hooks
 ### Handled Requests
