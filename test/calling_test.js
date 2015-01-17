@@ -20,6 +20,22 @@ test("a mapping function is optional", function(){
   ok(wasCalled);
 });
 
+
+test("mapping can be called directly", function(){
+  var wasCalled;
+  function map() {
+    this.get('/some/path', function(){
+      wasCalled = true;
+    });
+  }
+
+  pretender.map(map);
+
+  $.ajax({url: '/some/path'});
+  ok(wasCalled);
+});
+
+
 test("params are passed", function(){
   var params;
   pretender.get('/some/path/:id', function(request){

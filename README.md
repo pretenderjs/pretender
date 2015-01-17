@@ -50,6 +50,26 @@ var server = new Pretender(function(){
 
 ```
 
+a Pretender constructor can take multiple maps:
+
+```javascript
+import adminMaps from "testing/maps/admin";
+import photoMaps from "testing/maps/photos";
+
+var server = new Pretender(photoMaps, adminMaps);
+
+```
+
+The HTTP verb methods can also be called on an instance individually:
+
+```javascript
+var server = new Pretender();
+server.put('/api/songs/99', function(request){
+  return [404, {}, ""];
+});
+
+```
+
 ### Paths
 Paths can either be hard-coded (`this.get('/api/songs/12')`) or contain dynamic segments
 (`this.get('/api/songs/:song_id'`). If there were dynamic segments of the path,

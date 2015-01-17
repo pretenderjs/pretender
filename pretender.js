@@ -3,9 +3,10 @@
 var isNode = typeof process !== 'undefined' && process.toString() === '[object process]';
 var RouteRecognizer = isNode ? require('route-recognizer')['default'] : window.RouteRecognizer;
 var FakeXMLHttpRequest = isNode ? require('./bower_components/FakeXMLHttpRequest/fake_xml_http_request') : window.FakeXMLHttpRequest;
+var slice = [].slice;
 
-function Pretender(maps){
-  maps = maps || function(){};
+function Pretender(/* routeMap1, routeMap2, ...*/){
+  maps = slice.call(arguments);
   // Herein we keep track of RouteRecognizer instances
   // keyed by HTTP method. Feel free to add more as needed.
   this.registry = {
@@ -35,7 +36,9 @@ function Pretender(maps){
   this.running = true;
 
   // trigger the route map DSL.
-  maps.call(this);
+  for(i=0; i < arguments.length; i++){
+    this.map(arguments[i]);
+  }
 }
 
 function interceptor(pretender) {
@@ -141,6 +144,9 @@ Pretender.prototype = {
   'delete': verbify('DELETE'),
   patch: verbify('PATCH'),
   head: verbify('HEAD'),
+  map: function(maps){
+    maps.call(this);
+  },
   register: function register(verb, path, handler, async){
     if (!handler) {
       throw new Error("The function you tried passing to Pretender to handle " + verb + " " + path + " is undefined or missing.");
