@@ -371,6 +371,16 @@ Pretender.parseURL = parseURL;
 Pretender.Hosts = Hosts;
 Pretender.Registry = Registry;
 
+Pretender.json = function json(status, payload) {
+  return function() {
+    return [
+      status,
+      { 'Content-Type': 'text/json' },
+      JSON.stringify(payload)
+    ];
+  };
+};
+
 if (typeof module === 'object') {
   module.exports = Pretender;
 } else if (typeof define !== 'undefined') {
