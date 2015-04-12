@@ -5,18 +5,86 @@ var RouteRecognizer = isNode ? require('route-recognizer')['default'] : window.R
 var FakeXMLHttpRequest = isNode ? require('./bower_components/FakeXMLHttpRequest/fake_xml_http_request') : window.FakeXMLHttpRequest;
 var slice = [].slice;
 
-function Pretender(/* routeMap1, routeMap2, ...*/){
-  maps = slice.call(arguments);
-  // Herein we keep track of RouteRecognizer instances
-  // keyed by HTTP method. Feel free to add more as needed.
-  this.registry = {
+
+/**
+ * parseURL - decompose a URL into its parts
+ * @param  {String} url a URL
+ * @return {Object} parts of the URL, including the following
+ *
+ * 'https://www.yahoo.com:1234/mypage?test=yes#abc'
+ * 
+ * {
+ *   host: 'www.yahoo.com:1234',
+ *   protocol: 'https:',
+ *   search: '?test=yes',
+ *   hash: '#abc',
+ *   href: 'https://www.yahoo.com:1234/mypage?test=yes#abc',
+ *   pathname: '/mypage',
+ *   fullpath: '/mypage?test=yes'
+ * }
+ */
+function parseURL(url) {
+  // TODO: something for when document isn't present... #yolo
+  var anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.fullpath = anchor.pathname + (anchor.search || '') + (anchor.hash || '');
+  return anchor;
+}
+
+
+/**
+ * Registry
+ * 
+ * A registry is a map of HTTP verbs to route recognizers. 
+ */
+
+function Registry(host) {
+  this.verbs = {
     GET: new RouteRecognizer(),
     PUT: new RouteRecognizer(),
     POST: new RouteRecognizer(),
     DELETE: new RouteRecognizer(),
     PATCH: new RouteRecognizer(),
-    HEAD: new RouteRecognizer()
+    HEAD: new RouteRecognizer(),
+    OPTIONS: new RouteRecognizer()
   };
+}
+
+/**
+ * Hosts
+ * 
+ * a map of hosts to Registries, ultimately allowing
+ * a per-host-and-port, per HTTP verb lookup of RouteRecognizers
+ */
+function Hosts() {
+  this._registries = {};
+}
+
+/**
+ * Hosts#forURL - retrieve a map of HTTP verbs to RouteRecognizers
+ *                for a given URL
+ * 
+ * @param  {String} url a URL
+ * @return {Registry}   a map of HTTP verbs to RouteRecognizers 
+ *                      corresponding to the provided URL's 
+ *                      hostname and port 
+ */
+Hosts.prototype.forURL = function(url) {
+  var host = parseURL(url).host;
+  var registry = this._registries[host];
+
+  if (registry === undefined) {
+    registry = (this._registries[host] = new Registry(host));
+  }
+
+  return registry.verbs;
+}
+
+function Pretender(/* routeMap1, routeMap2, ...*/){
+  maps = slice.call(arguments);
+  // Herein we keep track of RouteRecognizer instances
+  // keyed by HTTP method. Feel free to add more as needed.
+  this.hosts = new Hosts();
 
   this.handlers = [];
   this.handledRequests = [];
@@ -129,20 +197,6 @@ function verbify(verb){
   };
 }
 
-function throwIfURLDetected(url){
-  var HTTP_REGEXP = /^https?/;
-  var message;
-
-  if(HTTP_REGEXP.test(url)) {
-    var parser = window.document.createElement('a');
-    parser.href = url;
-
-    message = "Pretender will not respond to requests for URLs. It is not possible to accurately simluate the browser's CSP. "+
-              "Remove the " + parser.protocol +"//"+ parser.hostname +" from " + url + " and try again";
-    throw new Error(message)
-  }
-}
-
 function scheduleProgressEvent(request, startTime, totalTime) {
   setTimeout(function() {
     if (!request.aborted && !request.status) {
@@ -166,28 +220,31 @@ Pretender.prototype = {
   map: function(maps){
     maps.call(this);
   },
-  register: function register(verb, path, handler, async){
+  register: function register(verb, url, handler, async){
     if (!handler) {
-      throw new Error("The function you tried passing to Pretender to handle " + verb + " " + path + " is undefined or missing.");
+      throw new Error("The function you tried passing to Pretender to handle " + verb + " " + url + " is undefined or missing.");
     }
 
     handler.numberOfCalls = 0;
     handler.async = async;
     this.handlers.push(handler);
 
-    var registry = this.registry[verb];
-    registry.add([{path: path, handler: handler}]);
+    var registry = this.hosts.forURL(url)[verb];
+
+    registry.add([{
+      path: parseURL(url).fullpath,
+      handler: handler
+    }]);
   },
   passthrough: PASSTHROUGH,
-  checkPassthrough: function(request) {
+  checkPassthrough: function checkPassthrough(request) {
     var verb = request.method.toUpperCase();
-    var path = request.url;
 
-    throwIfURLDetected(path);
+    var path = parseURL(request.url).fullpath;
 
     verb = verb.toUpperCase();
 
-    var recognized = this.registry[verb].recognize(path);
+    var recognized = this.hosts.forURL(request.url)[verb].recognize(path);
     var match = recognized && recognized[0];
     if (match && match.handler == PASSTHROUGH) {
       this.passthroughRequests.push(request);
@@ -277,9 +334,9 @@ Pretender.prototype = {
     error.message = "Pretender intercepted "+verb+" "+path+" but encountered an error: " + error.message;
     throw error;
   },
-  _handlerFor: function(verb, path, request){
-    var registry = this.registry[verb];
-    var matches = registry.recognize(path);
+  _handlerFor: function(verb, url, request){
+    var registry = this.hosts.forURL(url)[verb];
+    var matches = registry.recognize(parseURL(url).fullpath);
 
     var match = matches ? matches[0] : null;
     if (match) {
@@ -296,6 +353,10 @@ Pretender.prototype = {
     this.running = false;
   }
 };
+
+Pretender.parseURL = parseURL;
+Pretender.Hosts = Hosts;
+Pretender.Registry = Registry;
 
 if (isNode) {
   module.exports = Pretender;
