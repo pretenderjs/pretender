@@ -56,6 +56,38 @@ test("queryParams are passed", function(){
   equal(params.zulu, 'nation');
 });
 
+test("request body is accessible", function(){
+  var params;
+  pretender.post('/some/path/1', function(request){
+    params = request.requestBody;
+  });
+
+  $.ajax({
+    method: 'post',
+    url: '/some/path/1',
+    data: {
+      ok: true
+    }
+  });
+  equal(params, 'ok=true');
+});
+
+test("request headers are accessible", function(){
+  var headers;
+  pretender.post('/some/path/1', function(request){
+    headers = request.requestHeaders;
+  });
+
+  $.ajax({
+    method: 'post',
+    url: '/some/path/1',
+    headers: {
+      "A-Header": "value",
+    }
+  });
+  equal(headers["A-Header"], 'value')
+});
+
 test("adds requests to the list of handled requests", function(){
   var params;
   pretender.get('/some/path', function(request){
