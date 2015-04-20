@@ -139,6 +139,12 @@ function throwIfURLDetected(url){
   By the spec, uploads/downloads should trigger progress events each 50ms or each time a byte is
   sent, whatever happens **less** often. Since we cannot simulate byte transfer, pretender will
   file progress events each 50ms.
+
+  Extrictly speaking, a `loadstart` event should be fired af the beginning, followed by
+  many `progress` events, followed by a `load` event (if successful) and finally by a `loadend`
+  event (regardless of the success or failure of the request).
+
+  We might not want all this and stay with only the "progress" event.
 */
 function scheduleProgressEvents(request, delay) {
   if (delay === 0) {
@@ -149,14 +155,14 @@ function scheduleProgressEvents(request, delay) {
   if (request.onerror && typeof request.onerror === 'function') {
     for (i = 0; i < numberOfEvents; i++) {
       setTimeout(function() {
-        request._progress(i * 50, delay, true);
+        request._progress(true, i * 50, delay);
       }, i * 50);
     }
   }
   if (request.upload.onerror && typeof request.upload.onerror === 'function') {
     for (i = 0; i < numberOfEvents; i++) {
       setTimeout(function() {
-        request.upload._progress(i * 50, delay, true);
+        request.upload._progress(true, i * 50, delay);
       }, i * 50);
     }
   }
