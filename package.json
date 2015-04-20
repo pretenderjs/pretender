@@ -18,6 +18,6 @@
   },
   "dependencies": {
     "route-recognizer": "^0.1.0",
-    "fake-xml-http-request": "^1.0.0"
+    "fake-xml-http-request": "^1.2.0"
   }
 }
