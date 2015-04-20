@@ -135,6 +135,33 @@ function throwIfURLDetected(url){
   }
 }
 
+/*
+  By the spec, uploads/downloads should trigger progress events each 50ms or each time a byte is
+  sent, whatever happens **less** often. Since we cannot simulate byte transfer, pretender will
+  file progress events each 50ms.
+*/
+function scheduleProgressEvents(request, delay) {
+  if (delay === 0) {
+    return
+  }
+  var numberOfEvents = Math.floor(delay / 50);
+  var i;
+  if (request.onerror && typeof request.onerror === 'function') {
+    for (i = 0; i < numberOfEvents; i++) {
+      setTimeout(function() {
+        request._progress(i * 50, delay, true);
+      }, i * 50);
+    }
+  }
+  if (request.upload.onerror && typeof request.upload.onerror === 'function') {
+    for (i = 0; i < numberOfEvents; i++) {
+      setTimeout(function() {
+        request.upload._progress(i * 50, delay, true);
+      }, i * 50);
+    }
+  }
+}
+
 var PASSTHROUGH = {};
 
 Pretender.prototype = {
@@ -210,9 +237,10 @@ Pretender.prototype = {
     }
   },
   handleResponse: function handleResponse(request, strategy, callback) {
-    strategy = typeof strategy === 'function' ? strategy() : strategy;
+    var delay = typeof strategy === 'function' ? strategy() : strategy;
+    delay = typeof delay === 'boolean' ? delay : (typeof delay === 'number' ? delay : 0);
 
-    if (strategy === false) {
+    if (delay === false) {
       callback();
     } else {
       var pretender = this;
@@ -221,10 +249,11 @@ Pretender.prototype = {
         callback: callback
       });
 
-      if (strategy !== true) {
+      if (delay !== true) {
+        scheduleProgressEvents(request, delay);
         setTimeout(function() {
           pretender.resolve(request);
-        }, typeof strategy === 'number' ? strategy : 0);
+        }, delay);
       }
     }
   },
