@@ -19,13 +19,18 @@ module.exports = function(config) {
       'bower_components/route-recognizer/dist/route-recognizer.js',
       'bower_components/jquery/dist/jquery.js',
       'pretender.js',
-      'test/**/*.js'
+      'test/**/*.js',
+      {pattern: 'test/assets/pretender.ogg', watched: false, included: false, served: true}
     ],
 
     // list of files to exclude
     exclude: [
 
     ],
+
+    proxies: {
+      '/assets/': '/base/test/assets/'
+    },
 
 
     // preprocess matching files before serving them to the browser
