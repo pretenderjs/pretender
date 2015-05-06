@@ -20,7 +20,6 @@ test("a mapping function is optional", function(){
   ok(wasCalled);
 });
 
-
 test("mapping can be called directly", function(){
   var wasCalled;
   function map() {
@@ -34,7 +33,6 @@ test("mapping can be called directly", function(){
   $.ajax({url: '/some/path'});
   ok(wasCalled);
 });
-
 
 test("params are passed", function(){
   var params;
@@ -325,4 +323,118 @@ test("requiresManualResolution returns true for endpoints configured with `true`
 
   ok(pretender.requiresManualResolution('get', '/some/path'));
   ok(!pretender.requiresManualResolution('get', '/some/other/path'));
+});
+
+test("async requests with `onprogress` upload events in the upload trigger a progress event each 50ms", function(assert) {
+  var done = assert.async();
+  var progressEventCount = 0;
+  pretender.post('/uploads', function(request){
+    return [200, {}, ''];
+  }, 300);
+
+  var xhr = new window.XMLHttpRequest();
+  xhr.open('POST', '/uploads');
+  xhr.upload.onprogress = function(e) {
+    progressEventCount++;
+  };
+  xhr.onload = function() {
+    equal(progressEventCount, 5, 'In a request of 300ms the progress event has been fired 5 times');
+    done();
+  }
+  xhr.send("some data");
+});
+
+test("`onprogress` upload events don't keep firing once the request has ended", function(assert) {
+  var done = assert.async();
+  var progressEventCount = 0;
+  pretender.post('/uploads', function(request){
+    return [200, {}, ''];
+  }, 210);
+
+  var xhr = new window.XMLHttpRequest();
+  xhr.open('POST', '/uploads');
+  xhr.upload.onprogress = function(e) {
+    progressEventCount++;
+  };
+  xhr.send("some data");
+  setTimeout(function() {
+    equal(progressEventCount, 4, 'No `onprogress` events are fired after the the request finalizes');
+    done();
+  }, 510);
+});
+
+test('no progress upload events are fired after the request is aborted', function(assert) {
+  var done = assert.async();
+  var progressEventCount = 0;
+
+  pretender.post('/uploads', function(request){
+    return [200, {}, ''];
+  }, 210);
+
+  var xhr = new window.XMLHttpRequest();
+  xhr.open('POST', '/uploads');
+  xhr.upload.onprogress = function(e) { progressEventCount++; };
+  xhr.send("some data");
+  setTimeout(function() { xhr.abort() }, 90);
+  setTimeout(function() {
+    equal(progressEventCount, 1, 'only one progress event was triggered because the request was aborted');
+    done();
+  }, 220);
+});
+
+test("async requests with `onprogress` events trigger a progress event each 50ms", function(assert) {
+  var done = assert.async();
+  var progressEventCount = 0;
+  pretender.get('/downloads', function(request){
+    return [200, {}, ''];
+  }, 300);
+
+  var xhr = new window.XMLHttpRequest();
+  xhr.open('GET', '/downloads');
+  xhr.onprogress = function(e) {
+    progressEventCount++;
+  };
+  xhr.onload = function() {
+    equal(progressEventCount, 5, 'In a request of 300ms the progress event has been fired 5 times');
+    done();
+  }
+  xhr.send("some data");
+});
+
+test("`onprogress` download events don't keep firing once the request has ended", function(assert) {
+  var done = assert.async();
+  var progressEventCount = 0;
+  pretender.get('/downloads', function(request){
+    return [200, {}, ''];
+  }, 210);
+
+  var xhr = new window.XMLHttpRequest();
+  xhr.open('GET', '/downloads');
+  xhr.onprogress = function(e) {
+    progressEventCount++;
+  };
+  xhr.send("some data");
+  setTimeout(function() {
+    equal(progressEventCount, 4, 'No `onprogress` events are fired after the the request finalizes');
+    done();
+  }, 510);
+});
+
+test('no progress download events are fired after the request is aborted', function(assert) {
+  var done = assert.async();
+  var progressEventCount = 0;
+
+  pretender.get('/downloads', function(request){
+    return [200, {}, ''];
+  }, 210);
+
+  var xhr = new window.XMLHttpRequest();
+  xhr.open('GET', '/downloads');
+  xhr.onprogress = function(e) { progressEventCount++; };
+  xhr.send("some data");
+  setTimeout(function() { xhr.abort() }, 90);
+  setTimeout(function() {
+    equal(progressEventCount, 1, 'only one progress event was triggered because the request was aborted');
+    done();
+  }, 220);
 });
