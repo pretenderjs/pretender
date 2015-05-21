@@ -135,6 +135,17 @@ function throwIfURLDetected(url){
   }
 }
 
+function scheduleProgressEvent(request, startTime, totalTime) {
+  setTimeout(function() {
+    if (!request.aborted && !request.status) {
+      var ellapsedTime = new Date().getTime() - startTime.getTime();
+      request.upload._progress(true, ellapsedTime, totalTime);
+      request._progress(true, ellapsedTime, totalTime);
+      scheduleProgressEvent(request, startTime, totalTime);
+    }
+  }, 50);
+}
+
 var PASSTHROUGH = {};
 
 Pretender.prototype = {
@@ -210,9 +221,10 @@ Pretender.prototype = {
     }
   },
   handleResponse: function handleResponse(request, strategy, callback) {
-    strategy = typeof strategy === 'function' ? strategy() : strategy;
+    var delay = typeof strategy === 'function' ? strategy() : strategy;
+    delay = typeof delay === 'boolean' || typeof delay === 'number' ? delay : 0;
 
-    if (strategy === false) {
+    if (delay === false) {
       callback();
     } else {
       var pretender = this;
@@ -221,10 +233,11 @@ Pretender.prototype = {
         callback: callback
       });
 
-      if (strategy !== true) {
+      if (delay !== true) {
+        scheduleProgressEvent(request, new Date(), delay);
         setTimeout(function() {
           pretender.resolve(request);
-        }, typeof strategy === 'number' ? strategy : 0);
+        }, delay);
       }
     }
   },
