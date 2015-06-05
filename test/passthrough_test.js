@@ -35,3 +35,34 @@ asyncTest("allows matched paths to be pass-through", function(){
     }
   });
 });
+
+asyncTest("allows requests for URL to be pass-through", function(){
+  pretender.passthroughURL = true;
+
+  var passthroughInvoked = false;
+  pretender.passthroughRequest = function(verb, path, request) {
+    passthroughInvoked = true;
+    equal(verb, 'POST');
+    equal(path, 'http://www.google.com');
+    equal(request.requestBody, 'some=data');
+  };
+
+  $.ajax({
+    url: 'http://www.google.com',
+    method: 'POST',
+    headers: {
+      'test-header': 'value'
+    },
+    data: {
+      'some': 'data'
+    },
+    async: false,
+    error: function(xhr) {
+      equal(xhr.status, 0);
+      ok(passthroughInvoked);
+      start();
+    }
+  });
+});
+
+
