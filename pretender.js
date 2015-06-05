@@ -35,6 +35,9 @@ function Pretender(/* routeMap1, routeMap2, ...*/){
   // "start" the server
   this.running = true;
 
+  // allows for URL requests to passthrough
+  this.passthroughURL = false;
+
   // trigger the route map DSL.
   for(i=0; i < arguments.length; i++){
     this.map(arguments[i]);
@@ -88,8 +91,11 @@ function interceptor(pretender) {
       };
     })(evts[i]);
     xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
-    xhr.timeout = fakeXHR.timeout;
+    if(fakeXHR.async){
+      xhr.timeout = fakeXHR.timeout;
+    }
     xhr.withCredentials = fakeXHR.withCredentials;
+
     for (var h in fakeXHR.requestHeaders) {
       xhr.setRequestHeader(h, fakeXHR.requestHeaders[h]);
     }
@@ -121,11 +127,14 @@ function verbify(verb){
   };
 }
 
-function throwIfURLDetected(url){
+function throwIfURLDetected(url, passthroughURL){
   var HTTP_REGEXP = /^https?/;
   var message;
 
   if(HTTP_REGEXP.test(url)) {
+    if(passthroughURL){
+      return true;
+    }
     var parser = window.document.createElement('a');
     parser.href = url;
 
@@ -175,7 +184,11 @@ Pretender.prototype = {
     var verb = request.method.toUpperCase();
     var path = request.url;
 
-    throwIfURLDetected(path);
+    if(throwIfURLDetected(path, this.passthroughURL)){ 
+      this.passthroughRequests.push(request);
+      this.passthroughRequest(verb, path, request);
+      return true;
+    }
 
     verb = verb.toUpperCase();
 
