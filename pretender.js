@@ -66,10 +66,18 @@ function interceptor(pretender) {
   };
 
   // passthrough handling
-  var evts = ['load', 'error', 'timeout', 'progress', 'abort', 'readystatechange'];
+  var evts = ['error', 'timeout', 'progress', 'abort'];
   var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
   function createPassthrough(fakeXHR) {
     var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
+
+    // use onload instead of onreadystatechange if the browser supports it
+    if ('onload' in xhr) {
+      evts.push('load');
+    } else {
+      evts.push('readystatechange');
+    }
+
     // listen to all events to update lifecycle properties
     for (var i = 0; i < evts.length; i++) (function(evt) {
       xhr['on' + evt] = function(e) {
