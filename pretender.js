@@ -67,7 +67,7 @@ function interceptor(pretender) {
 
   // passthrough handling
   var evts = ['load', 'error', 'timeout', 'progress', 'abort', 'readystatechange'];
-  var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
+  var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText', 'response'];
   function createPassthrough(fakeXHR) {
     var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
     // listen to all events to update lifecycle properties
@@ -76,7 +76,12 @@ function interceptor(pretender) {
         // update lifecycle props on each event
         for (var i = 0; i < lifecycleProps.length; i++) {
           var prop = lifecycleProps[i];
-          if (xhr[prop]) {
+          // reading responseText and responseXML throws an exceptions when responseType is not appropriate
+          // see https://xhr.spec.whatwg.org/#the-responsetext-attribute
+          if (
+            (prop !== 'responseText' || xhr.responseType === 'text' || xhr.responseType === '') &&
+            (prop !== 'responseXML' || xhr.responseType === 'document' || xhr.responseType === '') &&
+            xhr[prop]) {
             fakeXHR[prop] = xhr[prop];
           }
         }
@@ -90,6 +95,7 @@ function interceptor(pretender) {
     xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
     xhr.timeout = fakeXHR.timeout;
     xhr.withCredentials = fakeXHR.withCredentials;
+    xhr.responseType = fakeXHR.responseType;
     for (var h in fakeXHR.requestHeaders) {
       xhr.setRequestHeader(h, fakeXHR.requestHeaders[h]);
     }
