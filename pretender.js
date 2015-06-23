@@ -81,7 +81,7 @@ function interceptor(pretender) {
           }
         }
         // fire fake events where applicable
-        fakeXHR.dispatchEvent(evt, e);
+        fakeXHR.dispatchEvent(e);
         if (fakeXHR['on' + evt]) {
           fakeXHR['on' + evt](e);
         }
