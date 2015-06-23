@@ -95,7 +95,7 @@ function interceptor(pretender) {
     xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
     xhr.timeout = fakeXHR.timeout;
     xhr.withCredentials = fakeXHR.withCredentials;
-    xhr.responseType = fakeXHR.responseType;
+    xhr.responseType = fakeXHR.responseType || '';
     for (var h in fakeXHR.requestHeaders) {
       xhr.setRequestHeader(h, fakeXHR.requestHeaders[h]);
     }
