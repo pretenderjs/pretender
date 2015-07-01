@@ -204,6 +204,33 @@ means the route will use the default behavior.
 When the time is right, you can set `externalState` to `"OH NO DOS ATTACK"` which will make all
 future requests take 15 seconds to respond.
 
+## Sharing routes
+You can call `map` multiple times on a Pretender instance. This is a great way to share and reuse
+sets of routes between tests:
+
+```javascript
+export function authenticationRoutes(){
+  this.post('/authenticate', function(){ ... });
+  this.post('/signout', function(){ ... });
+}
+
+export function songsRoutes(){
+  this.get('/api/songs', function(){ ... });
+}
+```
+
+
+```javascript
+// a test
+
+import {authenticationRoutes, songsRoutes} from "../shared/routes";
+import Pretender from "pretender";
+
+let p = new Pretender();
+p.map(authenticationRoutes);
+p.map(songsRoutes);
+```
+
 ## Hooks
 ### Handled Requests
 In addition to responding to the request, your server will call a `handledRequest` method with
