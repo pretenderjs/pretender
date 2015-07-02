@@ -273,7 +273,7 @@ test("can be configured to resolve after a specified time", function(assert) {
 
   pretender.get('/some/path', function(request) {
     return [200, {}, ''];
-  }, 10);
+  }, 100);
 
   $.ajax({
     url: '/some/path',
