@@ -1,0 +1,11 @@
+{
+  "framework": "qunit",
+  "test_page": "dist/test/index.html",
+  "src_files": [
+    "lib/**/*.js",
+    "test/**/*.js"
+  ],
+  "before_tests": "npm run build",
+  "launch_in_ci": ["PhantomJS"],
+  "launch_in_dev": ["PhantomJS", "Chrome"]
+}
