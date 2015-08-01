@@ -438,3 +438,19 @@ test('no progress download events are fired after the request is aborted', funct
     done();
   }, 220);
 });
+
+test("resolves cross-origin requests", function () {
+
+  var url = 'http://status.github.com/api/status';
+  var payload = 'it works!';
+  var wasCalled;
+
+  pretender.get(url, function(){
+    wasCalled = true;
+    return [200, {}, payload];
+  });
+
+  $.ajax({url: url});
+  ok(wasCalled);
+
+});
