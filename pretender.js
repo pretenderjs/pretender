@@ -12,7 +12,7 @@ var slice = [].slice;
  * @return {Object} parts of the URL, including the following
  *
  * 'https://www.yahoo.com:1234/mypage?test=yes#abc'
- * 
+ *
  * {
  *   host: 'www.yahoo.com:1234',
  *   protocol: 'https:',
@@ -34,8 +34,8 @@ function parseURL(url) {
 
 /**
  * Registry
- * 
- * A registry is a map of HTTP verbs to route recognizers. 
+ *
+ * A registry is a map of HTTP verbs to route recognizers.
  */
 
 function Registry(host) {
@@ -52,7 +52,7 @@ function Registry(host) {
 
 /**
  * Hosts
- * 
+ *
  * a map of hosts to Registries, ultimately allowing
  * a per-host-and-port, per HTTP verb lookup of RouteRecognizers
  */
@@ -63,11 +63,11 @@ function Hosts() {
 /**
  * Hosts#forURL - retrieve a map of HTTP verbs to RouteRecognizers
  *                for a given URL
- * 
+ *
  * @param  {String} url a URL
- * @return {Registry}   a map of HTTP verbs to RouteRecognizers 
- *                      corresponding to the provided URL's 
- *                      hostname and port 
+ * @return {Registry}   a map of HTTP verbs to RouteRecognizers
+ *                      corresponding to the provided URL's
+ *                      hostname and port
  */
 Hosts.prototype.forURL = function(url) {
   var host = parseURL(url).host;
@@ -104,7 +104,7 @@ function Pretender(/* routeMap1, routeMap2, ...*/){
   this.running = true;
 
   // trigger the route map DSL.
-  for(i=0; i < arguments.length; i++){
+  for(var i=0; i < arguments.length; i++){
     this.map(arguments[i]);
   }
 }
