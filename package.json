@@ -1,6 +1,6 @@
 {
   "name": "pretender",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "main": "./pretender.js",
   "scripts": {
     "postinstall": "bower install",
