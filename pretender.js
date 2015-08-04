@@ -1,10 +1,8 @@
-(function(window){
-
+(function(self){
+'use strict';
 var isNode = typeof process !== 'undefined' && process.toString() === '[object process]';
 var RouteRecognizer = isNode ? require('route-recognizer')['default'] : window.RouteRecognizer;
 var FakeXMLHttpRequest = isNode ? require('./bower_components/FakeXMLHttpRequest/fake_xml_http_request') : window.FakeXMLHttpRequest;
-var slice = [].slice;
-
 
 /**
  * parseURL - decompose a URL into its parts
@@ -171,21 +169,25 @@ function interceptor(pretender) {
     }
     return xhr;
   }
-  proto._passthroughCheck = function(method, arguments) {
+
+  proto._passthroughCheck = function(method, args) {
     if (this._passthroughRequest) {
-      return this._passthroughRequest[method].apply(this._passthroughRequest, arguments);
+      return this._passthroughRequest[method].apply(this._passthroughRequest, args);
     }
-    return FakeXMLHttpRequest.prototype[method].apply(this, arguments);
-  }
-  proto.abort = function abort(){
+    return FakeXMLHttpRequest.prototype[method].apply(this, args);
+  };
+
+  proto.abort = function abort() {
     return this._passthroughCheck('abort', arguments);
-  }
-  proto.getResponseHeader = function getResponseHeader(){
+  };
+
+  proto.getResponseHeader = function getResponseHeader() {
     return this._passthroughCheck('getResponseHeader', arguments);
-  }
-  proto.getAllResponseHeaders = function getAllResponseHeaders(){
+  };
+
+  proto.getAllResponseHeaders = function getAllResponseHeaders() {
     return this._passthroughCheck('getAllResponseHeaders', arguments);
-  }
+  };
 
   FakeRequest.prototype = proto;
   return FakeRequest;
@@ -347,7 +349,7 @@ Pretender.prototype = {
     return match;
   },
   shutdown: function shutdown(){
-    window.XMLHttpRequest = this._nativeXMLHttpRequest;
+    self.XMLHttpRequest = this._nativeXMLHttpRequest;
 
     // "stop" the server
     this.running = false;
@@ -361,7 +363,7 @@ Pretender.Registry = Registry;
 if (isNode) {
   module.exports = Pretender;
 } else {
-  window.Pretender = Pretender;
+  self.Pretender = Pretender;
 }
 
-})(window);
+}(self));
