@@ -81,7 +81,6 @@ Hosts.prototype.forURL = function(url) {
 }
 
 function Pretender(/* routeMap1, routeMap2, ...*/){
-  maps = slice.call(arguments);
   // Herein we keep track of RouteRecognizer instances
   // keyed by HTTP method. Feel free to add more as needed.
   this.hosts = new Hosts();
