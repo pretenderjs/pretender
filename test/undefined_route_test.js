@@ -11,11 +11,11 @@ module('pretender route not defined', {
   }
 });
 
-test('calls unhandledRequest', function() {
+test('calls unhandledRequest', function(assert) {
   pretender.unhandledRequest = function(verb, path) {
-    equal('GET', verb);
-    equal('not-defined', path);
-    ok(true);
+    assert.equal('GET', verb);
+    assert.equal('not-defined', path);
+    assert.ok(true);
   };
 
   $.ajax({
@@ -23,19 +23,19 @@ test('calls unhandledRequest', function() {
   });
 });
 
-test('errors by default', function() {
+test('errors by default', function(assert) {
   var verb = 'GET';
   var path = '/foo/bar';
-  throws (function() {
+  assert.throws (function() {
     pretender.unhandledRequest(verb, path);
   }, 'Pretender intercepted GET /foo/bar but no handler was defined for this type of request');
 });
 
-test('adds the request to the array of unhandled requests by default', function() {
+test('adds the request to the array of unhandled requests by default', function(assert) {
   $.ajax({
     url: 'not-defined'
   });
 
   var req = pretender.unhandledRequests[0];
-  equal(req.url, 'not-defined');
+  assert.equal(req.url, 'not-defined');
 });

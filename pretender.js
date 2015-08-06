@@ -36,7 +36,7 @@ function parseURL(url) {
  * A registry is a map of HTTP verbs to route recognizers.
  */
 
-function Registry(host) {
+function Registry(/* host */) {
   this.verbs = {
     GET: new RouteRecognizer(),
     PUT: new RouteRecognizer(),
@@ -145,22 +145,24 @@ function interceptor(pretender) {
     /*jshint -W083 */
     // jscs:disable requireCurlyBraces
     // listen to all events to update lifecycle properties
-    for (var i = 0; i < evts.length; i++) (function(evt) {
-      xhr['on' + evt] = function(e) {
-        // update lifecycle props on each event
-        for (var i = 0; i < lifecycleProps.length; i++) {
-          var prop = lifecycleProps[i];
-          if (xhr[prop]) {
-            fakeXHR[prop] = xhr[prop];
+    for (var i = 0; i < evts.length; i++) {
+      (function(evt) {
+        xhr['on' + evt] = function(e) {
+          // update lifecycle props on each event
+          for (var i = 0; i < lifecycleProps.length; i++) {
+            var prop = lifecycleProps[i];
+            if (xhr[prop]) {
+              fakeXHR[prop] = xhr[prop];
+            }
           }
-        }
-        // fire fake events where applicable
-        fakeXHR.dispatchEvent(evt, e);
-        if (fakeXHR['on' + evt]) {
-          fakeXHR['on' + evt](e);
-        }
-      };
-    })(evts[i]);
+          // fire fake events where applicable
+          fakeXHR.dispatchEvent(evt, e);
+          if (fakeXHR['on' + evt]) {
+            fakeXHR['on' + evt](e);
+          }
+        };
+      })(evts[i]);
+    }
     /*jshint +W083 */
     // jscs:enable requireCurlyBraces
     xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
@@ -251,7 +253,7 @@ Pretender.prototype = {
 
     var recognized = this.hosts.forURL(request.url)[verb].recognize(path);
     var match = recognized && recognized[0];
-    if (match && match.handler == PASSTHROUGH) {
+    if (match && match.handler === PASSTHROUGH) {
       this.passthroughRequests.push(request);
       this.passthroughRequest(verb, path, request);
       return true;
@@ -330,9 +332,9 @@ Pretender.prototype = {
   },
   prepareBody: function(body) { return body; },
   prepareHeaders: function(headers) { return headers; },
-  handledRequest: function(verb, path, request) { /* no-op */},
-  passthroughRequest: function(verb, path, request) { /* no-op */},
-  unhandledRequest: function(verb, path, request) {
+  handledRequest: function(/* verb, path, request */) { /* no-op */},
+  passthroughRequest: function(/* verb, path, request */) { /* no-op */},
+  unhandledRequest: function(verb, path/*, request */) {
     throw new Error('Pretender intercepted ' + verb + ' ' +
       path + ' but no handler was defined for this type of request');
   },

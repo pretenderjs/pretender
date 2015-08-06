@@ -1,4 +1,4 @@
-# Pretender
+# Pretender [![Build Status](https://travis-ci.org/pretenderjs/pretender.svg)](https://travis-ci.org/pretenderjs/pretender)
 
 [![Test Coverage](https://codeclimate.com/github/pretenderjs/pretender/badges/coverage.svg)](https://codeclimate.com/github/pretenderjs/pretender/coverage)
 

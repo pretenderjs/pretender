@@ -7,10 +7,10 @@
     "pretest": "bower install",
     "test": "npm run lint && npm run jscs && npm run tests-only",
     "test-ci": "npm run pretest && npm run lint && npm run jscs && npm run tests-only-ci",
-    "tests-only": "./node_modules/karma/bin/karma start --single-run",
-    "tests-only-ci": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
-    "lint": "./node_modules/.bin/jshint pretender.js test",
-    "jscs": "./node_modules/.bin/jscs pretender.js test",
+    "tests-only": "karma start --single-run",
+    "tests-only-ci": "karma start --single-run --browsers PhantomJS",
+    "lint": "jshint pretender.js test",
+    "jscs": "jscs pretender.js test",
     "test:server": "karma start --no-single-run"
   },
   "repository": {
@@ -22,13 +22,26 @@
     "jscs": "^2.0.0",
     "jshint": "^2.8.0",
     "karma": "^0.13.8",
-    "karma-chrome-launcher": "^0.1.3",
+    "karma-chrome-launcher": "^0.2.0",
     "karma-coverage": "^0.5.0",
-    "karma-phantomjs-launcher": "0.2.0",
-    "karma-qunit": "^0.1.3"
+    "karma-phantomjs-launcher": "^0.2.0",
+    "karma-qunit": "^0.1.3",
+    "phantomjs": "^1.9.17",
+    "qunitjs": "^1.18.0"
   },
   "dependencies": {
     "fake-xml-http-request": "^1.2.0",
     "route-recognizer": "^0.1.9"
+  },
+  "jspm": {
+    "shim": {
+      "pretender": {
+        "deps": [
+          "route-recognizer",
+          "fake-xml-http-request"
+        ],
+        "exports": "Pretender"
+      }
+    }
   }
 }
