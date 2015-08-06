@@ -29,5 +29,13 @@
   "dependencies": {
     "fake-xml-http-request": "^1.2.0",
     "route-recognizer": "^0.1.9"
+  },
+  "jspm": {
+    "shim": {
+      "pretender": {
+        "deps": ["route-recognizer", "fake-xml-http-request"],
+        "exports": "Pretender"
+      }
+    }
   }
 }
