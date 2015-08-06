@@ -14,3 +14,7 @@ install:
   - npm --version
   - git --version
   - npm install
+
+
+after_script:
+  - find ./coverage/Phantom* -name "lcov.info" -exec cat {} \; | coveralls
