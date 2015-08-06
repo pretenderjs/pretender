@@ -8,20 +8,20 @@ module('pretender shutdown', {
   }
 });
 
-test('restores the native XMLHttpRequest object', function() {
+test('restores the native XMLHttpRequest object', function(assert) {
   pretender = new Pretender();
-  notEqual(window.XMLHttpRequest, nativeXMLHttpRequest);
+  assert.notEqual(window.XMLHttpRequest, nativeXMLHttpRequest);
 
   pretender.shutdown();
-  equal(window.XMLHttpRequest, nativeXMLHttpRequest);
+  assert.equal(window.XMLHttpRequest, nativeXMLHttpRequest);
 });
 
-test('warns if requests attempt to respond after shutdown', function() {
+test('warns if requests attempt to respond after shutdown', function(assert) {
   pretender = new Pretender();
   var request = new XMLHttpRequest();
   pretender.shutdown();
 
-  throws (function() {
+  assert.throws (function() {
     request.send();
   });
 });

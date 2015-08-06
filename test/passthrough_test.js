@@ -10,15 +10,16 @@ module('pretender invoking', {
     pretender = null;
   }
 });
-asyncTest('allows matched paths to be pass-through', function() {
+
+asyncTest('allows matched paths to be pass-through', function(assert) {
   pretender.post('/some/:route', pretender.passthrough);
 
   var passthroughInvoked = false;
   pretender.passthroughRequest = function(verb, path, request) {
     passthroughInvoked = true;
-    equal(verb, 'POST');
-    equal(path, '/some/path');
-    equal(request.requestBody, 'some=data');
+    assert.equal(verb, 'POST');
+    assert.equal(path, '/some/path');
+    assert.equal(request.requestBody, 'some=data');
   };
 
   $.ajax({
@@ -31,9 +32,9 @@ asyncTest('allows matched paths to be pass-through', function() {
       some: 'data'
     },
     error: function(xhr) {
-      equal(xhr.status, 404);
-      ok(passthroughInvoked);
-      start();
+      assert.equal(xhr.status, 404);
+      assert.ok(passthroughInvoked);
+      QUnit.start();
     }
   });
 });

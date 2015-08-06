@@ -11,9 +11,9 @@ test('has a "verbs" property', function() {
 });
 
 
-test('supports all HTTP verbs', function() {
+test('supports all HTTP verbs', function(assert) {
   var verbs = ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'];
   for (var v = 0; v < verbs.length; v++) {
-    ok(registry.verbs[verbs[v]], 'supports ' + verbs[v]);
+    assert.ok(registry.verbs[verbs[v]], 'supports ' + verbs[v]);
   }
 });
