@@ -1,13 +1,17 @@
 {
   "predef": [
-    "self"
+    "self",
+    "require",
+    "module",
+    "define",
+    "process"
   ],
   "expr": true,
   "proto": true,
   "strict": true,
   "indent": 2,
   "camelcase": true,
-  "node": true,
+  "node": false,
   "browser": true,
   "boss": true,
   "curly": true,
