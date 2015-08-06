@@ -1,6 +1,6 @@
 # Pretender [![Build Status](https://travis-ci.org/pretenderjs/pretender.svg)](https://travis-ci.org/pretenderjs/pretender)
 
-[![Test Coverage](https://codeclimate.com/github/pretenderjs/pretender/badges/coverage.svg)](https://codeclimate.com/github/pretenderjs/pretender/coverage)
+[![Coverage Status](https://coveralls.io/repos/pretenderjs/pretender/badge.svg?branch=master&service=github)](https://coveralls.io/github/pretenderjs/pretender?branch=master)
 
 Pretender is a mock server library in the style of Sinon (but built from microlibs. Because JavaScript)
 that comes with an express/sinatra style syntax for defining routes and their handlers.

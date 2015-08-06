@@ -3,10 +3,6 @@ language: node_js
 node_js:
   - "0.12"
 
-addons:
-  code_climate:
-    repo_token: $CC_REPO_TOKEN
-
 before_install:
   - "npm config set spin false"
   - "npm install -g npm@^2"
@@ -21,4 +17,4 @@ install:
 
 
 after_script:
-  - codeclimate-test-reporter < /coverage/PhantomJS%201.9.8%20%28Mac%20OS%20X%200.0.0%29/lcov.info
+  - find ./coverage/Phantom* -name "lcov.info" -exec cat {} \; | coveralls

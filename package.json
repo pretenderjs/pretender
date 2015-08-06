@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "bower": "^1.3.5",
+    "coveralls": "^2.11.3",
     "jscs": "^2.0.0",
     "jshint": "^2.8.0",
     "karma": "^0.13.8",
