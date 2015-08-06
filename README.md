@@ -87,12 +87,6 @@ $.get('/api/songs/871') // params.song_id will be '871'
 
 ```
 
-Pretender will *only* handle requests to paths (`/some/kind/of/path`) and not fully qualified URLs
-(`https://mydomain.tld/some/kind/of/path`). There are many
-[CSP](http://www.html5rocks.com/en/tutorials/security/content-security-policy/) behaviors that cannot
-be consistenly simulated when using full URLs (calls to `http` from an `https` page, requests to
-external domains which may not implement CORS, etc).
-
 ### Query Parameters
 If there were query parameters in the request, these well be attached to the request object as a `queryParams`
 property.
@@ -186,7 +180,7 @@ done by providing a function as the timing parameter.
 var externalState = 'idle';
 
 function throttler() {
-  if (externalState === 'OH NO DOS ATTACK') {
+  if (externalState === 'OH NO DDOS ATTACK') {
     return 15000;
   }
 }
@@ -292,7 +286,7 @@ the error and then throw the error again. You can override this method to supply
 ```javascript
 var server = new Pretender(function(){
   this.get('/api/songs', function(request){
-    undefinedWat("this is no function!");
+    undefinedWAT("this is no function!");
   });
 });
 
