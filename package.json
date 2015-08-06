@@ -2,6 +2,7 @@
   "name": "pretender",
   "version": "0.9.0",
   "main": "./pretender.js",
+  "license": "MIT",
   "scripts": {
     "postinstall": "bower install",
     "test": "karma start --single-run",
