@@ -11,13 +11,13 @@ module('pretender errored requests', {
   }
 });
 
-test('calls erroredRequest', function() {
+test('calls erroredRequest', function(assert) {
   pretender.get('/some/path', function() {
     throw new Error('something in this handler broke!');
   });
 
   pretender.erroredRequest = function(verb, path, request, error) {
-    ok(error);
+    assert.ok(error);
   };
 
   $.ajax({url: '/some/path'});

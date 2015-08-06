@@ -8,7 +8,7 @@ module('pretender creation', {
   }
 });
 
-test('a mapping function is optional', function() {
+test('a mapping function is optional', function(assert) {
   var result = false;
   try {
     pretender = new Pretender();
@@ -17,10 +17,10 @@ test('a mapping function is optional', function() {
     // fail
   }
 
-  ok(true, 'does not raise');
+  assert.ok(true, 'does not raise');
 });
 
-test('many maps can be passed on creation', function() {
+test('many maps can be passed on creation', function(assert) {
   var aWasCalled = false;
   var bWasCalled = false;
 
@@ -41,12 +41,12 @@ test('many maps can be passed on creation', function() {
   $.ajax({url: '/some/path'});
   $.ajax({url: '/other/path'});
 
-  ok(aWasCalled);
-  ok(bWasCalled);
+  assert.ok(aWasCalled);
+  assert.ok(bWasCalled);
 });
 
-test('an error is thrown when a request handler is missing', function() {
-  throws(function() {
+test('an error is thrown when a request handler is missing', function(assert) {
+  assert.throws(function() {
     pretender = new Pretender();
     pretender.get('/path', undefined);
   }, 'The function you tried passing to Pretender to handle GET /path is undefined or missing.');
