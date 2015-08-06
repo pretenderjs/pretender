@@ -170,7 +170,6 @@ function interceptor(pretender) {
     /*jshint +W083 */
     // jscs:enable requireCurlyBraces
     xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
-    xhr.timeout = fakeXHR.timeout;
     xhr.withCredentials = fakeXHR.withCredentials;
     for (var h in fakeXHR.requestHeaders) {
       xhr.setRequestHeader(h, fakeXHR.requestHeaders[h]);
