@@ -1,8 +1,8 @@
 (function(self){
 'use strict';
 var isNode = typeof process !== 'undefined' && process.toString() === '[object process]';
-var RouteRecognizer = isNode ? require('route-recognizer')['default'] : window.RouteRecognizer;
-var FakeXMLHttpRequest = isNode ? require('./bower_components/FakeXMLHttpRequest/fake_xml_http_request') : window.FakeXMLHttpRequest;
+var RouteRecognizer = isNode ? require('route-recognizer') : window.RouteRecognizer;
+var FakeXMLHttpRequest = isNode ? require('fake-xml-http-request') : window.FakeXMLHttpRequest;
 
 /**
  * parseURL - decompose a URL into its parts
