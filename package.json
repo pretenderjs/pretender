@@ -7,10 +7,10 @@
     "pretest": "bower install",
     "test": "npm run lint && npm run jscs && npm run tests-only",
     "test-ci": "npm run pretest && npm run lint && npm run jscs && npm run tests-only-ci",
-    "tests-only": "./node_modules/karma/bin/karma start --single-run",
-    "tests-only-ci": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
-    "lint": "./node_modules/.bin/jshint pretender.js test",
-    "jscs": "./node_modules/.bin/jscs pretender.js test",
+    "tests-only": "karma start --single-run",
+    "tests-only-ci": "karma start --single-run --browsers PhantomJS",
+    "lint": "jshint pretender.js test",
+    "jscs": "jscs pretender.js test",
     "test:server": "karma start --no-single-run"
   },
   "repository": {
