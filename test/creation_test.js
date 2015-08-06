@@ -1,12 +1,14 @@
 var pretender;
-module("pretender creation", {
-  teardown: function(){
-    pretender && pretender.shutdown();
+module('pretender creation', {
+  teardown: function() {
+    if (pretender) {
+      pretender.shutdown();
+    }
     pretender = null;
   }
 });
 
-test("a mapping function is optional", function(){
+test('a mapping function is optional', function() {
   var result = false;
   try {
     pretender = new Pretender();
@@ -15,23 +17,23 @@ test("a mapping function is optional", function(){
     // fail
   }
 
-  ok(true, "does not raise");
+  ok(true, 'does not raise');
 });
 
-test("many maps can be passed on creation", function(){
+test('many maps can be passed on creation', function() {
   var aWasCalled = false;
   var bWasCalled = false;
 
-  var mapA = function(){
-    this.get('/some/path', function(){
-      aWasCalled = true
-    })
+  var mapA = function() {
+    this.get('/some/path', function() {
+      aWasCalled = true;
+    });
   };
 
-  var mapB = function(){
-    this.get('/other/path', function(){
-      bWasCalled = true
-    })
+  var mapB = function() {
+    this.get('/other/path', function() {
+      bWasCalled = true;
+    });
   };
 
   pretender = new Pretender(mapA, mapB);
@@ -43,9 +45,9 @@ test("many maps can be passed on creation", function(){
   ok(bWasCalled);
 });
 
-test("an error is thrown when a request handler is missing", function(){
-  throws(function(){
+test('an error is thrown when a request handler is missing', function() {
+  throws(function() {
     pretender = new Pretender();
     pretender.get('/path', undefined);
-  }, "The function you tried passing to Pretender to handle GET /path is undefined or missing.");
+  }, 'The function you tried passing to Pretender to handle GET /path is undefined or missing.');
 });

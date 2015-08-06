@@ -1,4 +1,4 @@
-(function(self){
+(function(self) {
 'use strict';
 var isNode = typeof process !== 'undefined' && process.toString() === '[object process]';
 var RouteRecognizer = isNode ? require('route-recognizer') : window.RouteRecognizer;
@@ -76,9 +76,9 @@ Hosts.prototype.forURL = function(url) {
   }
 
   return registry.verbs;
-}
+};
 
-function Pretender(/* routeMap1, routeMap2, ...*/){
+function Pretender(/* routeMap1, routeMap2, ...*/) {
   // Herein we keep track of RouteRecognizer instances
   // keyed by HTTP method. Feel free to add more as needed.
   this.hosts = new Hosts();
@@ -97,34 +97,33 @@ function Pretender(/* routeMap1, routeMap2, ...*/){
   // the route map.
   window.XMLHttpRequest = interceptor(this);
 
-  // "start" the server
+  // 'start' the server
   this.running = true;
 
   // trigger the route map DSL.
-  for(var i=0; i < arguments.length; i++){
+  for (var i = 0; i < arguments.length; i++) {
     this.map(arguments[i]);
   }
 }
 
 function interceptor(pretender) {
-  function FakeRequest(){
+  function FakeRequest() {
     // super()
     FakeXMLHttpRequest.call(this);
   }
   // extend
   var proto = new FakeXMLHttpRequest();
-  proto.send = function send(){
+  proto.send = function send() {
     if (!pretender.running) {
-      throw new Error('You shut down a Pretender instance while there was a pending request. '+
-            'That request just tried to complete. Check to see if you accidentally shut down '+
+      throw new Error('You shut down a Pretender instance while there was a pending request. ' +
+            'That request just tried to complete. Check to see if you accidentally shut down ' +
             'a pretender earlier than you intended to');
     }
 
     FakeXMLHttpRequest.prototype.send.apply(this, arguments);
     if (!pretender.checkPassthrough(this)) {
       pretender.handleRequest(this);
-    }
-    else {
+    } else {
       var xhr = createPassthrough(this);
       xhr.send.apply(xhr, arguments);
     }
@@ -136,13 +135,16 @@ function interceptor(pretender) {
   function createPassthrough(fakeXHR) {
     var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
 
-    // use onload instead of onreadystatechange if the browser supports it
+    // Use onload instead of onreadystatechange if the browser supports it
     if ('onload' in xhr) {
       evts.push('load');
     } else {
       evts.push('readystatechange');
     }
 
+    /*jshint -W083 */
+    // jscs:disable requireCurlyBraces
+    // TODO: Don't create functions within a loop - https://github.com/pretenderjs/pretender/issues/99
     // listen to all events to update lifecycle properties
     for (var i = 0; i < evts.length; i++) (function(evt) {
       xhr['on' + evt] = function(e) {
@@ -160,6 +162,8 @@ function interceptor(pretender) {
         }
       };
     })(evts[i]);
+    /*jshint +W083 */
+    // jscs:enable requireCurlyBraces
     xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
     xhr.timeout = fakeXHR.timeout;
     xhr.withCredentials = fakeXHR.withCredentials;
@@ -192,8 +196,8 @@ function interceptor(pretender) {
   return FakeRequest;
 }
 
-function verbify(verb){
-  return function(path, handler, async){
+function verbify(verb) {
+  return function(path, handler, async) {
     this.register(verb, path, handler, async);
   };
 }
@@ -218,12 +222,13 @@ Pretender.prototype = {
   'delete': verbify('DELETE'),
   patch: verbify('PATCH'),
   head: verbify('HEAD'),
-  map: function(maps){
+  map: function(maps) {
     maps.call(this);
   },
-  register: function register(verb, url, handler, async){
+  register: function register(verb, url, handler, async) {
     if (!handler) {
-      throw new Error("The function you tried passing to Pretender to handle " + verb + " " + url + " is undefined or missing.");
+      throw new Error('The function you tried passing to Pretender to handle ' +
+        verb + ' ' + url + ' is undefined or missing.');
     }
 
     handler.numberOfCalls = 0;
@@ -255,7 +260,7 @@ Pretender.prototype = {
 
     return false;
   },
-  handleRequest: function handleRequest(request){
+  handleRequest: function handleRequest(request) {
     var verb = request.method.toUpperCase();
     var path = request.url;
 
@@ -308,7 +313,7 @@ Pretender.prototype = {
     }
   },
   resolve: function resolve(request) {
-    for(var i = 0, len = this.requestReferences.length; i < len; i++) {
+    for (var i = 0, len = this.requestReferences.length; i < len; i++) {
       var res = this.requestReferences[i];
       if (res.request === request) {
         res.callback();
@@ -329,13 +334,15 @@ Pretender.prototype = {
   handledRequest: function(verb, path, request) { /* no-op */},
   passthroughRequest: function(verb, path, request) { /* no-op */},
   unhandledRequest: function(verb, path, request) {
-    throw new Error("Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request");
+    throw new Error('Pretender intercepted ' + verb + ' ' +
+      path + ' but no handler was defined for this type of request');
   },
-  erroredRequest: function(verb, path, request, error){
-    error.message = "Pretender intercepted "+verb+" "+path+" but encountered an error: " + error.message;
+  erroredRequest: function(verb, path, request, error) {
+    error.message = 'Pretender intercepted ' + verb + ' ' +
+      path + ' but encountered an error: ' + error.message;
     throw error;
   },
-  _handlerFor: function(verb, url, request){
+  _handlerFor: function(verb, url, request) {
     var registry = this.hosts.forURL(url)[verb];
     var matches = registry.recognize(parseURL(url).fullpath);
 
@@ -347,10 +354,10 @@ Pretender.prototype = {
 
     return match;
   },
-  shutdown: function shutdown(){
+  shutdown: function shutdown() {
     self.XMLHttpRequest = this._nativeXMLHttpRequest;
 
-    // "stop" the server
+    // 'stop' the server
     this.running = false;
   }
 };

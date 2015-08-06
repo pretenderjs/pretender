@@ -8,7 +8,7 @@ before_install:
   - "npm install -g npm@^2"
   - "npm config set spin false"
 
-script: npm test
+script: npm run test-ci
 install:
   - node --version
   - npm --version
