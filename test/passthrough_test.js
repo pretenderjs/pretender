@@ -1,14 +1,16 @@
 var pretender;
-module("pretender invoking", {
-  setup: function(){
+module('pretender invoking', {
+  setup: function() {
     pretender = new Pretender();
   },
-  teardown: function(){
-    pretender && pretender.shutdown();
+  teardown: function() {
+    if (pretender) {
+      pretender.shutdown();
+    }
     pretender = null;
   }
 });
-asyncTest("allows matched paths to be pass-through", function(){
+asyncTest('allows matched paths to be pass-through', function() {
   pretender.post('/some/:route', pretender.passthrough);
 
   var passthroughInvoked = false;
@@ -26,7 +28,7 @@ asyncTest("allows matched paths to be pass-through", function(){
       'test-header': 'value'
     },
     data: {
-      'some': 'data'
+      some: 'data'
     },
     error: function(xhr) {
       equal(xhr.status, 404);
