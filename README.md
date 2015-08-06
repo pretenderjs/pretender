@@ -358,3 +358,10 @@ var server = new Pretender(function(){
 
 server.shutdown(); // all done.
 ```
+
+# Development of Pretender
+
+## Running tests
+
+* `npm test` runs tests once
+* `npm run test:server` runs and reruns on changes
