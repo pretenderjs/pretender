@@ -4,7 +4,8 @@
   "main": "./pretender.js",
   "scripts": {
     "postinstall": "bower install",
-    "test": "./node_modules/karma/bin/karma start"
+    "test": "karma start --single-run",
+    "test:server": "karma start --no-single-run"
   },
   "repository": {
     "type": "git",
