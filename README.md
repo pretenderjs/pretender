@@ -1,5 +1,7 @@
 # Pretender
 
+[![Test Coverage](https://codeclimate.com/github/pretenderjs/pretender/badges/coverage.svg)](https://codeclimate.com/github/pretenderjs/pretender/coverage)
+
 Pretender is a mock server library in the style of Sinon (but built from microlibs. Because JavaScript)
 that comes with an express/sinatra style syntax for defining routes and their handlers.
 

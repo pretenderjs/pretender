@@ -144,7 +144,6 @@ function interceptor(pretender) {
 
     /*jshint -W083 */
     // jscs:disable requireCurlyBraces
-    // TODO: Don't create functions within a loop - https://github.com/pretenderjs/pretender/issues/99
     // listen to all events to update lifecycle properties
     for (var i = 0; i < evts.length; i++) (function(evt) {
       xhr['on' + evt] = function(e) {
