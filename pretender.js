@@ -7,6 +7,7 @@ var appearsBrowserified = typeof self !== 'undefined' &&
 
 var RouteRecognizer = appearsBrowserified ? require('route-recognizer') : self.RouteRecognizer;
 var FakeXMLHttpRequest = appearsBrowserified ? require('fake-xml-http-request') : self.FakeXMLHttpRequest;
+var jQuery = appearsBrowserified ? require('jquery') : self.jQuery;
 
 /**
  * parseURL - decompose a URL into its parts
@@ -110,6 +111,11 @@ function Pretender(/* routeMap1, routeMap2, ...*/) {
   }
 }
 
+function onLoadSupported() {
+  var majorVersion = ~~jQuery.fn.jquery.split('.')[0];
+  return majorVersion > 1;
+}
+
 function interceptor(pretender) {
   function FakeRequest() {
     // super()
@@ -140,7 +146,8 @@ function interceptor(pretender) {
     var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
 
     // Use onload instead of onreadystatechange if the browser supports it
-    if ('onload' in xhr) {
+    // jQuery 1.x only supports onreadystatechange
+    if ('onload' in xhr && onLoadSupported()) {
       evts.push('load');
     } else {
       evts.push('readystatechange');
