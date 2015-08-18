@@ -218,6 +218,10 @@ function scheduleProgressEvent(request, startTime, totalTime) {
   }, 50);
 }
 
+function isArray(array) {
+  return Object.prototype.toString.call(array) === '[object Array]';
+}
+
 var PASSTHROUGH = {};
 
 Pretender.prototype = {
@@ -277,8 +281,13 @@ Pretender.prototype = {
       this.handledRequests.push(request);
 
       try {
-        var statusHeadersAndBody = handler.handler(request),
-            status = statusHeadersAndBody[0],
+        var statusHeadersAndBody = handler.handler(request);
+        if (!isArray(statusHeadersAndBody)) {
+          var note = 'Remember to `return [status, headers, body];` in your route handler.';
+          throw new Error('Nothing returned by handler for ' + path + '. ' + note);
+        }
+
+        var status = statusHeadersAndBody[0],
             headers = this.prepareHeaders(statusHeadersAndBody[1]),
             body = this.prepareBody(statusHeadersAndBody[2]),
             pretender = this;
