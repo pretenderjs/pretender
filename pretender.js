@@ -134,7 +134,7 @@ function interceptor(pretender) {
   };
 
   // passthrough handling
-  var evts = ['error', 'timeout', 'progress', 'abort'];
+  var evts = ['error', 'timeout', 'abort'];
   var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
   function createPassthrough(fakeXHR) {
     var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
@@ -144,6 +144,11 @@ function interceptor(pretender) {
       evts.push('load');
     } else {
       evts.push('readystatechange');
+    }
+
+    // add progress event for async calls
+    if (fakeXHR.async) {
+      evts.push('progress');
     }
 
     /*jshint -W083 */
@@ -170,8 +175,10 @@ function interceptor(pretender) {
     /*jshint +W083 */
     // jscs:enable requireCurlyBraces
     xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
-    xhr.timeout = fakeXHR.timeout;
-    xhr.withCredentials = fakeXHR.withCredentials;
+    if (fakeXHR.async) {
+      xhr.timeout = fakeXHR.timeout;
+      xhr.withCredentials = fakeXHR.withCredentials;
+    }
     for (var h in fakeXHR.requestHeaders) {
       xhr.setRequestHeader(h, fakeXHR.requestHeaders[h]);
     }

@@ -38,3 +38,56 @@ asyncTest('allows matched paths to be pass-through', function(assert) {
     }
   });
 });
+
+asyncTest('asynchronous request with pass-through has timeout, withCredentials and onprogress event', function(assert) {
+  function testXHR() {
+    this.pretender = pretender;
+    this.open = function() {};
+    this.setRequestHeader = function() {};
+    this.send = {
+      pretender: pretender,
+      apply: function(xhr, argument) {
+        assert.ok('timeout' in xhr);
+        assert.ok('withCredentials' in xhr);
+        assert.ok('onprogress' in xhr);
+        this.pretender.resolve(xhr);
+        QUnit.start();
+      }
+    };
+  }
+  pretender._nativeXMLHttpRequest = testXHR;
+
+  pretender.post('/some/path', pretender.passthrough);
+
+  var xhr = new window.XMLHttpRequest();
+  xhr.open('POST', '/some/path');
+  xhr.timeout = 1000;
+  xhr.withCredentials = true;
+  xhr.send('some data');
+});
+
+asyncTest('synchronous request does not have timeout, withCredentials and onprogress event', function(assert) {
+  function testXHR() {
+    this.open = function() {};
+    this.setRequestHeader = function() {};
+    this.send = {
+      pretender: pretender,
+      apply: function(xhr, argument) {
+        assert.ok(!('timeout' in xhr));
+        assert.ok(!('withCredentials' in xhr));
+        assert.ok(!('onprogress' in xhr));
+        this.pretender.resolve(xhr);
+        QUnit.start();
+      }
+    };
+  }
+  pretender._nativeXMLHttpRequest = testXHR;
+
+  pretender.post('/some/path', pretender.passthrough);
+
+  var xhr = new window.XMLHttpRequest();
+  xhr.open('POST', '/some/path', false);
+  xhr.timeout = 1000;
+  xhr.withCredentials = true;
+  xhr.send('some data');
+});
