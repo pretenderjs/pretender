@@ -457,3 +457,16 @@ test('resolves cross-origin requests', function() {
   ok(wasCalled);
 
 });
+
+test('url with encoded characters', function() {
+  var wasCalled;
+  var encodedChar = 'encoded:char';
+  var urlpath = '/some/path/' + encodeURIComponent(encodedChar);
+
+  pretender.get(urlpath, function() {
+    wasCalled = true;
+  });
+
+  $.ajax({url: urlpath});
+  ok(wasCalled);
+});
