@@ -143,7 +143,7 @@ function interceptor(pretender) {
     if ('onload' in xhr) {
       evts.push('load');
     }
-    
+
     evts.push('readystatechange');
 
     // add progress event for async calls
