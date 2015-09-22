@@ -142,9 +142,9 @@ function interceptor(pretender) {
     // Use onload instead of onreadystatechange if the browser supports it
     if ('onload' in xhr) {
       evts.push('load');
-    } else {
-      evts.push('readystatechange');
     }
+    
+    evts.push('readystatechange');
 
     // add progress event for async calls
     if (fakeXHR.async) {
