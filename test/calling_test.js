@@ -1,4 +1,5 @@
 var pretender;
+
 module('pretender invoking', {
   setup: function() {
     pretender = new Pretender();
