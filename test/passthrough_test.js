@@ -1,6 +1,7 @@
-var pretender;
+var pretender, originalXMLHttpRequest;
 module('pretender invoking', {
   setup: function() {
+    originalXMLHttpRequest = window.XMLHttpRequest;
     pretender = new Pretender();
   },
   teardown: function() {
@@ -8,6 +9,7 @@ module('pretender invoking', {
       pretender.shutdown();
     }
     pretender = null;
+    window.XMLHttpRequest = originalXMLHttpRequest;
   }
 });
 
@@ -90,4 +92,64 @@ asyncTest('synchronous request does not have timeout, withCredentials and onprog
   xhr.timeout = 1000;
   xhr.withCredentials = true;
   xhr.send('some data');
+});
+
+test('asynchronous request fires events', function(assert) {
+  var done = assert.async();
+  assert.expect(4);
+
+  pretender.post('/some/:route', pretender.passthrough);
+
+  var onEvents = {
+    load: false,
+    progress: false
+  };
+  var listenerEvents = {
+    load: false,
+    progress: false
+  };
+
+  var xhr = new window.XMLHttpRequest();
+  xhr.open('POST', '/some/otherpath');
+
+  xhr.addEventListener('progress', function _progress() {
+    listenerEvents.progress = true;
+  });
+
+  xhr.onprogress = function _onprogress() {
+    onEvents.progress = true;
+  };
+
+  xhr.addEventListener('load', function _load() {
+    listenerEvents.load = true;
+    finishNext();
+  });
+
+  xhr.onload = function _onload() {
+    onEvents.load = true;
+    finishNext();
+  };
+
+  xhr.send();
+
+  // call `finish` in next tick to ensure both load event handlers
+  // have a chance to fire.
+  function finishNext() {
+    setTimeout(finishOnce, 1);
+  }
+
+  var finished = false;
+  function finishOnce() {
+    if (!finished) {
+      finished = true;
+
+      assert.ok(onEvents.load, 'onload called');
+      assert.ok(onEvents.progress, 'onprogress called');
+
+      assert.ok(listenerEvents.load, 'load listener called');
+      assert.ok(listenerEvents.progress, 'progress listener called');
+
+      done();
+    }
+  }
 });
