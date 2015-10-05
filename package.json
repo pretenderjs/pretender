@@ -31,7 +31,7 @@
     "qunitjs": "^1.18.0"
   },
   "dependencies": {
-    "fake-xml-http-request": "^1.2.0",
+    "fake-xml-http-request": "^1.2.1",
     "route-recognizer": "^0.1.9"
   },
   "jspm": {
