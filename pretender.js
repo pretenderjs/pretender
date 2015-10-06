@@ -133,9 +133,15 @@ function interceptor(pretender) {
     }
   };
 
-  // passthrough handling
+  // event types to handle on the xhr
   var evts = ['error', 'timeout', 'abort'];
+
+  // event types to handle on the xhr.upload
+  var uploadEvents = ['progress'];
+
+  // properties to copy from the native xhr to fake xhr
   var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
+
   function createPassthrough(fakeXHR) {
     var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
 
@@ -151,29 +157,50 @@ function interceptor(pretender) {
       evts.push('progress');
     }
 
-    /*jshint -W083 */
-    // jscs:disable requireCurlyBraces
-    // listen to all events to update lifecycle properties
-    for (var i = 0; i < evts.length; i++) {
-      (function(evt) {
-        xhr['on' + evt] = function(e) {
-          // update lifecycle props on each event
-          for (var i = 0; i < lifecycleProps.length; i++) {
-            var prop = lifecycleProps[i];
-            if (xhr[prop]) {
-              fakeXHR[prop] = xhr[prop];
-            }
-          }
-          // fire fake events where applicable
-          fakeXHR.dispatchEvent(e);
-          if (fakeXHR['on' + evt]) {
-            fakeXHR['on' + evt](e);
-          }
-        };
-      })(evts[i]);
+    // update `propertyNames` properties from `fromXHR` to `toXHR`
+    function copyLifecycleProperties(propertyNames, fromXHR, toXHR) {
+      for (var i = 0; i < propertyNames.length; i++) {
+        var prop = propertyNames[i];
+        if (fromXHR[prop]) {
+          toXHR[prop] = fromXHR[prop];
+        }
+      }
     }
-    /*jshint +W083 */
-    // jscs:enable requireCurlyBraces
+
+    // fire fake event on `eventable`
+    function dispatchEvent(eventable, eventType, event) {
+      eventable.dispatchEvent(event);
+      if (eventable['on' + eventType]) {
+        eventable['on' + eventType](event);
+      }
+    }
+
+    // set the on- handler on the native xhr for the given eventType
+    function createHandler(eventType) {
+      xhr['on' + eventType] = function(event) {
+        copyLifecycleProperties(lifecycleProps, xhr, fakeXHR);
+        dispatchEvent(fakeXHR, eventType, event);
+      };
+    }
+
+    // set the on- handler on the native xhr's `upload` property for
+    // the given eventType
+    function createUploadHandler(eventType) {
+      if (xhr.upload) {
+        xhr.upload['on' + eventType] = function(event) {
+          dispatchEvent(fakeXHR.upload, eventType, event);
+        };
+      }
+    }
+
+    var i;
+    for (i = 0; i < evts.length; i++) {
+      createHandler(evts[i]);
+    }
+    for (i = 0; i < uploadEvents.length; i++) {
+      createUploadHandler(uploadEvents[i]);
+    }
+
     xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
     if (fakeXHR.async) {
       xhr.timeout = fakeXHR.timeout;
