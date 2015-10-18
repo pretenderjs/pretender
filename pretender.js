@@ -41,6 +41,8 @@ function parseURL(url) {
  */
 
 function Registry(/* host */) {
+  // Herein we keep track of RouteRecognizer instances
+  // keyed by HTTP method. Feel free to add more as needed.
   this.verbs = {
     GET: new RouteRecognizer(),
     PUT: new RouteRecognizer(),
@@ -83,8 +85,6 @@ Hosts.prototype.forURL = function(url) {
 };
 
 function Pretender(/* routeMap1, routeMap2, ...*/) {
-  // Herein we keep track of RouteRecognizer instances
-  // keyed by HTTP method. Feel free to add more as needed.
   this.hosts = new Hosts();
 
   this.handlers = [];
