@@ -1,5 +1,5 @@
 var pretender, originalXMLHttpRequest;
-module('pretender invoking', {
+module('pretender passthrough', {
   setup: function() {
     originalXMLHttpRequest = window.XMLHttpRequest;
     pretender = new Pretender();
@@ -46,6 +46,7 @@ asyncTest('asynchronous request with pass-through has timeout, withCredentials a
     this.pretender = pretender;
     this.open = function() {};
     this.setRequestHeader = function() {};
+    this.upload = {};
     this.send = {
       pretender: pretender,
       apply: function(xhr, argument) {
@@ -72,6 +73,7 @@ asyncTest('synchronous request does not have timeout, withCredentials and onprog
   function testXHR() {
     this.open = function() {};
     this.setRequestHeader = function() {};
+    this.upload = {};
     this.send = {
       pretender: pretender,
       apply: function(xhr, argument) {
@@ -147,6 +149,55 @@ test('asynchronous request fires events', function(assert) {
       assert.ok(onEvents.progress, 'onprogress called');
 
       assert.ok(listenerEvents.load, 'load listener called');
+      assert.ok(listenerEvents.progress, 'progress listener called');
+
+      done();
+    }
+  }
+});
+
+test('asynchronous request fires upload progress events', function(assert) {
+  var done = assert.async();
+  assert.expect(2);
+
+  pretender.post('/some/:route', pretender.passthrough);
+
+  var onEvents = {
+    progress: false
+  };
+  var listenerEvents = {
+    progress: false
+  };
+
+  var xhr = new window.XMLHttpRequest();
+  xhr.open('POST', '/some/otherpath');
+
+  xhr.upload.addEventListener('progress', function _progress() {
+    listenerEvents.progress = true;
+  });
+
+  xhr.upload.onprogress = function _onprogress() {
+    onEvents.progress = true;
+  };
+
+  xhr.onload = function _onload() {
+    setTimeout(finish, 1);
+  };
+
+  xhr.send('some data');
+
+  // ensure the test ends
+  var failTimer = setTimeout(function() {
+    assert.ok(false, 'test timed out');
+    done();
+  }, 500);
+
+  var finished = false;
+  function finish() {
+    if (!finished) {
+      finished = true;
+      clearTimeout(failTimer);
+      assert.ok(onEvents.progress, 'onprogress called');
       assert.ok(listenerEvents.progress, 'progress listener called');
 
       done();
