@@ -348,8 +348,8 @@ test('async requests with `onprogress` upload events in the upload ' +
 });
 
 test('`onprogress` upload events don\'t keep firing once the request has ended', function(assert) {
-  var done = assert.async();
   var progressEventCount = 0;
+  var clock = sinon.useFakeTimers();
   pretender.post('/uploads', function(request) {
     return [200, {}, ''];
   }, 210);
@@ -360,10 +360,9 @@ test('`onprogress` upload events don\'t keep firing once the request has ended',
     progressEventCount++;
   };
   xhr.send('some data');
-  setTimeout(function() {
-    equal(progressEventCount, 4, 'No `onprogress` events are fired after the the request finalizes');
-    done();
-  }, 510);
+  clock.tick(510);
+  equal(progressEventCount, 4, 'No `onprogress` events are fired after the the request finalizes');
+  clock.restore();
 });
 
 test('no progress upload events are fired after the request is aborted', function(assert) {
@@ -405,7 +404,7 @@ test('async requests with `onprogress` events trigger a progress event each 50ms
 });
 
 test('`onprogress` download events don\'t keep firing once the request has ended', function(assert) {
-  var done = assert.async();
+  var clock = sinon.useFakeTimers();
   var progressEventCount = 0;
   pretender.get('/downloads', function(request) {
     return [200, {}, ''];
@@ -417,10 +416,9 @@ test('`onprogress` download events don\'t keep firing once the request has ended
     progressEventCount++;
   };
   xhr.send('some data');
-  setTimeout(function() {
-    equal(progressEventCount, 4, 'No `onprogress` events are fired after the the request finalizes');
-    done();
-  }, 510);
+  clock.tick(510);
+  equal(progressEventCount, 4, 'No `onprogress` events are fired after the the request finalizes');
+  clock.restore();
 });
 
 test('no progress download events are fired after the request is aborted', function(assert) {
