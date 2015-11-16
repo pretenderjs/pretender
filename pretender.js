@@ -145,12 +145,12 @@ function interceptor(pretender) {
   function createPassthrough(fakeXHR) {
     var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
 
-    // Use onload instead of onreadystatechange if the browser supports it
+    // Use onload if the browser supports it
     if ('onload' in xhr) {
       evts.push('load');
-    } else {
-      evts.push('readystatechange');
     }
+
+    evts.push('readystatechange');
 
     // add progress event for async calls
     if (fakeXHR.async) {
