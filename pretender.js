@@ -133,23 +133,22 @@ function interceptor(pretender) {
     }
   };
 
-  // event types to handle on the xhr
-  var evts = ['error', 'timeout', 'abort'];
-
-  // event types to handle on the xhr.upload
-  var uploadEvents = ['progress'];
-
-  // properties to copy from the native xhr to fake xhr
-  var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
 
   function createPassthrough(fakeXHR) {
+    // event types to handle on the xhr
+    var evts = ['error', 'timeout', 'abort', 'readystatechange'];
+
+    // event types to handle on the xhr.upload
+    var uploadEvents = ['progress'];
+
+    // properties to copy from the native xhr to fake xhr
+    var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
+
     var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
 
-    // Use onload instead of onreadystatechange if the browser supports it
+    // Use onload if the browser supports it
     if ('onload' in xhr) {
       evts.push('load');
-    } else {
-      evts.push('readystatechange');
     }
 
     // add progress event for async calls
@@ -183,6 +182,8 @@ function interceptor(pretender) {
       };
     }
 
+    xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
+
     // set the on- handler on the native xhr's `upload` property for
     // the given eventType
     function createUploadHandler(eventType) {
@@ -201,7 +202,6 @@ function interceptor(pretender) {
       createUploadHandler(uploadEvents[i]);
     }
 
-    xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
     if (fakeXHR.async) {
       xhr.timeout = fakeXHR.timeout;
       xhr.withCredentials = fakeXHR.withCredentials;

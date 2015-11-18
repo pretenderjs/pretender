@@ -98,17 +98,19 @@ asyncTest('synchronous request does not have timeout, withCredentials and onprog
 
 test('asynchronous request fires events', function(assert) {
   var done = assert.async();
-  assert.expect(4);
+  assert.expect(6);
 
   pretender.post('/some/:route', pretender.passthrough);
 
   var onEvents = {
     load: false,
-    progress: false
+    progress: false,
+    readystatechange: false
   };
   var listenerEvents = {
     load: false,
-    progress: false
+    progress: false,
+    readystatechange: false
   };
 
   var xhr = new window.XMLHttpRequest();
@@ -132,6 +134,20 @@ test('asynchronous request fires events', function(assert) {
     finishNext();
   };
 
+  xhr.addEventListener('readystatechange', function _load() {
+    if (xhr.readyState == 4) {
+      listenerEvents.readystatechange = true;
+      finishNext();
+    }
+  });
+
+  xhr.onreadystatechange = function _onload() {
+    if (xhr.readyState == 4) {
+      onEvents.readystatechange = true;
+      finishNext();
+    }
+  };
+
   xhr.send();
 
   // call `finish` in next tick to ensure both load event handlers
@@ -147,9 +163,11 @@ test('asynchronous request fires events', function(assert) {
 
       assert.ok(onEvents.load, 'onload called');
       assert.ok(onEvents.progress, 'onprogress called');
+      assert.ok(onEvents.readystatechange, 'onpreadystate called');
 
       assert.ok(listenerEvents.load, 'load listener called');
       assert.ok(listenerEvents.progress, 'progress listener called');
+      assert.ok(listenerEvents.readystatechange, 'readystate listener called');
 
       done();
     }
