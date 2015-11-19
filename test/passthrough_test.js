@@ -163,7 +163,7 @@ test('asynchronous request fires events', function(assert) {
 
       assert.ok(onEvents.load, 'onload called');
       assert.ok(onEvents.progress, 'onprogress called');
-      assert.ok(onEvents.readystatechange, 'onpreadystate called');
+      assert.ok(onEvents.readystatechange, 'onreadystate called');
 
       assert.ok(listenerEvents.load, 'load listener called');
       assert.ok(listenerEvents.progress, 'progress listener called');
