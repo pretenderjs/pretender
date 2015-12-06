@@ -42,7 +42,7 @@ asyncTest('allows matched paths to be pass-through', function(assert) {
 });
 
 asyncTest('passthrough request calls jQuery v1 handler', function(assert) {
-  jQuery2 = jQuery.noConflict(true);
+  var jQuery2 = jQuery.noConflict(true);
   pretender.get('/some/:route', pretender.passthrough);
 
   assert.ok(/^1/.test(jQuery.fn.jquery));
