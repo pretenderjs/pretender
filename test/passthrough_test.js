@@ -41,6 +41,22 @@ asyncTest('allows matched paths to be pass-through', function(assert) {
   });
 });
 
+asyncTest('passthrough request calls jQuery v1 handler', function(assert) {
+  jQuery2 = jQuery.noConflict(true);
+  pretender.get('/some/:route', pretender.passthrough);
+
+  assert.ok(/^1/.test(jQuery.fn.jquery));
+  jQuery.ajax({
+    url: '/some/path',
+    error: function(xhr) {
+      assert.equal(xhr.status, 404);
+      jQuery = $ = jQuery2;
+      assert.ok(/^2/.test(jQuery.fn.jquery));
+      QUnit.start();
+    }
+  });
+});
+
 asyncTest('asynchronous request with pass-through has timeout, withCredentials and onprogress event', function(assert) {
   function testXHR() {
     this.pretender = pretender;

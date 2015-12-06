@@ -182,8 +182,6 @@ function interceptor(pretender) {
       };
     }
 
-    xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
-
     // set the on- handler on the native xhr's `upload` property for
     // the given eventType
     function createUploadHandler(eventType) {
@@ -193,6 +191,8 @@ function interceptor(pretender) {
         };
       }
     }
+
+    xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
 
     var i;
     for (i = 0; i < evts.length; i++) {
