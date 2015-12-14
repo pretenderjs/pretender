@@ -323,7 +323,7 @@ Pretender.prototype = {
 
         var status = statusHeadersAndBody[0],
             headers = this.prepareHeaders(statusHeadersAndBody[1]),
-            body = this.prepareBody(statusHeadersAndBody[2]),
+            body = this.prepareBody(statusHeadersAndBody[2], headers),
             pretender = this;
 
         this.handleResponse(request, async, function() {
