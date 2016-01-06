@@ -146,7 +146,7 @@ function interceptor(pretender) {
     // properties to copy from the native xhr to fake xhr
     var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
 
-    var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
+    var xhr = fakeXHR._passthroughRequest = new self._nativeXMLHttpRequest();
 
     // Use onload if the browser supports it
     if ('onload' in xhr) {
