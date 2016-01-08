@@ -392,7 +392,11 @@ Pretender.prototype = {
   },
   _handlerFor: function(verb, url, request) {
     var registry = this.hosts.forURL(url)[verb];
-    var matches = registry.recognize(parseURL(url).fullpath);
+    var fullpath = parseURL(url).fullpath;
+    var matches = registry.recognize(fullpath);
+    if (matches === undefined) {
+      registry.recognize(decodeURIComponent(fullpath));
+    }
 
     var match = matches ? matches[0] : null;
     if (match) {
