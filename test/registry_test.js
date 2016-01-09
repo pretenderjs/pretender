@@ -1,19 +1,20 @@
-var registry;
+var describe = QUnit.module;
+var it = QUnit.test;
 
-module('Registry', {
-  setup: function() {
-    registry = new Pretender.Registry();
-  }
-});
+describe('Registry', function(config) {
+  config.beforeEach(function() {
+    this.registry = new Pretender.Registry();
+  });
 
-test('has a "verbs" property', function() {
-  ok(registry.verbs);
-});
+  it('has a "verbs" property', function() {
+    ok(this.registry.verbs);
+  });
 
 
-test('supports all HTTP verbs', function(assert) {
-  var verbs = ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'];
-  for (var v = 0; v < verbs.length; v++) {
-    assert.ok(registry.verbs[verbs[v]], 'supports ' + verbs[v]);
-  }
+  it('supports all HTTP verbs', function(assert) {
+    var verbs = ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'];
+    for (var v = 0; v < verbs.length; v++) {
+      assert.ok(this.registry.verbs[verbs[v]], 'supports ' + verbs[v]);
+    }
+  });
 });

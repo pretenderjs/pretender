@@ -1,25 +1,25 @@
-var pretender;
-module('pretender errored requests', {
-  setup: function() {
-    pretender = new Pretender();
-  },
-  teardown: function() {
-    if (pretender) {
-      pretender.shutdown();
-    }
-    pretender = null;
-  }
-});
+var describe = QUnit.module;
+var it = QUnit.test;
 
-test('calls erroredRequest', function(assert) {
-  pretender.get('/some/path', function() {
-    throw new Error('something in this handler broke!');
+describe('pretender errored requests', function(config) {
+  config.beforeEach(function() {
+    this.pretender = new Pretender();
   });
 
-  pretender.erroredRequest = function(verb, path, request, error) {
-    assert.ok(error);
-  };
+  config.afterEach(function() {
+    this.pretender.shutdown();
+  });
 
-  $.ajax({url: '/some/path'});
+  it('calls erroredRequest', function(assert) {
+    this.pretender.get('/some/path', function() {
+      throw new Error('something in this handler broke!');
+    });
+
+    this.pretender.erroredRequest = function(verb, path, request, error) {
+      assert.ok(error);
+    };
+
+    $.ajax({url: '/some/path'});
+  });
 });
 

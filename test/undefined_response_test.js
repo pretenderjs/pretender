@@ -1,27 +1,25 @@
-var pretender;
-module('pretender undefined response', {
-  setup: function() {
-    pretender = new Pretender();
-  },
-  teardown: function() {
-    if (pretender) {
-      pretender.shutdown();
-    }
-    pretender = null;
-  }
-});
+var describe = QUnit.module;
+var it = QUnit.test;
 
-test('calls erroredRequest', function(assert) {
-  pretender.get('/some/path', function() {
-    // return nothing
+describe('retruning an undefined response', function(config) {
+  config.beforeEach(function() {
+    this.pretender = new Pretender();
+  });
+  config.afterEach(function() {
+    this.pretender.shutdown();
   });
 
-  pretender.erroredRequest = function(verb, path, request, error) {
-    var message = 'Nothing returned by handler for ' + path + '. ' +
-      'Remember to `return [status, headers, body];` in your route handler.';
-    assert.equal(error.message, message);
-  };
+  it('calls erroredRequest callback', function(assert) {
+    this.pretender.get('/some/path', function() {
+      // return nothing
+    });
 
-  $.ajax({url: '/some/path'});
+    this.pretender.erroredRequest = function(verb, path, request, error) {
+      var message = 'Nothing returned by handler for ' + path + '. ' +
+        'Remember to `return [status, headers, body];` in your route handler.';
+      assert.equal(error.message, message);
+    };
+
+    $.ajax({url: '/some/path'});
+  });
 });
-
