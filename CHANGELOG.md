@@ -1,5 +1,8 @@
 # Pretender Changelog
 
+## 0.12.0
+  * [#134](https://github.com/pretenderjs/pretender/pull/134) `prepareBody` now receives the headers as a second argument, in case you want to handle something like `Content-Type`
+
 ## 0.11.0
 
  * [#137](https://github.com/pretenderjs/pretender/pull/137) Bump FakeXMLHttpRequest version to 1.3.0 to fix "event is undefined" bug
