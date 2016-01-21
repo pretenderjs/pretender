@@ -12,6 +12,8 @@ that comes with an express/sinatra style syntax for defining routes and their ha
 Pretender will temporarily replace the native XMLHttpRequest object, intercept all requests, and direct them
 to little pretend service you've defined.
 
+**:warning: Pretender only works in the browser!**
+
 ```javascript
 var PHOTOS = {
   "10": {
