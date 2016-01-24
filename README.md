@@ -371,3 +371,9 @@ server.shutdown(); // all done.
 
 * `npm test` runs tests once
 * `npm run test:server` runs and reruns on changes
+
+## Code of Conduct
+
+In order to have a more open and welcoming community this project adheres to a [code of conduct](CONDUCT.md) adapted from the [contributor covenant](http://contributor-covenant.org/).
+
+Please adhere to this code of conduct in any interactions you have with this project's community. If you encounter someone violating these terms, please let a maintainer (@trek) know and we will address it as soon as possible.
