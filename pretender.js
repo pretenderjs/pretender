@@ -70,6 +70,14 @@ function interceptor(pretender) {
   var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
   function createPassthrough(fakeXHR) {
     var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
+
+    if(fakeXHR.responseType) {
+      xhr.responseType = fakeXHR.responseType;
+      delete lifecycleProps[lifecycleProps.indexOf('responseText')];
+      delete lifecycleProps[lifecycleProps.indexOf('responseXML')];
+      lifecycleProps.push('response');
+    }
+
     // listen to all events to update lifecycle properties
     for (var i = 0; i < evts.length; i++) (function(evt) {
       xhr['on' + evt] = function(e) {
