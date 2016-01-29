@@ -146,6 +146,13 @@ function interceptor(pretender) {
 
     var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
 
+    if(fakeXHR.responseType) {
+      xhr.responseType = fakeXHR.responseType;
+      delete lifecycleProps[lifecycleProps.indexOf('responseText')];
+      delete lifecycleProps[lifecycleProps.indexOf('responseXML')];
+      lifecycleProps.push('response');
+    }
+
     // Use onload if the browser supports it
     if ('onload' in xhr) {
       evts.push('load');
