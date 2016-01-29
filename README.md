@@ -1,5 +1,11 @@
 # Pretender
 
+[![Build Status](https://travis-ci.org/pretenderjs/pretender.svg)](https://travis-ci.org/pretenderjs/pretender)
+[![Coverage Status](https://coveralls.io/repos/pretenderjs/pretender/badge.svg?branch=master&service=github)](https://coveralls.io/github/pretenderjs/pretender?branch=master)
+[![Dependency Status](https://david-dm.org/pretenderjs/pretender.svg)](https://david-dm.org/pretenderjs/pretender)
+[![devDependency Status](https://david-dm.org/pretenderjs/pretender/dev-status.svg)](https://david-dm.org/pretenderjs/pretender#info=devDependencies)
+[![Code Climate](https://codeclimate.com/github/pretenderjs/pretender/badges/gpa.svg)](https://codeclimate.com/github/pretenderjs/pretender)
+
 Pretender is a mock server library in the style of Sinon (but built from microlibs. Because JavaScript)
 that comes with an express/sinatra style syntax for defining routes and their handlers.
 
@@ -86,12 +92,6 @@ var server = new Pretender(function(){
 $.get('/api/songs/871') // params.song_id will be '871'
 
 ```
-
-Pretender will *only* handle requests to paths (`/some/kind/of/path`) and not fully qualified URLs
-(`https://mydomain.tld/some/kind/of/path`). There are many
-[CSP](http://www.html5rocks.com/en/tutorials/security/content-security-policy/) behaviors that cannot
-be consistenly simulated when using full URLs (calls to `http` from an `https` page, requests to
-external domains which may not implement CORS, etc).
 
 ### Query Parameters
 If there were query parameters in the request, these well be attached to the request object as a `queryParams`
@@ -186,7 +186,7 @@ done by providing a function as the timing parameter.
 var externalState = 'idle';
 
 function throttler() {
-  if (externalState === 'OH NO DOS ATTACK') {
+  if (externalState === 'OH NO DDOS ATTACK') {
     return 15000;
   }
 }
@@ -203,6 +203,33 @@ means the route will use the default behavior.
 
 When the time is right, you can set `externalState` to `"OH NO DOS ATTACK"` which will make all
 future requests take 15 seconds to respond.
+
+## Sharing routes
+You can call `map` multiple times on a Pretender instance. This is a great way to share and reuse
+sets of routes between tests:
+
+```javascript
+export function authenticationRoutes(){
+  this.post('/authenticate', function(){ ... });
+  this.post('/signout', function(){ ... });
+}
+
+export function songsRoutes(){
+  this.get('/api/songs', function(){ ... });
+}
+```
+
+
+```javascript
+// a test
+
+import {authenticationRoutes, songsRoutes} from "../shared/routes";
+import Pretender from "pretender";
+
+let p = new Pretender();
+p.map(authenticationRoutes);
+p.map(songsRoutes);
+```
 
 ## Hooks
 ### Handled Requests
@@ -265,7 +292,7 @@ the error and then throw the error again. You can override this method to supply
 ```javascript
 var server = new Pretender(function(){
   this.get('/api/songs', function(request){
-    undefinedWat("this is no function!");
+    undefinedWAT("this is no function!");
   });
 });
 
@@ -337,3 +364,16 @@ var server = new Pretender(function(){
 
 server.shutdown(); // all done.
 ```
+
+# Development of Pretender
+
+## Running tests
+
+* `npm test` runs tests once
+* `npm run test:server` runs and reruns on changes
+
+## Code of Conduct
+
+In order to have a more open and welcoming community this project adheres to a [code of conduct](CONDUCT.md) adapted from the [contributor covenant](http://contributor-covenant.org/).
+
+Please adhere to this code of conduct in any interactions you have with this project's community. If you encounter someone violating these terms, please let a maintainer (@trek) know and we will address it as soon as possible.

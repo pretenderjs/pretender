@@ -17,6 +17,7 @@ module.exports = function(config) {
     files: [
       'bower_components/FakeXMLHttpRequest/fake_xml_http_request.js',
       'bower_components/route-recognizer/dist/route-recognizer.js',
+      'bower_components/jquery-1/index.js',
       'bower_components/jquery/dist/jquery.js',
       'pretender.js',
       'test/**/*.js',
@@ -36,14 +37,19 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+        'pretender.js': ['coverage']
+    },
 
+    coverageReporter: {
+        type: 'lcov',
+        dir: 'coverage'
     },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['dots'],
+    reporters: ['dots', 'coverage'],
 
 
     // web server port
@@ -65,7 +71,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['Chrome', 'PhantomJS'],
 
 
     // Continuous Integration mode
