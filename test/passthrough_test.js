@@ -91,6 +91,34 @@ describe('passthrough requests',  function(config) {
     xhr.send('some data');
   });
 
+  asyncTest('asynchronous request with pass-through and ' +
+    'arraybuffer as responseType', function(assert) {
+    var pretender = this.pretender;
+    function testXHR() {
+      this.pretender = pretender;
+      this.open = function() {};
+      this.setRequestHeader = function() {};
+      this.upload = {};
+      this.responseType = '';
+      this.send = {
+        pretender: pretender,
+        apply: function(xhr, argument) {
+          assert.equal(xhr.responseType, 'arraybuffer');
+          this.pretender.resolve(xhr);
+          QUnit.start();
+        }
+      };
+    }
+    pretender._nativeXMLHttpRequest = testXHR;
+
+    pretender.get('/some/path', pretender.passthrough);
+
+    var xhr = new window.XMLHttpRequest();
+    xhr.open('GET', '/some/path');
+    xhr.responseType = 'arraybuffer';
+    xhr.send();
+  });
+
   asyncTest('synchronous request does not have timeout, withCredentials and onprogress event', function(assert) {
     var pretender = this.pretender;
     function testXHR() {
