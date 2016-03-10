@@ -1,5 +1,8 @@
 # Pretender Changelog
 
+## 0.13.0
+  * [#148](https://github.com/pretenderjs/pretender/pull/148) Support `ArrayBuffer` responses.
+
 ## 0.12.0
   * [#134](https://github.com/pretenderjs/pretender/pull/134) `prepareBody` now receives the headers as a second argument, in case you want to handle something like `Content-Type`
 
