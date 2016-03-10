@@ -1,5 +1,8 @@
 # Pretender Changelog
 
+## 1.0
+  * No changes. Just making the API stable.
+
 ## 0.13.0
   * [#148](https://github.com/pretenderjs/pretender/pull/148) Support `ArrayBuffer` responses.
 
