@@ -1,4 +1,6 @@
 # Pretender Changelog
+## 1.1
+  * [#150](https://github.com/pretenderjs/pretender/pull/150) Update the dependency on FakeXMLHttpRequest
 
 ## 1.0
   * No changes. Just making the API stable.
