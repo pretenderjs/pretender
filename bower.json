@@ -16,7 +16,7 @@
     "./pretender.js"
   ],
   "dependencies": {
-    "FakeXMLHttpRequest": "^1.3.0",
+    "FakeXMLHttpRequest": "^1.4.0",
     "route-recognizer": "~0.1.1"
   },
   "devDependencies": {
