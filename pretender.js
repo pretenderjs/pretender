@@ -165,7 +165,7 @@ function interceptor(pretender) {
     function copyLifecycleProperties(propertyNames, fromXHR, toXHR) {
       for (var i = 0; i < propertyNames.length; i++) {
         var prop = propertyNames[i];
-        if (fromXHR[prop]) {
+        if (fromXHR.hasOwnProperty(prop)) {
           toXHR[prop] = fromXHR[prop];
         }
       }
