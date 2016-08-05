@@ -270,6 +270,7 @@ Pretender.prototype = {
   'delete': verbify('DELETE'),
   patch: verbify('PATCH'),
   head: verbify('HEAD'),
+  options: verbify('OPTIONS'),
   map: function(maps) {
     maps.call(this);
   },
