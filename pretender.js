@@ -139,7 +139,7 @@ function interceptor(pretender) {
     var evts = ['error', 'timeout', 'abort', 'readystatechange'];
 
     // event types to handle on the xhr.upload
-    var uploadEvents = ['progress'];
+    var uploadEvents = [''];
 
     // properties to copy from the native xhr to fake xhr
     var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
@@ -159,6 +159,7 @@ function interceptor(pretender) {
     // add progress event for async calls
     if (fakeXHR.async && fakeXHR.responseType !== 'arraybuffer') {
       evts.push('progress');
+      uploadEvents.push('progress');
     }
 
     // update `propertyNames` properties from `fromXHR` to `toXHR`
