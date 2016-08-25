@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "fake-xml-http-request": "^1.4.0",
-    "route-recognizer": "^0.1.9"
+    "route-recognizer": "^0.2.3"
   },
   "jspm": {
     "shim": {
