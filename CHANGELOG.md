@@ -1,4 +1,7 @@
 # Pretender Changelog
+## 1.2.0
+  * [#163](https://github.com/pretenderjs/pretender/pull/163) Update the dependency on route-recognizer
+
 ## 1.1
   * [#150](https://github.com/pretenderjs/pretender/pull/150) Update the dependency on FakeXMLHttpRequest
 
