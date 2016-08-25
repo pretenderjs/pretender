@@ -99,7 +99,7 @@ function Pretender(/* routeMap1, routeMap2, ...*/) {
 
   // capture xhr requests, channeling them into
   // the route map.
-  self.XMLHttpRequest = interceptor(this);
+  self.XMLHttpRequest = interceptor(this, this._nativeXMLHttpRequest);
 
   // 'start' the server
   this.running = true;
@@ -110,7 +110,7 @@ function Pretender(/* routeMap1, routeMap2, ...*/) {
   }
 }
 
-function interceptor(pretender) {
+function interceptor(pretender, nativeRequest) {
   function FakeRequest() {
     // super()
     FakeXMLHttpRequest.call(this);
@@ -237,6 +237,11 @@ function interceptor(pretender) {
   };
 
   FakeRequest.prototype = proto;
+
+  if (nativeRequest.prototype._passthroughCheck) {
+    throw new Error('You created a second Pretender instance while there already one running. ' +
+          'Running two Pretender servers at once will lead to unexpected results!');
+  }
   return FakeRequest;
 }
 
