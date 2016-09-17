@@ -242,7 +242,7 @@ function interceptor(pretender) {
 
 function verbify(verb) {
   return function(path, handler, async) {
-    this.register(verb, path, handler, async);
+    return this.register(verb, path, handler, async);
   };
 }
 
@@ -290,6 +290,8 @@ Pretender.prototype = {
       path: parseURL(url).fullpath,
       handler: handler
     }]);
+
+    return handler;
   },
   passthrough: PASSTHROUGH,
   checkPassthrough: function checkPassthrough(request) {
