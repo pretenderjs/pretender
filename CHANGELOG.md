@@ -1,4 +1,9 @@
 # Pretender Changelog
+
+## 1.3.0 
+  * [168](https://github.com/pretenderjs/pretender/pull/168) "Verb" methods now return handler
+  * [166](https://github.com/pretenderjs/pretender/pull/166) HTTP `options` request type added
+
 ## 1.2.0
   * [#163](https://github.com/pretenderjs/pretender/pull/163) Update the dependency on route-recognizer
 
