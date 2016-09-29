@@ -29,8 +29,30 @@ function parseURL(url) {
   // TODO: something for when document isn't present... #yolo
   var anchor = document.createElement('a');
   anchor.href = url;
-  anchor.fullpath = anchor.pathname + (anchor.search || '') + (anchor.hash || '');
-  return anchor;
+
+  if (!anchor.host) {
+    anchor.href = anchor.href; // IE: load the host and protocol
+  }
+
+  var pathname = anchor.pathname;
+  if (pathname.charAt(0) !== '/') {
+    pathname = '/' + pathname; // IE: prepend leading slash
+  }
+
+  var host = anchor.host;
+  if (anchor.port === '80' || anchor.port === '443') {
+    host = anchor.hostname; // IE: remove default port
+  }
+
+  return {
+    host: host,
+    protocol: anchor.protocol,
+    search: anchor.search,
+    hash: anchor.hash,
+    href: anchor.href,
+    pathname: pathname,
+    fullpath: pathname + (anchor.search || '') + (anchor.hash || '')
+  };
 }
 
 
