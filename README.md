@@ -349,10 +349,24 @@ server.prepareHeaders = function(headers){
 ## Tracking Requests
 Your pretender instance will track handlers and requests on a few array properties.
 All handlers are stored on `handlers` property and incoming requests will be tracked in one of
-two properties: `handledRequests` and `unhandledRequests`. This is useful if you want to build
-testing infrastructure on top of pretender and need to fail tests that have handlers without requests.
+two properties: `handledRequests` and `unhandledRequests`. The handler is also returned from
+any verb function. This is useful if you want to build testing infrastructure on top of
+pretender and need to fail tests that have handlers without requests.
 
 Each handler keeps a count of the number of requests is successfully served.
+
+```javascript
+server.get(/* ... */);
+var handler = server.handlers[0];
+
+// or
+
+var handler = server.get(/* ... */);
+
+// then
+
+var numberOfCalls = handler.numberOfCalls;
+```
 
 ## Clean up
 When you're done mocking, be sure to call `shutdown()` to restore the native XMLHttpRequest object:
