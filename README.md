@@ -128,6 +128,23 @@ var server = new Pretender(function(){
 });
 ```
 
+Or, optionally, return a Promise.
+
+```javascript
+var server = new Pretender(function() {
+  this.get('/api/songs', function(request) {
+    return new Promise(function(resolve) {
+      var response = [
+        200,
+        {'content-type': 'application/javascript'},
+        '[{"id": 12}, {"id": 14}]'
+      ];
+      resolve(response);
+    });
+  });
+});
+```
+
 ### Pass-Through
 You can specify paths that should be ignored by pretender and made as real XHR requests.
 Enable these by specifying pass-through routes with `pretender.passthrough`:

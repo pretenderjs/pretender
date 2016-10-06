@@ -344,22 +344,34 @@ Pretender.prototype = {
       var async = handler.handler.async;
       this.handledRequests.push(request);
 
-      try {
-        var statusHeadersAndBody = handler.handler(request);
+      var pretender = this;
+
+      var _handleRequest = function(statusHeadersAndBody) {
         if (!isArray(statusHeadersAndBody)) {
           var note = 'Remember to `return [status, headers, body];` in your route handler.';
           throw new Error('Nothing returned by handler for ' + path + '. ' + note);
         }
 
         var status = statusHeadersAndBody[0],
-            headers = this.prepareHeaders(statusHeadersAndBody[1]),
-            body = this.prepareBody(statusHeadersAndBody[2], headers),
-            pretender = this;
+            headers = pretender.prepareHeaders(statusHeadersAndBody[1]),
+            body = pretender.prepareBody(statusHeadersAndBody[2], headers);
 
-        this.handleResponse(request, async, function() {
+        pretender.handleResponse(request, async, function() {
           request.respond(status, headers, body);
           pretender.handledRequest(verb, path, request);
         });
+      };
+
+      try {
+        var result = handler.handler(request);
+        if (result && typeof result.then === 'function') {
+          // `result` is a promise, resolve it
+          result.then(function(resolvedResult) {
+            _handleRequest(resolvedResult);
+          });
+        } else {
+          _handleRequest(result);
+        }
       } catch (error) {
         this.erroredRequest(verb, path, request, error);
         this.resolve(request);
