@@ -239,8 +239,9 @@ function interceptor(pretender, nativeRequest) {
   FakeRequest.prototype = proto;
 
   if (nativeRequest.prototype._passthroughCheck) {
-    throw new Error('You created a second Pretender instance while there already one running. ' +
-          'Running two Pretender servers at once will lead to unexpected results!');
+    throw new Error('You created a second Pretender instance while there was already one running. ' +
+          'Running two Pretender servers at once will lead to unexpected results!' +
+          'Please call .shutdown() on your instances when you no longer need them to respond.');
   }
   return FakeRequest;
 }
