@@ -1,5 +1,5 @@
 // Karma configuration
-// Generated on Sun Apr 27 2014 14:19:31 GMT-0500 (CDT)
+// Generated on Thu Oct 06 2016 14:24:14 GMT+0800 (PHT)
 
 module.exports = function(config) {
   config.set({
@@ -19,6 +19,7 @@ module.exports = function(config) {
       'bower_components/route-recognizer/dist/route-recognizer.js',
       'bower_components/jquery-1/index.js',
       'bower_components/jquery/dist/jquery.js',
+      'node_modules/es6-promise/dist/es6-promise.auto.js',
       'pretender.js',
       'test/**/*.js'
     ],

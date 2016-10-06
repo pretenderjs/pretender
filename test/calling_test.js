@@ -458,5 +458,28 @@ describe('pretender invoking', function(config) {
     $.ajax({url: url});
     ok(wasCalled);
   });
+
+  it('accepts a handler that returns a promise', function(assert) {
+    var done = assert.async();
+
+    var json = '{foo: "bar"}';
+
+    this.pretender.get('/some/path', function(req) {
+      return new Promise(function(resolve) {
+        resolve([200, {}, json]);
+      });
+    });
+
+    this.pretender.handledRequest = function(verb, path, request) {
+      ok(true, 'handledRequest hook was called');
+      equal(verb, 'GET');
+      equal(path, '/some/path');
+      equal(request.responseText, json);
+      equal(request.status, '200');
+      done();
+    };
+
+    $.ajax({url: '/some/path'});
+  });
 });
 
