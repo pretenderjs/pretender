@@ -2,6 +2,26 @@ var pretender;
 var describe = QUnit.module;
 var it = QUnit.test;
 
+describe('pretender creation - without shutdown', function(config) {
+  var secondPretender;
+
+  config.beforeEach(function() {
+    pretender = new Pretender();
+  });
+
+  config.afterEach(function() {
+    pretender.shutdown();
+  });
+
+  test('an error is thrown when you start a new pretender while another one is running', function(assert) {
+    var message = 'You created a second Pretender instance while there ' +
+                  'already one running. Running two Pretender servers at once will lead to unexpected results!';
+    assert.throws(function() {
+      new Pretender();
+    }, message);
+  });
+});
+
 describe('pretender creation', function(config) {
   config.afterEach(function() {
     if (pretender) {
@@ -54,4 +74,5 @@ describe('pretender creation', function(config) {
     }, 'The function you tried passing to Pretender to handle GET /path is undefined or missing.');
   });
 });
+
 
