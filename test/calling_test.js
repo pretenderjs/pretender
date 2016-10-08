@@ -481,5 +481,34 @@ describe('pretender invoking', function(config) {
 
     $.ajax({url: '/some/path'});
   });
-});
 
+  it('can return a null body response', function(assert) {
+    var done = assert.async();
+
+    this.pretender.get('/some/path', function(req) {
+      return [200, {'Content-Type': 'application/json'}, null];
+    });
+
+    this.pretender.handledRequest = function(verb, path, request) {
+      equal(request.responseText, '');
+      done();
+    };
+
+    $.ajax({url: '/some/path'});
+  });
+
+  it('can return an undefined body response', function(assert) {
+    var done = assert.async();
+
+    this.pretender.get('/some/path', function(req) {
+      return [200, {'Content-Type': 'application/json'}, undefined];
+    });
+
+    this.pretender.handledRequest = function(verb, path, request) {
+      equal(request.responseText, '');
+      done();
+    };
+
+    $.ajax({url: '/some/path'});
+  });
+});

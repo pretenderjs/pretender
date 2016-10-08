@@ -145,6 +145,20 @@ var server = new Pretender(function() {
 });
 ```
 
+You may return `null` or `undefined` instead of a string body, to simulate real-world responses:
+
+```javascript
+var server = new Pretender(function(){
+  this.get('/photos/:id/mark_favorite', function(request) {
+    return [
+      200,
+      {'content-type': 'application/json'},
+      null
+    ];
+  });
+});
+```
+
 ### Pass-Through
 You can specify paths that should be ignored by pretender and made as real XHR requests.
 Enable these by specifying pass-through routes with `pretender.passthrough`:
