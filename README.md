@@ -332,7 +332,7 @@ this.get('/api/songs', function(request){
 This can become tiresome if you know, for example, that all your responses are
 going to be JSON. The body of a response will be passed through a
 `prepareBody` hook before being passed to the fake response object.
-`prepareBody` defaults to an empty function, but can be overriden:
+`prepareBody` defaults to an empty function, but can be overridden:
 
 ```javascript
 var server = new Pretender(function(){
