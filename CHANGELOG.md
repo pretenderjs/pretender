@@ -1,5 +1,11 @@
 # Pretender Changelog
 
+## 1.4.0
+  * [179](https://github.com/pretenderjs/pretender/pull/178) Warn if a second pretedner instance is started
+  * [181](https://github.com/pretenderjs/pretender/pull/181) Remove test support for node 0.12
+  * [171](https://github.com/pretenderjs/pretender/pull/171) Fix url behavior in IE 11
+  * [177](https://github.com/pretenderjs/pretender/pull/177) Allow handlers to return a Promise
+
 ## 1.3.0 
   * [168](https://github.com/pretenderjs/pretender/pull/168) "Verb" methods now return handler
   * [166](https://github.com/pretenderjs/pretender/pull/166) HTTP `options` request type added
