@@ -1,7 +1,7 @@
 # Pretender Changelog
 
 ## 1.4.0
-  * [179](https://github.com/pretenderjs/pretender/pull/178) Warn if a second pretedner instance is started
+  * [178](https://github.com/pretenderjs/pretender/pull/178) Warn if a second pretender instance is started
   * [181](https://github.com/pretenderjs/pretender/pull/181) Remove test support for node 0.12
   * [171](https://github.com/pretenderjs/pretender/pull/171) Fix url behavior in IE 11
   * [177](https://github.com/pretenderjs/pretender/pull/177) Allow handlers to return a Promise
