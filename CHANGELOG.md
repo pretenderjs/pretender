@@ -1,4 +1,6 @@
 # Pretender Changelog
+## 1.4.1
+  * [188](https://github.com/pretenderjs/pretender/pull/178) Console warn if a second pretender instance is started
 
 ## 1.4.0
   * [178](https://github.com/pretenderjs/pretender/pull/178) Warn if a second pretender instance is started
