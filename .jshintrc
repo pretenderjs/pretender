@@ -6,6 +6,9 @@
     "define",
     "process"
   ],
+  "globals": {
+    "console":false
+  },
   "expr": true,
   "proto": true,
   "strict": true,
