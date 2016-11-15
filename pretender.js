@@ -161,7 +161,7 @@ function interceptor(pretender, nativeRequest) {
     var evts = ['error', 'timeout', 'abort', 'readystatechange'];
 
     // event types to handle on the xhr.upload
-    var uploadEvents = ['progress'];
+    var uploadEvents = [];
 
     // properties to copy from the native xhr to fake xhr
     var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
@@ -173,14 +173,16 @@ function interceptor(pretender, nativeRequest) {
       xhr.responseType = fakeXHR.responseType;
     }
 
-    // Use onload if the browser supports it
+    // use onload if the browser supports it
     if ('onload' in xhr) {
       evts.push('load');
     }
 
     // add progress event for async calls
+    // avoid using progress events for sync calls, they will hang https://bugs.webkit.org/show_bug.cgi?id=40996.
     if (fakeXHR.async && fakeXHR.responseType !== 'arraybuffer') {
       evts.push('progress');
+      uploadEvents.push('progress');
     }
 
     // update `propertyNames` properties from `fromXHR` to `toXHR`
