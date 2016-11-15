@@ -465,7 +465,7 @@ Pretender.parseURL = parseURL;
 Pretender.Hosts = Hosts;
 Pretender.Registry = Registry;
 
-if (typeof module === 'object') {
+if (typeof module === 'object' && typeof exports !== 'undefined' && module.exports === exports) {
   module.exports = Pretender;
 } else if (typeof define !== 'undefined') {
   define('pretender', [], function() {
