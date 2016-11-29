@@ -76,6 +76,14 @@ server.put('/api/songs/99', function(request){
 
 ```
 
+Pretender comes with a `json` helper that takes status code and response object and returns handler function. 
+
+```javascript
+var server = new Pretender();
+var json = Pretender.json;
+server.put('/api/songs/99', json(404, {}));
+```
+
 ### Paths
 Paths can either be hard-coded (`this.get('/api/songs/12')`) or contain dynamic segments
 (`this.get('/api/songs/:song_id'`). If there were dynamic segments of the path,
