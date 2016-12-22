@@ -111,7 +111,6 @@ function Pretender(/* routeMap1, routeMap2, ...*/) {
 
   this.handlers = [];
   this.handledRequests = [];
-  this.passthroughRequests = [];
   this.unhandledRequests = [];
   this.requestReferences = [];
 
@@ -335,7 +334,6 @@ Pretender.prototype = {
     var recognized = this.hosts.forURL(request.url)[verb].recognize(path);
     var match = recognized && recognized[0];
     if (match && match.handler === PASSTHROUGH) {
-      this.passthroughRequests.push(request);
       this.passthroughRequest(verb, path, request);
       return true;
     }
