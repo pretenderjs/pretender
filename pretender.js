@@ -117,7 +117,10 @@ function Pretender(/* routeMap1, routeMap2, ...*/) {
 
   // reference the native XMLHttpRequest object so
   // it can be restored later
-  this._nativeXMLHttpRequest = self.XMLHttpRequest;
+  if (!self._nativeXMLHttpRequest) { // Do this only once
+    self._nativeXMLHttpRequest = self.XMLHttpRequest;
+  }
+  this._nativeXMLHttpRequest = self._nativeXMLHttpRequest;
 
   // capture xhr requests, channeling them into
   // the route map.
@@ -311,8 +314,10 @@ Pretender.prototype = {
         verb + ' ' + url + ' is undefined or missing.');
     }
 
-    handler.numberOfCalls = 0;
-    handler.async = async;
+    if (handler !== PASSTHROUGH) {
+      handler.numberOfCalls = 0;
+      handler.async = async;
+    }
     this.handlers.push(handler);
 
     var registry = this.hosts.forURL(url)[verb];
