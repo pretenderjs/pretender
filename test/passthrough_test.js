@@ -275,7 +275,37 @@ describe('passthrough requests',  function(config) {
       }
     }
   });
+
+  test('asynchronous request with pass-through and empty response', function(assert) {
+    var done = assert.async();
+    var pretender = this.pretender;
+
+    function testXHR() {
+      this.pretender = pretender;
+      this.open = function() {};
+      this.setRequestHeader = function() {};
+      this.responseText = '';
+      this.onload = true;
+      this.send = {
+        pretender: pretender,
+        apply: function(xhr, argument) {
+          xhr.onload({ target: xhr, type: 'load' });
+        }
+      };
+    }
+    pretender._nativeXMLHttpRequest = testXHR;
+
+    pretender.get('/some/path', pretender.passthrough);
+
+    var xhr = new window.XMLHttpRequest();
+    xhr.open('GET', '/some/path');
+    xhr.addEventListener('load', function _onload(event) {
+      assert.equal(xhr.responseText, event.target.responseText,
+        'responseText for real and fake xhr are both blank strings');
+      done();
+    });
+
+    xhr.send();
+  });
+
 });
-
-
-
