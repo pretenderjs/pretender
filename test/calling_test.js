@@ -1,5 +1,6 @@
 var describe = QUnit.module;
 var it = QUnit.test;
+var clock;
 
 describe('pretender invoking', function(config) {
   config.beforeEach(function() {
@@ -7,6 +8,7 @@ describe('pretender invoking', function(config) {
   });
 
   config.afterEach(function() {
+    if (clock) { clock.restore(); }
     this.pretender.shutdown();
   });
 
@@ -432,7 +434,7 @@ describe('pretender invoking', function(config) {
   it("`onprogress` upload events don't keep firing once the request has ended", function(
     assert
   ) {
-    var done = assert.async();
+    clock = sinon.useFakeTimers();
     var progressEventCount = 0;
     this.pretender.post(
       '/uploads',
@@ -448,21 +450,20 @@ describe('pretender invoking', function(config) {
       progressEventCount++;
     };
     xhr.send('some data');
-    setTimeout(function() {
-      assert.equal(
-        progressEventCount,
-        4,
-        'No `onprogress` events are fired after the the request finalizes'
-      );
-      done();
-    }, 510);
+    clock.tick(510);
+    assert.equal(
+      progressEventCount,
+      4,
+      'No `onprogress` events are fired after the the request finalizes'
+    );
   });
 
   it('no progress upload events are fired after the request is aborted', function(
     assert
   ) {
-    var done = assert.async();
     var progressEventCount = 0;
+
+    clock = sinon.useFakeTimers();
 
     this.pretender.post(
       '/uploads',
@@ -478,17 +479,15 @@ describe('pretender invoking', function(config) {
       progressEventCount++;
     };
     xhr.send('some data');
-    setTimeout(function() {
-      xhr.abort();
-    }, 90);
-    setTimeout(function() {
-      assert.equal(
-        progressEventCount,
-        1,
-        'only one progress event was triggered because the request was aborted'
-      );
-      done();
-    }, 220);
+
+    clock.tick(90);
+    xhr.abort();
+    clock.tick(220);
+    assert.equal(
+      progressEventCount,
+      1,
+      'only one progress event was triggered because the request was aborted'
+    );
   });
 
   it('async requests with `onprogress` events trigger a progress event each 50ms', function(
@@ -523,7 +522,7 @@ describe('pretender invoking', function(config) {
   it("`onprogress` download events don't keep firing once the request has ended", function(
     assert
   ) {
-    var done = assert.async();
+    clock = sinon.useFakeTimers();
     var progressEventCount = 0;
     this.pretender.get(
       '/downloads',
@@ -539,22 +538,19 @@ describe('pretender invoking', function(config) {
       progressEventCount++;
     };
     xhr.send('some data');
-    setTimeout(function() {
-      assert.equal(
-        progressEventCount,
-        4,
-        'No `onprogress` events are fired after the the request finalizes'
-      );
-      done();
-    }, 510);
+    clock.tick(510);
+    assert.equal(
+      progressEventCount,
+      4,
+      'No `onprogress` events are fired after the the request finalizes'
+    );
   });
 
   it('no progress download events are fired after the request is aborted', function(
     assert
   ) {
-    var done = assert.async();
     var progressEventCount = 0;
-
+    clock = sinon.useFakeTimers();
     this.pretender.get(
       '/downloads',
       function(request) {
@@ -569,17 +565,14 @@ describe('pretender invoking', function(config) {
       progressEventCount++;
     };
     xhr.send('some data');
-    setTimeout(function() {
-      xhr.abort();
-    }, 90);
-    setTimeout(function() {
-      assert.equal(
-        progressEventCount,
-        1,
-        'only one progress event was triggered because the request was aborted'
-      );
-      done();
-    }, 220);
+    clock.tick(90);
+    xhr.abort();
+    clock.tick(220);
+    assert.equal(
+      progressEventCount,
+      1,
+      'only one progress event was triggered because the request was aborted'
+    );
   });
 
   it('resolves cross-origin requests', function(assert) {
