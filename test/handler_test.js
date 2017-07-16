@@ -22,7 +22,7 @@ describe('pretender adding a handler', function(config) {
       wasCalled = true;
     });
 
-    $.ajax({url: '/some/path'});
+    $.ajax({ url: '/some/path' });
     assert.ok(wasCalled);
   });
 
@@ -33,7 +33,7 @@ describe('pretender adding a handler', function(config) {
       wasCalled = true;
     });
 
-    $.ajax({url: '/some/path', method: 'post'});
+    $.ajax({ url: '/some/path', method: 'post' });
     assert.ok(wasCalled);
   });
 
@@ -44,7 +44,7 @@ describe('pretender adding a handler', function(config) {
       wasCalled = true;
     });
 
-    $.ajax({url: '/some/path', method: 'patch'});
+    $.ajax({ url: '/some/path', method: 'patch' });
     assert.ok(wasCalled);
   });
 
@@ -55,7 +55,7 @@ describe('pretender adding a handler', function(config) {
       wasCalled = true;
     });
 
-    $.ajax({url: '/some/path', method: 'delete'});
+    $.ajax({ url: '/some/path', method: 'delete' });
     assert.ok(wasCalled);
   });
 
@@ -66,7 +66,7 @@ describe('pretender adding a handler', function(config) {
       wasCalled = true;
     });
 
-    $.ajax({url: '/some/path', method: 'options'});
+    $.ajax({ url: '/some/path', method: 'options' });
     assert.ok(wasCalled);
   });
 
@@ -77,7 +77,7 @@ describe('pretender adding a handler', function(config) {
       wasCalled = true;
     });
 
-    $.ajax({url: '/some/path', method: 'put'});
+    $.ajax({ url: '/some/path', method: 'put' });
     assert.ok(wasCalled);
   });
 
@@ -88,7 +88,7 @@ describe('pretender adding a handler', function(config) {
       wasCalled = true;
     });
 
-    $.ajax({url: '/some/path', method: 'head'});
+    $.ajax({ url: '/some/path', method: 'head' });
     assert.ok(wasCalled);
   });
 });

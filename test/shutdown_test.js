@@ -24,9 +24,8 @@ describe('pretender shutdown', function(config) {
     var request = new XMLHttpRequest();
     pretender.shutdown();
 
-    assert.throws (function() {
+    assert.throws(function() {
       request.send();
     });
   });
-
 });

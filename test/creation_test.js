@@ -40,8 +40,8 @@ describe('pretender creation', function(config) {
 
     pretender = new Pretender(mapA, mapB);
 
-    $.ajax({url: '/some/path'});
-    $.ajax({url: '/other/path'});
+    $.ajax({ url: '/some/path' });
+    $.ajax({ url: '/other/path' });
 
     assert.ok(aWasCalled);
     assert.ok(bWasCalled);
@@ -54,5 +54,3 @@ describe('pretender creation', function(config) {
     }, 'The function you tried passing to Pretender to handle GET /path is undefined or missing.');
   });
 });
-
-

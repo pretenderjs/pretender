@@ -19,7 +19,6 @@ describe('pretender errored requests', function(config) {
       assert.ok(error);
     };
 
-    $.ajax({url: '/some/path'});
+    $.ajax({ url: '/some/path' });
   });
 });
-

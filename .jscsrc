@@ -16,16 +16,16 @@
   "requireCurlyBraces": true,
   "requireSpaceAfterKeywords": [
     "if",
-    "else",
-    "for",
-    "while",
-    "do",
-    "switch",
-    "case",
-    "return",
-    "try",
-    "catch",
-    "typeof"
+  "else",
+  "for",
+  "while",
+  "do",
+  "switch",
+  "case",
+  "return",
+  "try",
+  "catch",
+  "typeof"
   ],
   "requireSpaceAfterLineComment": true,
   "requireSpaceAfterBinaryOperators": true,
@@ -35,8 +35,7 @@
   "requireSpacesInFunction": {
     "beforeOpeningCurlyBrace": true
   },
-  "disallowTrailingComma": true,
   "validateIndentation": 2,
   "validateLineBreaks": "LF",
-  "validateQuoteMarks": "'"
+  "validateQuoteMarks": { "mark": "'", "escape": true }
 }

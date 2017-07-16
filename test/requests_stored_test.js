@@ -17,7 +17,7 @@ describe('pretender', function(config) {
       wasCalled = true;
     });
 
-    $.ajax({url: '/some/path'});
+    $.ajax({ url: '/some/path' });
 
     assert.ok(wasCalled);
     assert.equal(this.pretender.handledRequests.length, 0);
@@ -32,7 +32,7 @@ describe('pretender', function(config) {
       wasCalled = true;
     });
 
-    $.ajax({url: '/very/good'});
+    $.ajax({ url: '/very/good' });
 
     assert.notOk(wasCalled);
     assert.equal(this.pretender.handledRequests.length, 0);
@@ -49,14 +49,13 @@ describe('pretender', function(config) {
 
     this.pretender.get('/some/path', this.pretender.passthrough);
 
-    $.ajax({url: '/some/path'});
+    $.ajax({ url: '/some/path' });
 
     assert.ok(wasCalled);
     assert.equal(this.pretender.handledRequests.length, 0);
     assert.equal(this.pretender.unhandledRequests.length, 0);
     assert.equal(this.pretender.passthroughRequests.length, 0);
   });
-
 });
 
 describe('pretender', function(config) {
@@ -75,7 +74,7 @@ describe('pretender', function(config) {
       wasCalled = true;
     });
 
-    $.ajax({url: '/some/path'});
+    $.ajax({ url: '/some/path' });
 
     assert.ok(wasCalled);
     assert.equal(this.pretender.handledRequests.length, 1);
@@ -90,7 +89,7 @@ describe('pretender', function(config) {
       wasCalled = true;
     });
 
-    $.ajax({url: '/very/good'});
+    $.ajax({ url: '/very/good' });
 
     assert.notOk(wasCalled);
     assert.equal(this.pretender.handledRequests.length, 0);
@@ -107,7 +106,7 @@ describe('pretender', function(config) {
 
     this.pretender.get('/some/path', this.pretender.passthrough);
 
-    $.ajax({url: '/some/path'});
+    $.ajax({ url: '/some/path' });
 
     assert.ok(wasCalled);
     assert.equal(this.pretender.handledRequests.length, 0);
