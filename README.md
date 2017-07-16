@@ -303,7 +303,7 @@ server.passthroughRequest = function(verb, path, request) {
 
 ### Error Requests
 Your server will call a `erroredRequest` method with the HTTP `verb`, `path`, original `request`,
-and the original `error` object if your handler code causes an error:
+and the original `error` object if your handler code causes an error.
 
 By default, this will augment the error message with some information about which handler caused
 the error and then throw the error again. You can override this method to supply your own behavior:
