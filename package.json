@@ -29,7 +29,7 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-qunit": "^1.2.1",
     "phantomjs": "^2.1.7",
-    "qunitjs": "^1.20.0"
+    "qunitjs": "^2.4.0"
   },
   "dependencies": {
     "fake-xml-http-request": "^1.6.0",

@@ -10,7 +10,7 @@ describe('pretender invoking', function(config) {
     this.pretender.shutdown();
   });
 
-  it('a mapping function is optional', function() {
+  it('a mapping function is optional', function(assert) {
     var wasCalled;
 
     this.pretender.get('/some/path', function() {
@@ -18,10 +18,10 @@ describe('pretender invoking', function(config) {
     });
 
     $.ajax({url: '/some/path'});
-    ok(wasCalled);
+    assert.ok(wasCalled);
   });
 
-  it('mapping can be called directly', function() {
+  it('mapping can be called directly', function(assert) {
     var wasCalled;
     function map() {
       this.get('/some/path', function() {
@@ -32,10 +32,10 @@ describe('pretender invoking', function(config) {
     this.pretender.map(map);
 
     $.ajax({url: '/some/path'});
-    ok(wasCalled);
+    assert.ok(wasCalled);
   });
 
-  it('clobbering duplicate mapping works', function() {
+  it('clobbering duplicate mapping works', function(assert) {
     var wasCalled, wasCalled2;
     function map() {
       this.get('/some/path', function() {
@@ -53,11 +53,11 @@ describe('pretender invoking', function(config) {
 
     $.ajax({url: '/some/path'});
 
-    ok(!wasCalled);
-    ok(wasCalled2);
+    assert.ok(!wasCalled);
+    assert.ok(wasCalled2);
   });
 
-  it('ordered duplicate mapping works', function() {
+  it('ordered duplicate mapping works', function(assert) {
     var wasCalled, wasCalled2;
     function map() {
       this.get('/some/path', function() {
@@ -77,31 +77,31 @@ describe('pretender invoking', function(config) {
     this.pretender.map(map2);
     $.ajax({url: '/some/path'});
 
-    ok(wasCalled);
-    ok(wasCalled2);
+    assert.ok(wasCalled);
+    assert.ok(wasCalled2);
   });
 
-  it('params are passed', function() {
+  it('params are passed', function(assert) {
     var params;
     this.pretender.get('/some/path/:id', function(request) {
       params = request.params;
     });
 
     $.ajax({url: '/some/path/1'});
-    equal(params.id, 1);
+    assert.equal(params.id, 1);
   });
 
-  it('queryParams are passed', function() {
+  it('queryParams are passed', function(assert) {
     var params;
     this.pretender.get('/some/path', function(request) {
       params = request.queryParams;
     });
 
     $.ajax({url: '/some/path?zulu=nation'});
-    equal(params.zulu, 'nation');
+    assert.equal(params.zulu, 'nation');
   });
 
-  it('request body is accessible', function() {
+  it('request body is accessible', function(assert) {
     var params;
     this.pretender.post('/some/path/1', function(request) {
       params = request.requestBody;
@@ -114,10 +114,10 @@ describe('pretender invoking', function(config) {
         ok: true
       }
     });
-    equal(params, 'ok=true');
+    assert.equal(params, 'ok=true');
   });
 
-  it('request headers are accessible', function() {
+  it('request headers are accessible', function(assert) {
     var headers;
     this.pretender.post('/some/path/1', function(request) {
       headers = request.requestHeaders;
@@ -130,10 +130,10 @@ describe('pretender invoking', function(config) {
         'A-Header': 'value'
       }
     });
-    equal(headers['A-Header'], 'value');
+    assert.equal(headers['A-Header'], 'value');
   });
 
-  it('adds requests to the list of handled requests', function() {
+  it('adds requests to the list of handled requests', function(assert) {
     var params;
     this.pretender.get('/some/path', function(request) {
       params = request.queryParams;
@@ -142,17 +142,17 @@ describe('pretender invoking', function(config) {
     $.ajax({url: '/some/path'});
 
     var req = this.pretender.handledRequests[0];
-    equal(req.url, '/some/path');
+    assert.equal(req.url, '/some/path');
   });
 
-  it('increments the handler\'s request count', function() {
+  it('increments the handler\'s request count', function(assert) {
     var handler = function(req) {};
 
     this.pretender.get('/some/path', handler);
 
     $.ajax({url: '/some/path'});
 
-    equal(handler.numberOfCalls, 1);
+    assert.equal(handler.numberOfCalls, 1);
   });
 
   it('handledRequest is called', function(assert) {
@@ -164,11 +164,11 @@ describe('pretender invoking', function(config) {
     });
 
     this.pretender.handledRequest = function(verb, path, request) {
-      ok(true, 'handledRequest hook was called');
-      equal(verb, 'GET');
-      equal(path, '/some/path');
-      equal(request.responseText, json);
-      equal(request.status, '200');
+      assert.ok(true, 'handledRequest hook was called');
+      assert.equal(verb, 'GET');
+      assert.equal(path, '/some/path');
+      assert.equal(request.responseText, json);
+      assert.equal(request.status, '200');
       done();
     };
 
@@ -187,7 +187,7 @@ describe('pretender invoking', function(config) {
     $.ajax({
       url: '/some/path',
       success: function(resp) {
-        deepEqual(JSON.parse(resp), obj);
+        assert.deepEqual(JSON.parse(resp), obj);
         done();
       }
     });
@@ -208,37 +208,36 @@ describe('pretender invoking', function(config) {
     $.ajax({
       url: '/some/path',
       complete: function(xhr) {
-        equal(xhr.getResponseHeader('X-WAS-CALLED'), 'YES');
+        assert.equal(xhr.getResponseHeader('X-WAS-CALLED'), 'YES');
         done();
       }
     });
   });
 
-  it('will use the latest defined handler', function() {
-    expect(1);
+  it('will use the latest defined handler', function(assert) {
+    assert.expect(1);
 
     var latestHandlerWasCalled = false;
     this.pretender.get('/some/path', function(request) {
-      ok(false);
+      assert.ok(false);
     });
     this.pretender.get('/some/path', function(request) {
       latestHandlerWasCalled = true;
     });
     $.ajax({url: '/some/path'});
-    ok(latestHandlerWasCalled, 'calls the latest handler');
+    assert.ok(latestHandlerWasCalled, 'calls the latest handler');
   });
 
-  it('will error when using fully qualified URLs instead of paths', function() {
+  it('will error when using fully qualified URLs instead of paths', function(assert) {
     var pretender = this.pretender;
 
     pretender.get('/some/path', function(request) {
       return [200, {}, ''];
     });
 
-    throws(function() {
+    assert.throws(function() {
       pretender.handleRequest({url: 'http://myserver.com/some/path'});
     });
-
   });
 
   it('is resolved asynchronously', function(assert) {
@@ -252,16 +251,16 @@ describe('pretender invoking', function(config) {
     $.ajax({
       url: '/some/path',
       complete: function() {
-        equal(val, 'set');
+        assert.equal(val, 'set');
         done();
       }
     });
 
-    equal(val, 'unset');
+    assert.equal(val, 'unset');
     val = 'set';
   });
 
-  it('can be resolved synchronous', function() {
+  it('can be resolved synchronous', function(assert) {
     var val = 0;
 
     this.pretender.get('/some/path', function(request) {
@@ -271,12 +270,12 @@ describe('pretender invoking', function(config) {
     $.ajax({
       url: '/some/path',
       complete: function() {
-        equal(val, 0);
+        assert.equal(val, 0);
         val++;
       }
     });
 
-    equal(val, 1);
+    assert.equal(val, 1);
   });
 
   it('can be both asynchronous or synchronous based on an async function', function(assert) {
@@ -294,12 +293,12 @@ describe('pretender invoking', function(config) {
     $.ajax({
       url: '/some/path',
       complete: function() {
-        equal(val, 0);
+        assert.equal(val, 0);
         val++;
       }
     });
 
-    equal(val, 1);
+    assert.equal(val, 1);
     val++;
 
     isAsync = 0;
@@ -307,12 +306,12 @@ describe('pretender invoking', function(config) {
     $.ajax({
       url: '/some/path',
       complete: function() {
-        equal(val, 3);
+        assert.equal(val, 3);
         done();
       }
     });
 
-    equal(val, 2);
+    assert.equal(val, 2);
     val++;
   });
 
@@ -328,18 +327,18 @@ describe('pretender invoking', function(config) {
     $.ajax({
       url: '/some/path',
       complete: function() {
-        equal(val, 1);
+        assert.equal(val, 1);
         done();
       }
     });
 
     setTimeout(function() {
-      equal(val, 0);
+      assert.equal(val, 0);
       val++;
     }, 0);
   });
 
-  it('can be configured to require manually resolution', function() {
+  it('can be configured to require manually resolution', function(assert) {
     var val = 0;
     var req = $.ajaxSettings.xhr();
 
@@ -354,25 +353,25 @@ describe('pretender invoking', function(config) {
         return req;
       },
       complete: function() {
-        equal(val, 1);
+        assert.equal(val, 1);
         val++;
       }
     });
 
-    equal(val, 0);
+    assert.equal(val, 0);
     val++;
 
     this.pretender.resolve(req);
 
-    equal(val, 2);
+    assert.equal(val, 2);
   });
 
-  it('requiresManualResolution returns true for endpoints configured with `true` for async', function() {
+  it('requiresManualResolution returns true for endpoints configured with `true` for async', function(assert) {
     this.pretender.get('/some/path', function(request) {}, true);
     this.pretender.get('/some/other/path', function() {});
 
-    ok(this.pretender.requiresManualResolution('get', '/some/path'));
-    ok(!this.pretender.requiresManualResolution('get', '/some/other/path'));
+    assert.ok(this.pretender.requiresManualResolution('get', '/some/path'));
+    assert.ok(!this.pretender.requiresManualResolution('get', '/some/other/path'));
   });
 
   it('async requests with `onprogress` upload events in the upload ' +
@@ -389,7 +388,7 @@ describe('pretender invoking', function(config) {
       progressEventCount++;
     };
     xhr.onload = function() {
-      equal(progressEventCount, 5, 'In a request of 300ms the progress event has been fired 5 times');
+      assert.equal(progressEventCount, 5, 'In a request of 300ms the progress event has been fired 5 times');
       done();
     };
     xhr.send('some data');
@@ -409,7 +408,7 @@ describe('pretender invoking', function(config) {
     };
     xhr.send('some data');
     setTimeout(function() {
-      equal(progressEventCount, 4, 'No `onprogress` events are fired after the the request finalizes');
+      assert.equal(progressEventCount, 4, 'No `onprogress` events are fired after the the request finalizes');
       done();
     }, 510);
   });
@@ -428,7 +427,7 @@ describe('pretender invoking', function(config) {
     xhr.send('some data');
     setTimeout(function() { xhr.abort(); }, 90);
     setTimeout(function() {
-      equal(progressEventCount, 1, 'only one progress event was triggered because the request was aborted');
+      assert.equal(progressEventCount, 1, 'only one progress event was triggered because the request was aborted');
       done();
     }, 220);
   });
@@ -446,7 +445,7 @@ describe('pretender invoking', function(config) {
       progressEventCount++;
     };
     xhr.onload = function() {
-      equal(progressEventCount, 5, 'In a request of 300ms the progress event has been fired 5 times');
+      assert.equal(progressEventCount, 5, 'In a request of 300ms the progress event has been fired 5 times');
       done();
     };
     xhr.send('some data');
@@ -466,7 +465,7 @@ describe('pretender invoking', function(config) {
     };
     xhr.send('some data');
     setTimeout(function() {
-      equal(progressEventCount, 4, 'No `onprogress` events are fired after the the request finalizes');
+      assert.equal(progressEventCount, 4, 'No `onprogress` events are fired after the the request finalizes');
       done();
     }, 510);
   });
@@ -485,13 +484,12 @@ describe('pretender invoking', function(config) {
     xhr.send('some data');
     setTimeout(function() { xhr.abort(); }, 90);
     setTimeout(function() {
-      equal(progressEventCount, 1, 'only one progress event was triggered because the request was aborted');
+      assert.equal(progressEventCount, 1, 'only one progress event was triggered because the request was aborted');
       done();
     }, 220);
   });
 
-  it('resolves cross-origin requests', function() {
-
+  it('resolves cross-origin requests', function(assert) {
     var url = 'http://status.github.com/api/status';
     var payload = 'it works!';
     var wasCalled;
@@ -502,7 +500,7 @@ describe('pretender invoking', function(config) {
     });
 
     $.ajax({url: url});
-    ok(wasCalled);
+    assert.ok(wasCalled);
   });
 
   it('accepts a handler that returns a promise', function(assert) {
@@ -517,11 +515,11 @@ describe('pretender invoking', function(config) {
     });
 
     this.pretender.handledRequest = function(verb, path, request) {
-      ok(true, 'handledRequest hook was called');
-      equal(verb, 'GET');
-      equal(path, '/some/path');
-      equal(request.responseText, json);
-      equal(request.status, '200');
+      assert.ok(true, 'handledRequest hook was called');
+      assert.equal(verb, 'GET');
+      assert.equal(path, '/some/path');
+      assert.equal(request.responseText, json);
+      assert.equal(request.status, '200');
       done();
     };
 

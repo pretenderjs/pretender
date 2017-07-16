@@ -10,7 +10,7 @@ describe('pretender', function(config) {
     this.pretender.shutdown();
   });
 
-  it('does not track handled requests', function() {
+  it('does not track handled requests', function(assert) {
     var wasCalled;
 
     this.pretender.get('/some/path', function() {
@@ -19,13 +19,13 @@ describe('pretender', function(config) {
 
     $.ajax({url: '/some/path'});
 
-    ok(wasCalled);
-    equal(this.pretender.handledRequests.length, 0);
-    equal(this.pretender.unhandledRequests.length, 0);
-    equal(this.pretender.passthroughRequests.length, 0);
+    assert.ok(wasCalled);
+    assert.equal(this.pretender.handledRequests.length, 0);
+    assert.equal(this.pretender.unhandledRequests.length, 0);
+    assert.equal(this.pretender.passthroughRequests.length, 0);
   });
 
-  it('does not track unhandled requests requests', function() {
+  it('does not track unhandled requests requests', function(assert) {
     var wasCalled;
 
     this.pretender.get('/some/path', function() {
@@ -34,13 +34,13 @@ describe('pretender', function(config) {
 
     $.ajax({url: '/very/good'});
 
-    notOk(wasCalled);
-    equal(this.pretender.handledRequests.length, 0);
-    equal(this.pretender.unhandledRequests.length, 0);
-    equal(this.pretender.passthroughRequests.length, 0);
+    assert.notOk(wasCalled);
+    assert.equal(this.pretender.handledRequests.length, 0);
+    assert.equal(this.pretender.unhandledRequests.length, 0);
+    assert.equal(this.pretender.passthroughRequests.length, 0);
   });
 
-  it('does not track passthrough requests requests', function() {
+  it('does not track passthrough requests requests', function(assert) {
     var wasCalled;
 
     this.pretender.passthrough = function() {
@@ -51,10 +51,10 @@ describe('pretender', function(config) {
 
     $.ajax({url: '/some/path'});
 
-    ok(wasCalled);
-    equal(this.pretender.handledRequests.length, 0);
-    equal(this.pretender.unhandledRequests.length, 0);
-    equal(this.pretender.passthroughRequests.length, 0);
+    assert.ok(wasCalled);
+    assert.equal(this.pretender.handledRequests.length, 0);
+    assert.equal(this.pretender.unhandledRequests.length, 0);
+    assert.equal(this.pretender.passthroughRequests.length, 0);
   });
 
 });
@@ -68,7 +68,7 @@ describe('pretender', function(config) {
     this.pretender.shutdown();
   });
 
-  it('tracks handled requests', function() {
+  it('tracks handled requests', function(assert) {
     var wasCalled;
 
     this.pretender.get('/some/path', function() {
@@ -77,13 +77,13 @@ describe('pretender', function(config) {
 
     $.ajax({url: '/some/path'});
 
-    ok(wasCalled);
-    equal(this.pretender.handledRequests.length, 1);
-    equal(this.pretender.unhandledRequests.length, 0);
-    equal(this.pretender.passthroughRequests.length, 0);
+    assert.ok(wasCalled);
+    assert.equal(this.pretender.handledRequests.length, 1);
+    assert.equal(this.pretender.unhandledRequests.length, 0);
+    assert.equal(this.pretender.passthroughRequests.length, 0);
   });
 
-  it('tracks unhandled requests requests', function() {
+  it('tracks unhandled requests requests', function(assert) {
     var wasCalled;
 
     this.pretender.get('/some/path', function() {
@@ -92,13 +92,13 @@ describe('pretender', function(config) {
 
     $.ajax({url: '/very/good'});
 
-    notOk(wasCalled);
-    equal(this.pretender.handledRequests.length, 0);
-    equal(this.pretender.unhandledRequests.length, 1);
-    equal(this.pretender.passthroughRequests.length, 0);
+    assert.notOk(wasCalled);
+    assert.equal(this.pretender.handledRequests.length, 0);
+    assert.equal(this.pretender.unhandledRequests.length, 1);
+    assert.equal(this.pretender.passthroughRequests.length, 0);
   });
 
-  it('tracks passthrough requests requests', function() {
+  it('tracks passthrough requests requests', function(assert) {
     var wasCalled;
 
     this.pretender.passthroughRequest = function() {
@@ -109,11 +109,9 @@ describe('pretender', function(config) {
 
     $.ajax({url: '/some/path'});
 
-    ok(wasCalled);
-    equal(this.pretender.handledRequests.length, 0);
-    equal(this.pretender.unhandledRequests.length, 0);
-    equal(this.pretender.passthroughRequests.length, 1);
+    assert.ok(wasCalled);
+    assert.equal(this.pretender.handledRequests.length, 0);
+    assert.equal(this.pretender.unhandledRequests.length, 0);
+    assert.equal(this.pretender.passthroughRequests.length, 1);
   });
-
 });
-

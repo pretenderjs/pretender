@@ -10,7 +10,7 @@ describe('pretender creation', function(config) {
     pretender = null;
   });
 
-  test('a mapping function is optional', function(assert) {
+  it('a mapping function is optional', function(assert) {
     var result = false;
     try {
       pretender = new Pretender();
@@ -22,7 +22,7 @@ describe('pretender creation', function(config) {
     assert.ok(true, 'does not raise');
   });
 
-  test('many maps can be passed on creation', function(assert) {
+  it('many maps can be passed on creation', function(assert) {
     var aWasCalled = false;
     var bWasCalled = false;
 
@@ -47,7 +47,7 @@ describe('pretender creation', function(config) {
     assert.ok(bWasCalled);
   });
 
-  test('an error is thrown when a request handler is missing', function(assert) {
+  it('an error is thrown when a request handler is missing', function(assert) {
     assert.throws(function() {
       pretender = new Pretender();
       pretender.get('/path', undefined);

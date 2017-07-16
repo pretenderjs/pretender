@@ -10,12 +10,12 @@ describe('pretender adding a handler', function(config) {
     this.pretender.shutdown();
   });
 
-  it('a handler is returned', function() {
+  it('a handler is returned', function(assert) {
     var handler = this.pretender.get('/some/path', function() {});
-    ok(handler);
+    assert.ok(handler);
   });
 
-  it('.get registers a handler for GET', function() {
+  it('.get registers a handler for GET', function(assert) {
     var wasCalled;
 
     this.pretender.get('/some/path', function() {
@@ -23,10 +23,10 @@ describe('pretender adding a handler', function(config) {
     });
 
     $.ajax({url: '/some/path'});
-    ok(wasCalled);
+    assert.ok(wasCalled);
   });
 
-  it('.post registers a handler for POST', function() {
+  it('.post registers a handler for POST', function(assert) {
     var wasCalled;
 
     this.pretender.post('/some/path', function() {
@@ -34,10 +34,10 @@ describe('pretender adding a handler', function(config) {
     });
 
     $.ajax({url: '/some/path', method: 'post'});
-    ok(wasCalled);
+    assert.ok(wasCalled);
   });
 
-  it('.patch registers a handler for PATCH', function() {
+  it('.patch registers a handler for PATCH', function(assert) {
     var wasCalled;
 
     this.pretender.patch('/some/path', function() {
@@ -45,10 +45,10 @@ describe('pretender adding a handler', function(config) {
     });
 
     $.ajax({url: '/some/path', method: 'patch'});
-    ok(wasCalled);
+    assert.ok(wasCalled);
   });
 
-  it('.delete registers a handler for DELETE', function() {
+  it('.delete registers a handler for DELETE', function(assert) {
     var wasCalled;
 
     this.pretender.delete('/some/path', function() {
@@ -56,10 +56,10 @@ describe('pretender adding a handler', function(config) {
     });
 
     $.ajax({url: '/some/path', method: 'delete'});
-    ok(wasCalled);
+    assert.ok(wasCalled);
   });
 
-  it('.options registers a handler for OPTIONS', function() {
+  it('.options registers a handler for OPTIONS', function(assert) {
     var wasCalled;
 
     this.pretender.options('/some/path', function() {
@@ -67,10 +67,10 @@ describe('pretender adding a handler', function(config) {
     });
 
     $.ajax({url: '/some/path', method: 'options'});
-    ok(wasCalled);
+    assert.ok(wasCalled);
   });
 
-  it('.put registers a handler for PUT', function() {
+  it('.put registers a handler for PUT', function(assert) {
     var wasCalled;
 
     this.pretender.put('/some/path', function() {
@@ -78,10 +78,10 @@ describe('pretender adding a handler', function(config) {
     });
 
     $.ajax({url: '/some/path', method: 'put'});
-    ok(wasCalled);
+    assert.ok(wasCalled);
   });
 
-  it('.head registers a handler for HEAD', function() {
+  it('.head registers a handler for HEAD', function(assert) {
     var wasCalled;
 
     this.pretender.head('/some/path', function() {
@@ -89,6 +89,6 @@ describe('pretender adding a handler', function(config) {
     });
 
     $.ajax({url: '/some/path', method: 'head'});
-    ok(wasCalled);
+    assert.ok(wasCalled);
   });
 });

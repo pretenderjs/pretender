@@ -6,10 +6,9 @@ describe('Registry', function(config) {
     this.registry = new Pretender.Registry();
   });
 
-  it('has a "verbs" property', function() {
-    ok(this.registry.verbs);
+  it('has a "verbs" property', function(assert) {
+    assert.ok(this.registry.verbs);
   });
-
 
   it('supports all HTTP verbs', function(assert) {
     var verbs = ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'];
