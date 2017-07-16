@@ -106,13 +106,19 @@ Hosts.prototype.forURL = function(url) {
   return registry.verbs;
 };
 
-function Pretender(/* routeMap1, routeMap2, ...*/) {
+
+function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   this.hosts = new Hosts();
 
+  var lastArg = arguments[arguments.length - 1];
+  var options = typeof lastArg === 'object' ? lastArg : null;
+  var shouldNotTrack = options && (options.trackRequests === false);
+  var noopArray = { push: function() {}, length: 0 };
+
   this.handlers = [];
-  this.handledRequests = [];
-  this.passthroughRequests = [];
-  this.unhandledRequests = [];
+  this.handledRequests = shouldNotTrack ? noopArray: [];
+  this.passthroughRequests = shouldNotTrack ? noopArray: [];
+  this.unhandledRequests = shouldNotTrack ? noopArray: [];
   this.requestReferences = [];
 
   // reference the native XMLHttpRequest object so
@@ -127,7 +133,8 @@ function Pretender(/* routeMap1, routeMap2, ...*/) {
   this.running = true;
 
   // trigger the route map DSL.
-  for (var i = 0; i < arguments.length; i++) {
+  var argLength = options ? arguments.length - 1 : arguments.length;
+  for (var i = 0; i < argLength; i++) {
     this.map(arguments[i]);
   }
 }
