@@ -174,6 +174,7 @@ function interceptor(pretender, nativeRequest) {
     var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
 
     var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
+    xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
 
     if (fakeXHR.responseType === 'arraybuffer') {
       lifecycleProps = ['readyState', 'response', 'status', 'statusText'];
@@ -227,8 +228,6 @@ function interceptor(pretender, nativeRequest) {
         };
       }
     }
-
-    xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
 
     var i;
     for (i = 0; i < evts.length; i++) {
