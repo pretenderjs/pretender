@@ -196,7 +196,7 @@ function interceptor(pretender, nativeRequest) {
     function copyLifecycleProperties(propertyNames, fromXHR, toXHR) {
       for (var i = 0; i < propertyNames.length; i++) {
         var prop = propertyNames[i];
-        if (fromXHR[prop]) {
+        if (prop in fromXHR) {
           toXHR[prop] = fromXHR[prop];
         }
       }
