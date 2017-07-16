@@ -113,7 +113,7 @@ function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   var lastArg = arguments[arguments.length - 1];
   var options = typeof lastArg === 'object' ? lastArg : null;
   var shouldNotTrack = options && (options.trackRequests === false);
-  var noopArray = { push: function() {} };
+  var noopArray = { push: function() {}, length: 0 };
 
   this.handlers = [];
   this.handledRequests = shouldNotTrack ? noopArray: [];
