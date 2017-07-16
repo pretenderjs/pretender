@@ -2,7 +2,7 @@ var originalXMLHttpRequest;
 var describe = QUnit.module;
 var it = QUnit.test;
 
-describe('passthrough requests',  function(config) {
+describe('passthrough requests', function(config) {
   config.beforeEach(function() {
     originalXMLHttpRequest = window.XMLHttpRequest;
     this.pretender = new Pretender();
@@ -13,8 +13,9 @@ describe('passthrough requests',  function(config) {
     window.XMLHttpRequest = originalXMLHttpRequest;
   });
 
-  asyncTest('allows matched paths to be pass-through', function(assert) {
+  it('allows matched paths to be pass-through', function(assert) {
     var pretender = this.pretender;
+    var done = assert.async();
 
     pretender.post('/some/:route', pretender.passthrough);
 
@@ -30,21 +31,22 @@ describe('passthrough requests',  function(config) {
       url: '/some/path',
       method: 'POST',
       headers: {
-        'test-header': 'value'
+        'test-header': 'value',
       },
       data: {
-        some: 'data'
+        some: 'data',
       },
       error: function(xhr) {
         assert.equal(xhr.status, 404);
         assert.ok(passthroughInvoked);
-        QUnit.start();
-      }
+        done();
+      },
     });
   });
 
-  asyncTest('passthrough request calls jQuery v1 handler', function(assert) {
+  it('passthrough request calls jQuery v1 handler', function(assert) {
     var pretender = this.pretender;
+    var done = assert.async();
 
     var jQuery2 = jQuery.noConflict(true);
     pretender.get('/some/:route', pretender.passthrough);
@@ -56,71 +58,85 @@ describe('passthrough requests',  function(config) {
         assert.equal(xhr.status, 404);
         jQuery = $ = jQuery2;
         assert.ok(/^2/.test(jQuery.fn.jquery));
-        QUnit.start();
-      }
+        done();
+      },
     });
   });
 
-  asyncTest('asynchronous request with pass-through has timeout,' +
-    'withCredentials and onprogress event', function(assert) {
-    var pretender = this.pretender;
-    function testXHR() {
-      this.pretender = pretender;
-      this.open = function() {};
-      this.setRequestHeader = function() {};
-      this.upload = {};
-      this.send = {
-        pretender: pretender,
-        apply: function(xhr, argument) {
-          assert.ok('timeout' in xhr);
-          assert.ok('withCredentials' in xhr);
-          assert.ok('onprogress' in xhr);
-          this.pretender.resolve(xhr);
-          QUnit.start();
-        }
-      };
+  it(
+    'asynchronous request with pass-through has timeout,' +
+      'withCredentials and onprogress event',
+    function(assert) {
+      var pretender = this.pretender;
+      var done = assert.async();
+
+      function testXHR() {
+        this.pretender = pretender;
+        this.open = function() {};
+        this.setRequestHeader = function() {};
+        this.upload = {};
+        this.send = {
+          pretender: pretender,
+          apply: function(xhr, argument) {
+            assert.ok('timeout' in xhr);
+            assert.ok('withCredentials' in xhr);
+            assert.ok('onprogress' in xhr);
+            this.pretender.resolve(xhr);
+            done();
+          },
+        };
+      }
+      pretender._nativeXMLHttpRequest = testXHR;
+
+      pretender.post('/some/path', pretender.passthrough);
+
+      var xhr = new window.XMLHttpRequest();
+      xhr.open('POST', '/some/path');
+      xhr.timeout = 1000;
+      xhr.withCredentials = true;
+      xhr.send('some data');
     }
-    pretender._nativeXMLHttpRequest = testXHR;
+  );
 
-    pretender.post('/some/path', pretender.passthrough);
+  it(
+    'asynchronous request with pass-through and ' +
+      'arraybuffer as responseType',
+    function(assert) {
+      var pretender = this.pretender;
+      var done = assert.async();
 
-    var xhr = new window.XMLHttpRequest();
-    xhr.open('POST', '/some/path');
-    xhr.timeout = 1000;
-    xhr.withCredentials = true;
-    xhr.send('some data');
-  });
+      function testXHR() {
+        this.pretender = pretender;
+        this.open = function() {};
+        this.setRequestHeader = function() {};
+        this.upload = {};
+        this.responseType = '';
+        this.send = {
+          pretender: pretender,
+          apply: function(xhr, argument) {
+            assert.equal(xhr.responseType, 'arraybuffer');
+            this.pretender.resolve(xhr);
+            done();
+          },
+        };
+      }
+      pretender._nativeXMLHttpRequest = testXHR;
 
-  asyncTest('asynchronous request with pass-through and ' +
-    'arraybuffer as responseType', function(assert) {
-    var pretender = this.pretender;
-    function testXHR() {
-      this.pretender = pretender;
-      this.open = function() {};
-      this.setRequestHeader = function() {};
-      this.upload = {};
-      this.responseType = '';
-      this.send = {
-        pretender: pretender,
-        apply: function(xhr, argument) {
-          assert.equal(xhr.responseType, 'arraybuffer');
-          this.pretender.resolve(xhr);
-          QUnit.start();
-        }
-      };
+      pretender.get('/some/path', pretender.passthrough);
+
+      var xhr = new window.XMLHttpRequest();
+      xhr.open('GET', '/some/path');
+      xhr.responseType = 'arraybuffer';
+      xhr.send();
     }
-    pretender._nativeXMLHttpRequest = testXHR;
+  );
 
-    pretender.get('/some/path', pretender.passthrough);
-
-    var xhr = new window.XMLHttpRequest();
-    xhr.open('GET', '/some/path');
-    xhr.responseType = 'arraybuffer';
-    xhr.send();
-  });
-
-  asyncTest('synchronous request does not have timeout, withCredentials and onprogress event', function(assert) {
+  it('synchronous request does not have timeout, withCredentials and onprogress event', function(
+    assert
+  ) {
     var pretender = this.pretender;
+    var done = assert.async();
+
     function testXHR() {
       this.open = function() {};
       this.setRequestHeader = function() {};
@@ -132,8 +148,8 @@ describe('passthrough requests',  function(config) {
           assert.ok(!('withCredentials' in xhr));
           assert.ok(!('onprogress' in xhr));
           this.pretender.resolve(xhr);
-          QUnit.start();
-        }
+          done();
+        },
       };
     }
     pretender._nativeXMLHttpRequest = testXHR;
@@ -147,22 +163,23 @@ describe('passthrough requests',  function(config) {
     xhr.send('some data');
   });
 
-  test('asynchronous request fires events', function(assert) {
+  it('asynchronous request fires events', function(assert) {
+    assert.expect(6);
+
     var pretender = this.pretender;
     var done = assert.async();
-    assert.expect(6);
 
     pretender.post('/some/:route', pretender.passthrough);
 
     var onEvents = {
       load: false,
       progress: false,
-      readystatechange: false
+      readystatechange: false,
     };
     var listenerEvents = {
       load: false,
       progress: false,
-      readystatechange: false
+      readystatechange: false,
     };
 
     var xhr = new window.XMLHttpRequest();
@@ -219,25 +236,29 @@ describe('passthrough requests',  function(config) {
 
         assert.ok(listenerEvents.load, 'load listener called');
         assert.ok(listenerEvents.progress, 'progress listener called');
-        assert.ok(listenerEvents.readystatechange, 'readystate listener called');
+        assert.ok(
+          listenerEvents.readystatechange,
+          'readystate listener called'
+        );
 
         done();
       }
     }
   });
 
-  test('asynchronous request fires upload progress events', function(assert) {
+  it('asynchronous request fires upload progress events', function(assert) {
+    assert.expect(2);
+
     var pretender = this.pretender;
     var done = assert.async();
-    assert.expect(2);
 
     pretender.post('/some/:route', pretender.passthrough);
 
     var onEvents = {
-      progress: false
+      progress: false,
     };
     var listenerEvents = {
-      progress: false
+      progress: false,
     };
 
     var xhr = new window.XMLHttpRequest();
@@ -276,7 +297,9 @@ describe('passthrough requests',  function(config) {
     }
   });
 
-  test('asynchronous request with pass-through and empty response', function(assert) {
+  it('asynchronous request with pass-through and empty response', function(
+    assert
+  ) {
     var done = assert.async();
     var pretender = this.pretender;
 
@@ -290,7 +313,7 @@ describe('passthrough requests',  function(config) {
         pretender: pretender,
         apply: function(xhr, argument) {
           xhr.onload({ target: xhr, type: 'load' });
-        }
+        },
       };
     }
     pretender._nativeXMLHttpRequest = testXHR;
@@ -300,12 +323,14 @@ describe('passthrough requests',  function(config) {
     var xhr = new window.XMLHttpRequest();
     xhr.open('GET', '/some/path');
     xhr.addEventListener('load', function _onload(event) {
-      assert.equal(xhr.responseText, event.target.responseText,
-        'responseText for real and fake xhr are both blank strings');
+      assert.equal(
+        xhr.responseText,
+        event.target.responseText,
+        'responseText for real and fake xhr are both blank strings'
+      );
       done();
     });
 
     xhr.send();
   });
-
 });

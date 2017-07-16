@@ -17,7 +17,7 @@ describe('route not defined', function(config) {
     };
 
     $.ajax({
-      url: 'not-defined'
+      url: 'not-defined',
     });
   });
 
@@ -25,18 +25,19 @@ describe('route not defined', function(config) {
     var pretender = this.pretender;
     var verb = 'GET';
     var path = '/foo/bar';
-    assert.throws (function() {
+    assert.throws(function() {
       pretender.unhandledRequest(verb, path);
     }, 'Pretender intercepted GET /foo/bar but no handler was defined for this type of request');
   });
 
-  it('adds the request to the array of unhandled requests by default', function(assert) {
+  it('adds the request to the array of unhandled requests by default', function(
+    assert
+  ) {
     $.ajax({
-      url: 'not-defined'
+      url: 'not-defined',
     });
 
     var req = this.pretender.unhandledRequests[0];
     assert.equal(req.url, 'not-defined');
   });
 });
-

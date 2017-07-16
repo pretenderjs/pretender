@@ -15,11 +15,14 @@ describe('retruning an undefined response', function(config) {
     });
 
     this.pretender.erroredRequest = function(verb, path, request, error) {
-      var message = 'Nothing returned by handler for ' + path + '. ' +
+      var message =
+        'Nothing returned by handler for ' +
+        path +
+        '. ' +
         'Remember to `return [status, headers, body];` in your route handler.';
       assert.equal(error.message, message);
     };
 
-    $.ajax({url: '/some/path'});
+    $.ajax({ url: '/some/path' });
   });
 });

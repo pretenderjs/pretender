@@ -20,19 +20,23 @@ describe('Hosts', function(config) {
       assert.ok(hosts.forURL('/offers/skydiving'));
     });
 
-    it('returns different Registry objects for different hosts ', function(assert) {
+    it('returns different Registry objects for different hosts ', function(
+      assert
+    ) {
       var registry1 = hosts.forURL('/offers/dinner_out');
       var registry2 = hosts.forURL('http://www.yahoo.com/offers/dinner_out');
       registry1.GET.add({
         path: 'http://www.yahoo.com/offers/dinner_out',
         handler: function() {
           return [200, {}, 'ok'];
-        }
+        },
       });
-      assert.ok(!registry2.GET.recognize('http://www.yahoo.com/offers/dinner_out'));
-      assert.ok(!registry1.GET.recognize('http://www.yahoo.com/offers/dinner_out'));
+      assert.ok(
+        !registry2.GET.recognize('http://www.yahoo.com/offers/dinner_out')
+      );
+      assert.ok(
+        !registry1.GET.recognize('http://www.yahoo.com/offers/dinner_out')
+      );
     });
   });
 });
-
-
