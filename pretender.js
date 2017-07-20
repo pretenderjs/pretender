@@ -3,7 +3,8 @@
 
 var appearsBrowserified = typeof self !== 'undefined' &&
                           typeof process !== 'undefined' &&
-                          Object.prototype.toString.call(process) === '[object Object]';
+                          (Object.prototype.toString.call(process) === '[object Object]' ||
+                           Object.prototype.toString.call(process) === '[object process]');
 
 var RouteRecognizer = appearsBrowserified ? require('route-recognizer') : self.RouteRecognizer;
 var FakeXMLHttpRequest = appearsBrowserified ? require('fake-xml-http-request') : self.FakeXMLHttpRequest;
