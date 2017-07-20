@@ -8,6 +8,11 @@ var appearsBrowserified = typeof self !== 'undefined' &&
 var RouteRecognizer = appearsBrowserified ? require('route-recognizer') : self.RouteRecognizer;
 var FakeXMLHttpRequest = appearsBrowserified ? require('fake-xml-http-request') : self.FakeXMLHttpRequest;
 
+// When building with WebPack, `require('x') returns the module, not the default export.`
+RouteRecognizer = RouteRecognizer.default || RouteRecognizer;
+FakeXMLHttpRequest = FakeXMLHttpRequest.default || FakeXMLHttpRequest;
+
+
 /**
  * parseURL - decompose a URL into its parts
  * @param  {String} url a URL
