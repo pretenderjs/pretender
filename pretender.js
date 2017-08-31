@@ -120,6 +120,7 @@ function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   this.passthroughRequests = shouldNotTrack ? noopArray: [];
   this.unhandledRequests = shouldNotTrack ? noopArray: [];
   this.requestReferences = [];
+  this.forcePassthrough = options && (options.forcePassthrough === true);
 
   // reference the native XMLHttpRequest object so
   // it can be restored later
@@ -154,11 +155,12 @@ function interceptor(pretender, nativeRequest) {
     }
 
     FakeXMLHttpRequest.prototype.send.apply(this, arguments);
-    if (!pretender.checkPassthrough(this)) {
-      pretender.handleRequest(this);
-    } else {
+
+    if (pretender.checkPassthrough(this)) {
       var xhr = createPassthrough(this);
       xhr.send.apply(xhr, arguments);
+    } else {
+      pretender.handleRequest(this);
     }
   };
 
@@ -333,13 +335,15 @@ Pretender.prototype = {
   passthrough: PASSTHROUGH,
   checkPassthrough: function checkPassthrough(request) {
     var verb = request.method.toUpperCase();
-
     var path = parseURL(request.url).fullpath;
-
-    verb = verb.toUpperCase();
-
     var recognized = this.hosts.forURL(request.url)[verb].recognize(path);
     var match = recognized && recognized[0];
+
+    if (!match && this.forcePassthrough) {
+      this.register(verb, request.url, this.passthrough);
+      match = { handler: PASSTHROUGH };
+    }
+
     if (match && match.handler === PASSTHROUGH) {
       this.passthroughRequests.push(request);
       this.passthroughRequest(verb, path, request);
