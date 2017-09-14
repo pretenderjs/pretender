@@ -121,7 +121,7 @@ function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   this.unhandledRequests = shouldNotTrack ? noopArray: [];
   this.requestReferences = [];
   this.forcePassthrough = options && (options.forcePassthrough === true);
-  this.disabledUnhandled = options && (options.disabledUnhandled === true);
+  this.disableUnhandled = options && (options.disableUnhandled === true);
 
   // reference the native XMLHttpRequest object so
   // it can be restored later
@@ -340,12 +340,7 @@ Pretender.prototype = {
     var recognized = this.hosts.forURL(request.url)[verb].recognize(path);
     var match = recognized && recognized[0];
 
-    if (!match && this.forcePassthrough) {
-      this.register(verb, request.url, this.passthrough);
-      match = { handler: PASSTHROUGH };
-    }
-
-    if (match && match.handler === PASSTHROUGH) {
+    if ((match && match.handler === PASSTHROUGH) || this.forcePassthrough)  {
       this.passthroughRequests.push(request);
       this.passthroughRequest(verb, path, request);
       return true;
@@ -397,7 +392,7 @@ Pretender.prototype = {
         this.resolve(request);
       }
     } else {
-      if (!this.disabledUnhandled){
+      if (!this.disableUnhandled) {
         this.unhandledRequests.push(request);
         this.unhandledRequest(verb, path, request);
       }
