@@ -157,6 +157,12 @@ var server = new Pretender(function(){
 });
 ```
 
+In some case, you will need to force pretender to passthough, just start your server with the `forcePassthrough` option.
+
+```javascript
+var server = new Pretender({ forcePassthrough: true })
+```
+
 ### Timing Parameter
 The timing parameter is used to control when a request responds. By default, a request responds
 asynchronously on the next frame of the browser's event loop. A request can also be configured to respond
