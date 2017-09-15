@@ -8,7 +8,8 @@ node_js:
 
 before_install:
   - "npm config set spin false"
-  - "npm install -g npm@^5"
+  # if npm version is less than 3.0.0, upgrade to 3
+  - if [[ $(npm -v | cut -d '.' -f 1) -lt 3 ]]; then npm i -g npm@^3; fi
   - "npm config set spin false"
 
 script: npm run test-ci
