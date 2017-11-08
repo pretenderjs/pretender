@@ -1,12 +1,17 @@
 (function(self) {
 'use strict';
 
+function getModuleDefault(module) {
+  return module.default || module;
+}
+
 var appearsBrowserified = typeof self !== 'undefined' &&
                           typeof process !== 'undefined' &&
                           Object.prototype.toString.call(process) === '[object Object]';
 
-var RouteRecognizer = appearsBrowserified ? require('route-recognizer') : self.RouteRecognizer;
-var FakeXMLHttpRequest = appearsBrowserified ? require('fake-xml-http-request') : self.FakeXMLHttpRequest;
+var RouteRecognizer = appearsBrowserified ? getModuleDefault(require('route-recognizer')) : self.RouteRecognizer;
+var FakeXMLHttpRequest = appearsBrowserified ? getModuleDefault(require('fake-xml-http-request')) :
+  self.FakeXMLHttpRequest;
 
 /**
  * parseURL - decompose a URL into its parts
