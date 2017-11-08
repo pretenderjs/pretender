@@ -13,6 +13,11 @@ var RouteRecognizer = appearsBrowserified ? getModuleDefault(require('route-reco
 var FakeXMLHttpRequest = appearsBrowserified ? getModuleDefault(require('fake-xml-http-request')) :
   self.FakeXMLHttpRequest;
 
+// When building with WebPack, `require('x') returns the module, not the default export.`
+RouteRecognizer = RouteRecognizer.default || RouteRecognizer;
+FakeXMLHttpRequest = FakeXMLHttpRequest.default || FakeXMLHttpRequest;
+
+
 /**
  * parseURL - decompose a URL into its parts
  * @param  {String} url a URL
