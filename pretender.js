@@ -126,10 +126,13 @@ function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   // reference the native XMLHttpRequest object so
   // it can be restored later
   this._nativeXMLHttpRequest = self.XMLHttpRequest;
+  this.running = false;
+  var ctx = { pretender: this };
+  this.ctx = ctx;
 
   // capture xhr requests, channeling them into
   // the route map.
-  self.XMLHttpRequest = interceptor(this, this._nativeXMLHttpRequest);
+  self.XMLHttpRequest = interceptor(ctx);
 
   // 'start' the server
   this.running = true;
@@ -141,15 +144,17 @@ function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   }
 }
 
-function interceptor(pretender, nativeRequest) {
+function interceptor(ctx) {
   function FakeRequest() {
     // super()
     FakeXMLHttpRequest.call(this);
   }
+  FakeRequest.prototype = Object.create(FakeXMLHttpRequest.prototype);
+  FakeRequest.prototype.constructor = FakeRequest;
+
   // extend
-  var proto = new FakeXMLHttpRequest();
-  proto.send = function send() {
-    if (!pretender.running) {
+  FakeRequest.prototype.send = function send() {
+    if (!ctx.pretender.running) {
       throw new Error('You shut down a Pretender instance while there was a pending request. ' +
             'That request just tried to complete. Check to see if you accidentally shut down ' +
             'a pretender earlier than you intended to');
@@ -157,11 +162,11 @@ function interceptor(pretender, nativeRequest) {
 
     FakeXMLHttpRequest.prototype.send.apply(this, arguments);
 
-    if (pretender.checkPassthrough(this)) {
+    if (ctx.pretender.checkPassthrough(this)) {
       var xhr = createPassthrough(this);
       xhr.send.apply(xhr, arguments);
     } else {
-      pretender.handleRequest(this);
+      ctx.pretender.handleRequest(this);
     }
   };
 
@@ -176,7 +181,7 @@ function interceptor(pretender, nativeRequest) {
     // properties to copy from the native xhr to fake xhr
     var lifecycleProps = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
 
-    var xhr = fakeXHR._passthroughRequest = new pretender._nativeXMLHttpRequest();
+    var xhr = fakeXHR._passthroughRequest = new ctx.pretender._nativeXMLHttpRequest();
     xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
 
     if (fakeXHR.responseType === 'arraybuffer') {
@@ -250,28 +255,26 @@ function interceptor(pretender, nativeRequest) {
     return xhr;
   }
 
-  proto._passthroughCheck = function(method, args) {
+  FakeRequest.prototype._passthroughCheck = function(method, args) {
     if (this._passthroughRequest) {
       return this._passthroughRequest[method].apply(this._passthroughRequest, args);
     }
     return FakeXMLHttpRequest.prototype[method].apply(this, args);
   };
 
-  proto.abort = function abort() {
+  FakeRequest.prototype.abort = function abort() {
     return this._passthroughCheck('abort', arguments);
   };
 
-  proto.getResponseHeader = function getResponseHeader() {
+  FakeRequest.prototype.getResponseHeader = function getResponseHeader() {
     return this._passthroughCheck('getResponseHeader', arguments);
   };
 
-  proto.getAllResponseHeaders = function getAllResponseHeaders() {
+  FakeRequest.prototype.getAllResponseHeaders = function getAllResponseHeaders() {
     return this._passthroughCheck('getAllResponseHeaders', arguments);
   };
 
-  FakeRequest.prototype = proto;
-
-  if (nativeRequest.prototype._passthroughCheck) {
+  if (ctx.pretender._nativeXMLHttpRequest.prototype._passthroughCheck) {
     console.warn('You created a second Pretender instance while there was already one running. ' +
           'Running two Pretender servers at once will lead to unexpected results and will ' +
           'be removed entirely in a future major version.' +
@@ -463,7 +466,7 @@ Pretender.prototype = {
   },
   shutdown: function shutdown() {
     self.XMLHttpRequest = this._nativeXMLHttpRequest;
-
+    this.ctx.pretender = undefined;
     // 'stop' the server
     this.running = false;
   }
