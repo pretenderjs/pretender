@@ -31,9 +31,15 @@ var FakeXMLHttpRequest = appearsBrowserified ? getModuleDefault(require('fake-xm
  * }
  */
 function parseURL(url) {
-  // TODO: something for when document isn't present... #yolo
-  var anchor = document.createElement('a');
-  anchor.href = url;
+  var anchor;
+
+  try {
+    anchor = document.createElement('a');
+    anchor.href = url;
+  } catch (error) {
+    var URL = require('url-parse');
+    anchor = new URL(url);
+  }
 
   if (!anchor.host) {
     anchor.href = anchor.href; // IE: load the host and protocol
@@ -489,4 +495,4 @@ if (typeof module === 'object') {
   });
 }
 self.Pretender = Pretender;
-}(self));
+}(typeof self !== 'undefined' ? self : this));
