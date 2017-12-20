@@ -21,7 +21,8 @@ export class Server {
 
 export type RequestHandler = (
   urlExpression: string,
-  response: ResponseHandler
+  response: ResponseHandler,
+  async?: boolean
 ) => void;
 
 export type ResponseData = [number, { [k: string]: string }, string];
@@ -31,6 +32,6 @@ interface ExtraRequestData {
 }
 export type ResponseHandler = (
   request: FakeXMLHttpRequest | ExtraRequestData
-) => ResponseData;
+) => ResponseData | PromiseLike<ResponseData>;
 
 export default Server;
