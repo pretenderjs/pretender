@@ -34,7 +34,7 @@
     "sinon": "^3.2.1"
   },
   "dependencies": {
-    "fake-xml-http-request": "^1.6.0",
+    "fake-xml-http-request": "^2.0.0",
     "route-recognizer": "^0.3.3"
   },
   "jspm": {
