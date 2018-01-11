@@ -1,5 +1,7 @@
 import FakeXMLHttpRequest from "fake-xml-http-request";
 import { Params, QueryParams } from "route-recognizer";
+import * as JSON from 'json-typescript';
+
 type SetupCallback = (this: Server) => void;
 interface SetupConfig {
   forcePassthrough: boolean;
@@ -25,7 +27,7 @@ export type RequestHandler = (
   async?: boolean
 ) => void;
 
-export type ResponseData = [number, { [k: string]: string }, string];
+export type ResponseData = [number, JSON.Value, string];
 interface ExtraRequestData {
   params: Params;
   queryParams: QueryParams;

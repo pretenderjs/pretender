@@ -1,6 +1,6 @@
 {
   "name": "pretender",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "./pretender.js",
   "license": "MIT",
   "engines": {
@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "fake-xml-http-request": "^2.0.0",
+    "json-typescript": "^1.0.0",
     "route-recognizer": "^0.3.3"
   },
   "jspm": {
