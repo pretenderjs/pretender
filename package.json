@@ -3,6 +3,9 @@
   "version": "2.0.0",
   "main": "./pretender.js",
   "license": "MIT",
+  "engines": {
+    "node": ">=4"
+  },
   "scripts": {
     "pretest": "bower install",
     "test": "npm run lint && npm run jscs && npm run tests-only",

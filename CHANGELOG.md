@@ -1,4 +1,8 @@
 # Pretender Changelog
+## 2.0
+  * **Breaking change**: updated [fake-xml-http-request](https://github.com/pretenderjs/FakeXMLHttpRequest) to 2.0 (dropping support for end-of-life node versions)
+  * Improved webpack compatiblity through using module defaults [216](https://github.com/pretenderjs/pretender/pull/216)
+  * Added TypeScript type information [223](https://github.com/pretenderjs/pretender/pull/223)
 ## 1.4.1
   * [188](https://github.com/pretenderjs/pretender/pull/178) Console warn if a second pretender instance is started
 
