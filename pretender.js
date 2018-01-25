@@ -9,8 +9,16 @@ var appearsBrowserified = typeof self !== 'undefined' &&
                           typeof process !== 'undefined' &&
                           Object.prototype.toString.call(process) === '[object Object]';
 
-var RouteRecognizer = !appearsBrowserified && self && self.RouteRecognizer ? self.RouteRecognizer : getModuleDefault(require('route-recognizer'));
-var FakeXMLHttpRequest = !appearsBrowserified && self && self.FakeXMLHttpRequest ? self.FakeXMLHttpRequest : getModuleDefault(require('fake-xml-http-request'));
+var RouteRecognizer =
+  !appearsBrowserified &&
+  self && self.RouteRecognizer ?
+  self.RouteRecognizer :
+  getModuleDefault(require('route-recognizer'));
+var FakeXMLHttpRequest =
+  !appearsBrowserified &&
+  self && self.FakeXMLHttpRequest ?
+  self.FakeXMLHttpRequest :
+  getModuleDefault(require('fake-xml-http-request'));
 
 /**
  * parseURL - decompose a URL into its parts
