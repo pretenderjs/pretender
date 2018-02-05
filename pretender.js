@@ -489,4 +489,19 @@ if (typeof module === 'object') {
   });
 }
 self.Pretender = Pretender;
-}(window.self || window));
+}(
+    // source: https://github.com/pretenderjs/pretender/pull/219
+    function() {
+      if (typeof self !== 'undefined') {
+        return self;
+      } else if (typeof window !== 'undefined') {
+        return window;
+      } else if (typeof global !== 'undefined') {
+        return global;
+      } else {
+        return Function('return this')();
+      }
+    }()
+  
+  
+));
