@@ -10,8 +10,10 @@ var appearsBrowserified = typeof self !== 'undefined' &&
                           (Object.prototype.toString.call(process) === '[object Object]' ||
                            Object.prototype.toString.call(process) === '[object process]');
 
-var RouteRecognizer = appearsBrowserified ? require('route-recognizer') : self.RouteRecognizer;
-var FakeXMLHttpRequest = appearsBrowserified ? require('fake-xml-http-request') : self.FakeXMLHttpRequest;
+var RouteRecognizer = appearsBrowserified ? getModuleDefault(require('route-recognizer')) :
+                        self.RouteRecognizer;
+var FakeXMLHttpRequest = appearsBrowserified ? getModuleDefault(require('fake-xml-http-request')) :
+                          self.FakeXMLHttpRequest;
 
 /**
  * parseURL - decompose a URL into its parts
@@ -490,18 +492,15 @@ if (typeof module === 'object') {
 }
 self.Pretender = Pretender;
 }(
-    // source: https://github.com/pretenderjs/pretender/pull/219
-    function() {
-      if (typeof self !== 'undefined') {
-        return self;
-      } else if (typeof window !== 'undefined') {
-        return window;
-      } else if (typeof global !== 'undefined') {
-        return global;
-      } else {
-        return Function('return this')();
-      }
-    }()
-  
-  
+  // source: https://github.com/pretenderjs/pretender/pull/219
+  function() {
+    'use strict';
+    if (typeof self !== 'undefined') {
+      return self;
+    } else if (typeof window !== 'undefined') {
+      return window;
+    } else {
+      return {};
+    }
+  }()
 ));
