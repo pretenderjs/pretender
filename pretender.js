@@ -7,11 +7,13 @@ function getModuleDefault(module) {
 
 var appearsBrowserified = typeof self !== 'undefined' &&
                           typeof process !== 'undefined' &&
-                          Object.prototype.toString.call(process) === '[object Object]';
+                          (Object.prototype.toString.call(process) === '[object Object]' ||
+                           Object.prototype.toString.call(process) === '[object process]');
 
-var RouteRecognizer = appearsBrowserified ? getModuleDefault(require('route-recognizer')) : self.RouteRecognizer;
+var RouteRecognizer = appearsBrowserified ? getModuleDefault(require('route-recognizer')) :
+                        self.RouteRecognizer;
 var FakeXMLHttpRequest = appearsBrowserified ? getModuleDefault(require('fake-xml-http-request')) :
-  self.FakeXMLHttpRequest;
+                          self.FakeXMLHttpRequest;
 
 /**
  * parseURL - decompose a URL into its parts
@@ -489,4 +491,16 @@ if (typeof module === 'object') {
   });
 }
 self.Pretender = Pretender;
-}(self));
+}(
+  // source: https://github.com/pretenderjs/pretender/pull/219
+  function() {
+    'use strict';
+    if (typeof self !== 'undefined') {
+      return self;
+    } else if (typeof window !== 'undefined') {
+      return window;
+    } else {
+      return {};
+    }
+  }()
+));
