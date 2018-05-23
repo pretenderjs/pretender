@@ -13,6 +13,9 @@ var RouteRecognizer = appearsBrowserified ? getModuleDefault(require('route-reco
 var FakeXMLHttpRequest = appearsBrowserified ? getModuleDefault(require('fake-xml-http-request')) :
   self.FakeXMLHttpRequest;
 
+// fetch related ponyfills
+var Yetch = appearsBrowserified ? getModuleDefault(require('yetch/dist/yetch-polyfill')) : self.Yetch;
+
 /**
  * parseURL - decompose a URL into its parts
  * @param  {String} url a URL
@@ -138,6 +141,14 @@ function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   // capture xhr requests, channeling them into
   // the route map.
   self.XMLHttpRequest = interceptor(ctx);
+
+  // polyfill fetch when xhr is ready
+  // AbortController doesn't need restore
+  this._fetchProps = ['fetch', 'Headers', 'Request', 'Response'];
+  this._fetchProps.forEach(function(name) {
+    this['_native' + name] = self[name];
+    self[name] = Yetch[name];
+  }, this);
 
   // 'start' the server
   this.running = true;
@@ -471,6 +482,9 @@ Pretender.prototype = {
   },
   shutdown: function shutdown() {
     self.XMLHttpRequest = this._nativeXMLHttpRequest;
+    this._fetchProps.forEach(function(name) {
+      self[name] = this['_native' + name];
+    }, this);
     this.ctx.pretender = undefined;
     // 'stop' the server
     this.running = false;

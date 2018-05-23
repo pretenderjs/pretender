@@ -20,6 +20,8 @@ module.exports = function(config) {
       'bower_components/jquery-1/index.js',
       'bower_components/jquery/dist/jquery.js',
       'node_modules/es6-promise/dist/es6-promise.auto.js',
+      'node_modules/abortcontroller-polyfill/dist/abortcontroller-polyfill-only.js',
+      'node_modules/yetch/dist/yetch-ponyfill.js',
       'pretender.js',
       'test/**/*.js'
     ],
