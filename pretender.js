@@ -14,7 +14,7 @@ var FakeXMLHttpRequest = appearsBrowserified ? getModuleDefault(require('fake-xm
   self.FakeXMLHttpRequest;
 
 // fetch related ponyfills
-var WHATWGFetch = appearsBrowserified ? getModuleDefault(require('whatwg-fetch')) : self.WHATWGFetch;
+var FakeFetch = appearsBrowserified ? getModuleDefault(require('whatwg-fetch')) : self.WHATWGFetch;
 
 /**
  * parseURL - decompose a URL into its parts
@@ -147,7 +147,7 @@ function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   this._fetchProps = ['fetch', 'Headers', 'Request', 'Response'];
   this._fetchProps.forEach(function(name) {
     this['_native' + name] = self[name];
-    self[name] = WHATWGFetch[name];
+    self[name] = FakeFetch[name];
   }, this);
 
   // 'start' the server
