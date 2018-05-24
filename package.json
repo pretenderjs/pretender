@@ -40,14 +40,15 @@
   "dependencies": {
     "fake-xml-http-request": "^2.0.0",
     "route-recognizer": "^0.3.3",
-    "yetch": "^0.0.1"
+    "whatwg-fetch": "^2.0.4"
   },
   "jspm": {
     "shim": {
       "pretender": {
         "deps": [
           "route-recognizer",
-          "fake-xml-http-request"
+          "fake-xml-http-request",
+          "whatwg-fetch"
         ],
         "exports": "Pretender"
       }
