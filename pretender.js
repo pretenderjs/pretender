@@ -14,6 +14,7 @@ var FakeXMLHttpRequest = appearsBrowserified ? getModuleDefault(require('fake-xm
   self.FakeXMLHttpRequest;
 
 // fetch related ponyfills
+// TODO: use whatwg-fetch once new version release
 var FakeFetch = appearsBrowserified ? getModuleDefault(require('@xg-wang/whatwg-fetch')) : self.WHATWGFetch;
 
 /**
@@ -143,7 +144,6 @@ function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   self.XMLHttpRequest = interceptor(ctx);
 
   // polyfill fetch when xhr is ready
-  // AbortController doesn't need restore
   this._fetchProps = ['fetch', 'Headers', 'Request', 'Response'];
   this._fetchProps.forEach(function(name) {
     this['_native' + name] = self[name];

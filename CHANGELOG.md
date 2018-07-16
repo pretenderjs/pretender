@@ -1,8 +1,13 @@
 # Pretender Changelog
+
+## 2.1
+  * [230](https://github.com/pretenderjs/pretender/pull/230) Support `fetch`
+
 ## 2.0
   * **Breaking change**: updated [fake-xml-http-request](https://github.com/pretenderjs/FakeXMLHttpRequest) to 2.0 (dropping support for end-of-life node versions)
   * Improved webpack compatiblity through using module defaults [216](https://github.com/pretenderjs/pretender/pull/216)
   * Added TypeScript type information [223](https://github.com/pretenderjs/pretender/pull/223)
+
 ## 1.4.1
   * [188](https://github.com/pretenderjs/pretender/pull/178) Console warn if a second pretender instance is started
 
@@ -12,7 +17,7 @@
   * [171](https://github.com/pretenderjs/pretender/pull/171) Fix url behavior in IE 11
   * [177](https://github.com/pretenderjs/pretender/pull/177) Allow handlers to return a Promise
 
-## 1.3.0 
+## 1.3.0
   * [168](https://github.com/pretenderjs/pretender/pull/168) "Verb" methods now return handler
   * [166](https://github.com/pretenderjs/pretender/pull/166) HTTP `options` request type added
 
