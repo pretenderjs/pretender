@@ -31,16 +31,16 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.1",
     "karma-phantomjs-launcher": "^1.0.4",
-    "karma-qunit": "^1.2.1",
+    "karma-qunit": "^2.1.0",
     "karma-sinon": "^1.0.5",
     "phantomjs": "^2.1.7",
-    "qunitjs": "^2.4.0",
+    "qunit": "^2.6.1",
     "sinon": "^3.2.1"
   },
   "dependencies": {
+    "@xg-wang/whatwg-fetch": "^3.0.0",
     "fake-xml-http-request": "^2.0.0",
-    "route-recognizer": "^0.3.3",
-    "@xg-wang/whatwg-fetch": "^3.0.0"
+    "route-recognizer": "^0.3.3"
   },
   "jspm": {
     "shim": {

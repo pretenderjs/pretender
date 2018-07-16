@@ -1,6 +1,5 @@
 var describe = QUnit.module;
 var it = QUnit.test;
-var clock;
 
 describe('pretender invoking by fetch', function(config) {
   config.beforeEach(function() {
@@ -8,20 +7,22 @@ describe('pretender invoking by fetch', function(config) {
   });
 
   config.afterEach(function() {
-    if (clock) {
-      clock.restore();
-    }
     this.pretender.shutdown();
   });
 
   it('fetch triggers pretender', function(assert) {
+    assert.expect(1);
+    var done = assert.async();
     var wasCalled;
 
     this.pretender.get('/some/path', function() {
       wasCalled = true;
+      return [200, {}, ''];
     });
 
-    fetch('/some/path');
+    fetch('/some/path').then(function() {
+      done();
+    });
     assert.ok(wasCalled);
   });
 
@@ -30,7 +31,7 @@ describe('pretender invoking by fetch', function(config) {
     var done = assert.async();
     var val = 'unset';
 
-    this.pretender.get('/some/path', function(request) {
+    this.pretender.get('/some/path', function() {
       return [200, {}, ''];
     });
 
@@ -44,23 +45,25 @@ describe('pretender invoking by fetch', function(config) {
   });
 
   it('can NOT be resolved synchronously', function(assert) {
-    assert.expect(1);
-    var val = 0;
+    assert.expect(2);
+    var done = assert.async();
+    var val = 'unset';
 
     this.pretender.get(
       '/some/path',
-      function(request) {
+      function() {
         return [200, {}, ''];
       },
       false
     );
 
+    // This is async even we specified pretender get to be synchronised
     fetch('/some/path').then(function() {
-      // This won't be called
-      assert.equal(val, 0);
-      val++;
+      assert.equal(val, 'set');
+      done();
     });
-    assert.equal(val, 0);
+    assert.equal(val, 'unset');
+    val = 'set';
   });
 
 
@@ -96,7 +99,6 @@ describe('pretender invoking by fetch', function(config) {
   it('has NO Abortable fetch', function(assert) {
     assert.expect(1);
     var done = assert.async();
-    var wasCalled = false;
     this.pretender.get(
       '/downloads',
       function(request) {
@@ -115,7 +117,7 @@ describe('pretender invoking by fetch', function(config) {
         assert.ok(data, 'AbortError was not rejected');
         done();
       })
-      .catch(function(err) {
+      .catch(function() {
         // it should execute to here but won't due to FakeXmlHttpRequest limitation
         done();
       });
