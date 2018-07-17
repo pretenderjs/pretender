@@ -2,7 +2,7 @@
   "name": "pretender",
   "version": "2.1.0",
   "main": "./pretender.js",
-  "description": "Pretender is a mock server library, that comes with an express/sinatra style syntax for defining routes and their handlers.",
+  "description": "Pretender is a mock server library for XMLHttpRequest and Fetch, that comes with an express/sinatra style syntax for defining routes and their handlers.",
   "license": "MIT",
   "engines": {
     "node": ">=4"

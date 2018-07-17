@@ -6,16 +6,16 @@
 [![devDependency Status](https://david-dm.org/pretenderjs/pretender/dev-status.svg)](https://david-dm.org/pretenderjs/pretender#info=devDependencies)
 [![Code Climate](https://codeclimate.com/github/pretenderjs/pretender/badges/gpa.svg)](https://codeclimate.com/github/pretenderjs/pretender)
 
-Pretender is a mock server library in the style of Sinon (but built from microlibs. Because JavaScript)
-that comes with an express/sinatra style syntax for defining routes and their handlers.
+Pretender is a mock server library for XMLHttpRequest and Fetch, that comes
+with an express/sinatra style syntax for defining routes and their handlers.
 
-Pretender will temporarily replace the native XMLHttpRequest object, intercept all requests, and direct them
-to little pretend service you've defined.
+Pretender will temporarily replace native XMLHttpRequest and Fetch , intercept
+all requests, and direct them to little pretend service you've defined.
 
 **:warning: Pretender only works in the browser!**
 
 ```javascript
-var PHOTOS = {
+const PHOTOS = {
   "10": {
     id: 10,
     src: 'http://media.giphy.com/media/UdqUo8xvEcvgA/giphy.gif'
@@ -26,20 +26,19 @@ var PHOTOS = {
   }
 };
 
-var server = new Pretender(function(){
-  this.get('/photos', function(request){
-    var all =  JSON.stringify(Object.keys(PHOTOS).map(function(k){return PHOTOS[k]}))
+const server = new Pretender(function() {
+  this.get('/photos', request => {
+    let all =  JSON.stringify(Object.keys(PHOTOS).map(k => PHOTOS[k]);
     return [200, {"Content-Type": "application/json"}, all]
   });
 
-  this.get('/photos/:id', function(request){
+  this.get('/photos/:id', request => {
     return [200, {"Content-Type": "application/json"}, JSON.stringify(PHOTOS[request.params.id])]
   });
 });
 
-$.get('/photos/12', {success: function(){ ... }})
+$.get('/photos/12', {success() => { ... }})
 ```
-
 
 ## The Server DSL
 The server DSL is inspired by express/sinatra. Pass a function to the Pretender constructor
@@ -50,12 +49,9 @@ single argument (the XMLHttpRequest instance that triggered this request) and mu
 containing the HTTP status code, headers object, and body as a string.
 
 ```javascript
-var server = new Pretender(function(){
-  this.put('/api/songs/99', function(request){
-    return [404, {}, ""];
-  });
+const server = new Pretender(function() {
+  this.put('/api/songs/99', request => [404, {}, ""]);
 });
-
 ```
 
 a Pretender constructor can take multiple maps:
@@ -64,18 +60,14 @@ a Pretender constructor can take multiple maps:
 import adminMaps from "testing/maps/admin";
 import photoMaps from "testing/maps/photos";
 
-var server = new Pretender(photoMaps, adminMaps);
-
+const server = new Pretender(photoMaps, adminMaps);
 ```
 
 The HTTP verb methods can also be called on an instance individually:
 
 ```javascript
-var server = new Pretender();
-server.put('/api/songs/99', function(request){
-  return [404, {}, ""];
-});
-
+const server = new Pretender();
+server.put('/api/songs/99', request => [404, {}, ""]);
 ```
 
 ### Paths
@@ -85,10 +77,8 @@ these well be attached to the request object as a `params` property with keys ma
 the dynamic portion and values with the matching value from the path.
 
 ```javascript
-var server = new Pretender(function(){
-  this.get('/api/songs/:song_id', function(request){
-    request.params.song_id;
-  });
+const server = new Pretender(function() {
+  this.get('/api/songs/:song_id', request => request.params.song_id);
 });
 
 $.get('/api/songs/871') // params.song_id will be '871'
@@ -100,15 +90,13 @@ If there were query parameters in the request, these well be attached to the req
 property.
 
 ```javascript
-var server = new Pretender(function(){
-  this.get('/api/songs', function(request){
-    request.queryParams.sortOrder;
-  });
+const server = new Pretender(function() {
+  this.get('/api/songs', request => request.queryParams.sortOrder);
 });
 
 // typical jQuery-style uses you've probably seen.
 // queryParams.sortOrder will be 'asc' for both styles.
-$.get({url: '/api/songs', data: {sortOrder: 'asc'});
+$.get({url: '/api/songs', data: { sortOrder: 'asc' });
 $.get('/api/songs?sortOrder=asc');
 
 ```
@@ -119,8 +107,8 @@ You must return an array from this handler that includes the HTTP status code, a
 of response headers, and a string body.
 
 ```javascript
-var server = new Pretender(function(){
-  this.get('/api/songs', function(request){
+const server = new Pretender(function() {
+  this.get('/api/songs', request => {
     return [
       200,
       {'content-type': 'application/javascript'},
@@ -133,14 +121,15 @@ var server = new Pretender(function(){
 Or, optionally, return a Promise.
 
 ```javascript
-var server = new Pretender(function() {
-  this.get('/api/songs', function(request) {
-    return new Promise(function(resolve) {
-      var response = [
+const server = new Pretender(function() {
+  this.get('/api/songs', request => {
+    return new Promise(resolve => {
+      let response = [
         200,
         {'content-type': 'application/javascript'},
         '[{"id": 12}, {"id": 14}]'
       ];
+
       resolve(response);
     });
   });
@@ -152,7 +141,7 @@ You can specify paths that should be ignored by pretender and made as real XHR r
 Enable these by specifying pass-through routes with `pretender.passthrough`:
 
 ```javascript
-var server = new Pretender(function(){
+const server = new Pretender(function() {
   this.get('/photos/:id', this.passthrough);
 });
 ```
@@ -160,7 +149,7 @@ var server = new Pretender(function(){
 In some case, you will need to force pretender to passthough, just start your server with the `forcePassthrough` option.
 
 ```javascript
-var server = new Pretender({ forcePassthrough: true })
+const server = new Pretender({ forcePassthrough: true })
 ```
 
 ### Timing Parameter
@@ -170,7 +159,7 @@ synchronously, after a defined amount of time, or never (i.e., it needs to be ma
 
 **Default**
 ```javascript
-var server = new Pretender(function(){
+const server = new Pretender(function() {
   // songHandler will execute the frame after receiving a request (async)
   this.get('/api/songs', songHandler);
 });
@@ -178,7 +167,7 @@ var server = new Pretender(function(){
 
 **Synchronous**
 ```javascript
-var server = new Pretender(function(){
+const server = new Pretender(function() {
   // songHandler will execute immediately after receiving a request (sync)
   this.get('/api/songs', songHandler, false);
 });
@@ -186,7 +175,7 @@ var server = new Pretender(function(){
 
 **Delay**
 ```javascript
-var server = new Pretender(function(){
+const server = new Pretender(function() {
   // songHandler will execute two seconds after receiving a request (async)
   this.get('/api/songs', songHandler, 2000);
 });
@@ -194,7 +183,7 @@ var server = new Pretender(function(){
 
 **Manual**
 ```javascript
-var server = new Pretender(function(){
+const server = new Pretender(function() {
   // songHandler will only execute once you manually resolve the request
   this.get('/api/songs', songHandler, true);
 });
@@ -208,7 +197,7 @@ You may want the timing behavior of a response to change from request to request
 done by providing a function as the timing parameter.
 
 ```javascript
-var externalState = 'idle';
+const externalState = 'idle';
 
 function throttler() {
   if (externalState === 'OH NO DDOS ATTACK') {
@@ -216,7 +205,7 @@ function throttler() {
   }
 }
 
-var server = new Pretender(function(){
+const server = new Pretender(function() {
   // songHandler will only execute based on the result of throttler
   this.get('/api/songs', songHandler, throttler);
 });
@@ -234,13 +223,13 @@ You can call `map` multiple times on a Pretender instance. This is a great way t
 sets of routes between tests:
 
 ```javascript
-export function authenticationRoutes(){
-  this.post('/authenticate', function(){ ... });
-  this.post('/signout', function(){ ... });
+export function authenticationRoutes() {
+  this.post('/authenticate',() => { ... });
+  this.post('/signout', () => { ... });
 }
 
-export function songsRoutes(){
-  this.get('/api/songs', function(){ ... });
+export function songsRoutes() {
+  this.get('/api/songs',() => { ... });
 }
 ```
 
@@ -263,8 +252,8 @@ the HTTP `verb`, `path`, and original `request`. By default this method does not
 override this method to supply your own behavior like logging or test framework integration:
 
 ```javascript
-var server = new Pretender(function(){
-  this.put('/api/songs/:song_id', function(request){
+const server = new Pretender(function() {
+  this.put('/api/songs/:song_id', request => {
     return [202, {"Content-Type": "application/json"}, "{}"]
   });
 });
@@ -282,7 +271,7 @@ object if your server receives a request for a route that doesn't have a handler
 will throw an error. You can override this method to supply your own behavior:
 
 ```javascript
-var server = new Pretender(function(){
+const server = new Pretender(function() {
   // no routes
 });
 
@@ -297,7 +286,7 @@ $.getJSON("/these/arent/the/droids");
 Requests set to be handled by pass-through will trigger the `passthroughRequest` hook:
 
 ```javascript
-var server = new Pretender(function(){
+const server = new Pretender(function() {
   this.get('/some/path', this.passthrough);
 });
 
@@ -315,8 +304,8 @@ By default, this will augment the error message with some information about whic
 the error and then throw the error again. You can override this method to supply your own behavior:
 
 ```javascript
-var server = new Pretender(function(){
-  this.get('/api/songs', function(request){
+const server = new Pretender(function() {
+  this.get('/api/songs', request => {
     undefinedWAT("this is no function!");
   });
 });
@@ -332,7 +321,7 @@ Pretender is response format neutral, so you normally need to supply a string bo
 third part of a response:
 
 ```javascript
-this.get('/api/songs', function(request){
+this.get('/api/songs', request => {
   return [200, {}, "{'id': 12}"];
 });
 ```
@@ -343,8 +332,8 @@ going to be JSON. The body of a response will be passed through a
 `prepareBody` defaults to an empty function, but can be overridden:
 
 ```javascript
-var server = new Pretender(function(){
-  this.get('/api/songs', function(request){
+const server = new Pretender(function() {
+  this.get('/api/songs', request => {
     return [200, {}, {id: 12}];
   });
 });
@@ -359,8 +348,8 @@ Response headers can be mutated for the entire service instance by implementing 
 `prepareHeaders` method:
 
 ```javascript
-var server = new Pretender(function(){
-  this.get('/api/songs', function(request){
+const server = new Pretender(function() {
+  this.get('/api/songs', request => {
     return [200, {}, '{"id": 12}'];
   });
 });
@@ -379,29 +368,29 @@ any verb function. This is useful if you want to build testing infrastructure on
 pretender and need to fail tests that have handlers without requests.
 You can disable tracking requests by passing `trackRequests: false` to pretender options.
 ```javascript
-var server = new Pretender({ trackRequests: false });
+const server = new Pretender({ trackRequests: false });
 ```
 
 Each handler keeps a count of the number of requests is successfully served.
 
 ```javascript
 server.get(/* ... */);
-var handler = server.handlers[0];
+const handler = server.handlers[0];
 
 // or
 
-var handler = server.get(/* ... */);
+const handler = server.get(/* ... */);
 
 // then
 
-var numberOfCalls = handler.numberOfCalls;
+const numberOfCalls = handler.numberOfCalls;
 ```
 
 ## Clean up
 When you're done mocking, be sure to call `shutdown()` to restore the native XMLHttpRequest object:
 
 ```javascript
-var server = new Pretender(function(){
+const server = new Pretender(function() {
  ... routing ...
 });
 
@@ -419,4 +408,7 @@ server.shutdown(); // all done.
 
 In order to have a more open and welcoming community this project adheres to a [code of conduct](CONDUCT.md) adapted from the [contributor covenant](http://contributor-covenant.org/).
 
-Please adhere to this code of conduct in any interactions you have with this project's community. If you encounter someone violating these terms, please let a maintainer (@trek) know and we will address it as soon as possible.
+Please adhere to this code of conduct in any interactions you have with this
+project's community. If you encounter someone violating these terms, please let
+a maintainer (@trek) know and we will address it as soon as possible.
+
