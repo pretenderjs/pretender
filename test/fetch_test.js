@@ -12,7 +12,6 @@ describe('pretender invoking by fetch', function(config) {
 
   it('fetch triggers pretender', function(assert) {
     assert.expect(1);
-    var done = assert.async();
     var wasCalled;
 
     this.pretender.get('/some/path', function() {
@@ -20,33 +19,31 @@ describe('pretender invoking by fetch', function(config) {
       return [200, {}, ''];
     });
 
-    fetch('/some/path').then(function() {
-      done();
-    });
+    var wait = fetch('/some/path');
     assert.ok(wasCalled);
+    return wait;
   });
 
   it('is resolved asynchronously', function(assert) {
     assert.expect(2);
-    var done = assert.async();
     var val = 'unset';
 
     this.pretender.get('/some/path', function() {
       return [200, {}, ''];
     });
 
-    fetch('/some/path').then(function() {
+    var wait = fetch('/some/path').then(function() {
       assert.equal(val, 'set');
-      done();
     });
 
     assert.equal(val, 'unset');
     val = 'set';
+
+    return wait;
   });
 
   it('can NOT be resolved synchronously', function(assert) {
     assert.expect(2);
-    var done = assert.async();
     var val = 'unset';
 
     this.pretender.get(
@@ -58,12 +55,12 @@ describe('pretender invoking by fetch', function(config) {
     );
 
     // This is async even we specified pretender get to be synchronised
-    fetch('/some/path').then(function() {
+    var wait = fetch('/some/path').then(function() {
       assert.equal(val, 'set');
-      done();
     });
     assert.equal(val, 'unset');
     val = 'set';
+    return wait;
   });
 
 
@@ -98,7 +95,6 @@ describe('pretender invoking by fetch', function(config) {
   // The first resolve wins, error thus not rejected but an empty request is resolved.
   it('has NO Abortable fetch', function(assert) {
     assert.expect(1);
-    var done = assert.async();
     this.pretender.get(
       '/downloads',
       function(request) {
@@ -112,14 +108,10 @@ describe('pretender invoking by fetch', function(config) {
     setTimeout(function() {
       controller.abort();
     }, 10);
-    fetch('/downloads', { signal: signal })
+
+    return fetch('/downloads', { signal: signal })
       .then(function(data) {
         assert.ok(data, 'AbortError was not rejected');
-        done();
-      })
-      .catch(function() {
-        // it should execute to here but won't due to FakeXmlHttpRequest limitation
-        done();
       });
   });
 });
