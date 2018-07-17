@@ -1,5 +1,8 @@
 # Pretender Changelog
 
+## 2.1.1
+  * cleanup readme and package.json
+
 ## 2.1
   * [230](https://github.com/pretenderjs/pretender/pull/230) Support `fetch`
 
