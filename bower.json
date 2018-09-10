@@ -16,7 +16,7 @@
     "./pretender.js"
   ],
   "dependencies": {
-    "FakeXMLHttpRequest": "^1.6.0",
+    "FakeXMLHttpRequest": "https://github.com/raido/FakeXMLHttpRequest.git#cb05658",
     "route-recognizer": "^0.2.3"
   },
   "devDependencies": {
