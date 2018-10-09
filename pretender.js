@@ -144,7 +144,7 @@ function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   self.XMLHttpRequest = interceptor(ctx);
 
   // polyfill fetch when xhr is ready
-  this._fetchProps = ['fetch', 'Headers', 'Request', 'Response'];
+  this._fetchProps = FakeFetch ? ['fetch', 'Headers', 'Request', 'Response'] : [];
   this._fetchProps.forEach(function(name) {
     this['_native' + name] = self[name];
     self[name] = FakeFetch[name];
