@@ -497,7 +497,7 @@ Pretender.Hosts = Hosts;
 Pretender.Registry = Registry;
 
 if (typeof module === 'object') {
-  module.exports = Pretender;
+  module.exports.default = Pretender;
 } else if (typeof define !== 'undefined') {
   define('pretender', [], function() {
     return Pretender;
