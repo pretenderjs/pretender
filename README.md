@@ -174,6 +174,35 @@ In some case, you will need to force pretender to passthough, just start your se
 const server = new Pretender({ forcePassthrough: true })
 ```
 
+Other times, you may want to decide whether or not to passthrough when the call is made. In that
+case you can use the `.passthrough()` function on the fake request itself. (The [`unhandledRequest`
+property is discussed below](#unhandled-requests).)
+
+```javascript
+server.unhandledRequest = function(verb, path, request) {
+  if (myIgnoreRequestChecker(path)) {
+    console.warn(`Ignoring request) ${verb.toUpperCase()} : ${path}`);
+  } else {
+    console.warn(
+      `Unhandled ${verb.toUpperCase()} : ${path} >> Passing along. See eventual response below.`
+    )
+  
+    const xhr = request.passthrough(); // <-- A native, sent xhr is returned
+  
+    xhr.onloadend = (ev) => {
+        console.warn(`Response for ${path}`, {
+          verb,
+          path,
+          request,
+          responseEvent: ev,
+        })
+      };
+  }
+};
+```
+
+The `.passthrough()` function will immediately create, send, and return a native `XMLHttpRequest`.
+
 ### Timing Parameter
 The timing parameter is used to control when a request responds. By default, a request responds
 asynchronously on the next frame of the browser's event loop. A request can also be configured to respond

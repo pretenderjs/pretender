@@ -88,6 +88,7 @@ function interceptor(ctx) {
 
   // extend
   FakeRequest.prototype.send = function send() {
+    this.sendArguments = arguments;
     if (!ctx.pretender.running) {
       throw new Error('You shut down a Pretender instance while there was a pending request. ' +
             'That request just tried to complete. Check to see if you accidentally shut down ' +
@@ -97,11 +98,20 @@ function interceptor(ctx) {
     FakeXMLHttpRequest.prototype.send.apply(this, arguments);
 
     if (ctx.pretender.checkPassthrough(this)) {
-      var xhr = createPassthrough(this);
-      xhr.send.apply(xhr, arguments);
+      this.passthrough();
     } else {
       ctx.pretender.handleRequest(this);
     }
+  };
+
+  FakeRequest.prototype.passthrough = function passthrough() {
+    if (!this.sendArguments) {
+      throw new Error('You attempted to passthrough a FakeRequest that was never sent. ' +
+            'Call `.send()` on the original request first');
+    }
+    var xhr = createPassthrough(this);
+    xhr.send.apply(xhr, this.sendArguments);
+    return xhr;
   };
 
 
