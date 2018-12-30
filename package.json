@@ -15,7 +15,7 @@
     "tests-only": "karma start --single-run",
     "tests-only-ci": "karma start --single-run --browsers PhantomJS",
     "lint": "jshint pretender.js test",
-    "eslint": "eslint src/*.ts",
+    "eslint": "eslint src/*.ts test",
     "test:server": "karma start --no-single-run",
     "build": "rollup --config"
   },
