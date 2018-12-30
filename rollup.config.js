@@ -21,10 +21,11 @@ module.exports = {
       globals: {
         [selfId]: 'self',
         '@xg-wang/whatwg-fetch': 'FakeFetch',
-        'fake-xml-http-request': 'FakeXmlHttpRequest',
+        'fake-xml-http-request': 'FakeXMLHttpRequest',
         'route-recognizer': 'RouteRecognizer',
       },
-      banner: 'var self = window;\n' +
+      banner: '/* exported Pretender */\n' +
+              //'var self = window;\n' +
               'var FakeFetch = self.WHATWGFetch;\n' +
               'var FakeXMLHttpRequest = self.FakeXMLHttpRequest;\n' +
               'var RouteRecognizer = self.RouteRecognizer;\n',

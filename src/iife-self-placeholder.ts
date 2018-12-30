@@ -1,1 +1,1 @@
-export default window
+export default window;

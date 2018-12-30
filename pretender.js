@@ -1,4 +1,4 @@
-var self = window;
+/* exported Pretender */
 var FakeFetch = self.WHATWGFetch;
 var FakeXMLHttpRequest = self.FakeXMLHttpRequest;
 var RouteRecognizer = self.RouteRecognizer;
@@ -429,4 +429,4 @@ var Pretender = (function (self, RouteRecognizer, FakeXMLHttpRequest, FakeFetch)
 
   return Pretender;
 
-}(self, RouteRecognizer, FakeXmlHttpRequest, FakeFetch));
+}(self, RouteRecognizer, FakeXMLHttpRequest, FakeFetch));

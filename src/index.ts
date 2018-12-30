@@ -1,4 +1,3 @@
-
 import self from './iife-self-placeholder';
 import RouteRecognizer from 'route-recognizer';
 import FakeXMLHttpRequest from 'fake-xml-http-request';
@@ -30,6 +29,7 @@ function parseURL(url: string) {
   anchor.href = url;
 
   if (!anchor.host) {
+    // eslint-disable-next-line no-self-assign
     anchor.href = anchor.href; // IE: load the host and protocol
   }
 
@@ -281,6 +281,7 @@ function interceptor(ctx) {
   };
 
   if (ctx.pretender._nativeXMLHttpRequest.prototype._passthroughCheck) {
+    // eslint-disable-next-line no-console
     console.warn('You created a second Pretender instance while there was already one running. ' +
           'Running two Pretender servers at once will lead to unexpected results and will ' +
           'be removed entirely in a future major version.' +
@@ -376,9 +377,9 @@ Pretender.prototype = {
           throw new Error('Nothing returned by handler for ' + path + '. ' + note);
         }
 
-        var status = statusHeadersAndBody[0],
-            headers = pretender.prepareHeaders(statusHeadersAndBody[1]),
-            body = pretender.prepareBody(statusHeadersAndBody[2], headers);
+        var status = statusHeadersAndBody[0];
+        var headers = pretender.prepareHeaders(statusHeadersAndBody[1]);
+        var body = pretender.prepareBody(statusHeadersAndBody[2], headers);
 
         pretender.handleResponse(request, async, function() {
           request.respond(status, headers, body);
