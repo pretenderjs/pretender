@@ -25,7 +25,6 @@ module.exports = {
         'route-recognizer': 'RouteRecognizer',
       },
       banner: '/* exported Pretender */\n' +
-              //'var self = window;\n' +
               'var FakeFetch = self.WHATWGFetch;\n' +
               'var FakeXMLHttpRequest = self.FakeXMLHttpRequest;\n' +
               'var RouteRecognizer = self.RouteRecognizer;\n',
