@@ -80,10 +80,6 @@ describe('pretender invoking by fetch', function(config) {
     }, 10);
 
     return fetch('/downloads', { signal: signal })
-      .then(function(response) {
-        console.log(response);
-        assert.ok(false, 'fetch resolved before the abort signal was sent');
-      })
       .catch(function(err) {
         assert.equal(err.name, 'AbortError');
       });
