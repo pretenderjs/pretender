@@ -12,8 +12,6 @@ with an express/sinatra style syntax for defining routes and their handlers.
 Pretender will temporarily replace native XMLHttpRequest and Fetch , intercept
 all requests, and direct them to little pretend service you've defined.
 
-**:warning: Pretender only works in the browser!**
-
 ```javascript
 const PHOTOS = {
   "10": {
@@ -39,6 +37,10 @@ const server = new Pretender(function() {
 
 $.get('/photos/12', {success() => { ... }})
 ```
+
+## Usage examples
+
+
 
 ## The Server DSL
 The server DSL is inspired by express/sinatra. Pass a function to the Pretender constructor

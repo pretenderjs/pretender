@@ -2,7 +2,7 @@
   "name": "pretender",
   "version": "3.1.0",
   "main": "./pretender.js",
-  "module": "./pretender.es.js",
+  "module": "./src/pretender.es.js",
   "description": "Pretender is a mock server library for XMLHttpRequest and Fetch, that comes with an express/sinatra style syntax for defining routes and their handlers.",
   "license": "MIT",
   "engines": {
@@ -29,7 +29,7 @@
     "coveralls": "^2.11.3",
     "es6-promise": "^4.0.5",
     "eslint": "^5.11.1",
-    "jshint": "^2.8.0",
+    "jshint": "^2.9.7",
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.1",
@@ -48,6 +48,7 @@
     "typescript-eslint-parser": "^21.0.2"
   },
   "dependencies": {
+    "@babel/plugin-external-helpers": "^7.2.0",
     "@xg-wang/whatwg-fetch": "^3.0.0",
     "fake-xml-http-request": "^2.0.0",
     "route-recognizer": "^0.3.3"

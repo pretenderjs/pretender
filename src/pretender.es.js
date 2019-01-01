@@ -1,11 +1,7 @@
-'use strict';
-
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var self = _interopDefault(require('./iife-self-placeholder.ts'));
-var RouteRecognizer = _interopDefault(require('route-recognizer'));
-var FakeXMLHttpRequest = _interopDefault(require('fake-xml-http-request'));
-var FakeFetch = _interopDefault(require('@xg-wang/whatwg-fetch'));
+import self from './iife-self-placeholder.ts';
+import RouteRecognizer from 'route-recognizer';
+import FakeXMLHttpRequest from 'fake-xml-http-request';
+import FakeFetch from '@xg-wang/whatwg-fetch';
 
 /**
  * parseURL - decompose a URL into its parts
@@ -29,6 +25,7 @@ function parseURL(url) {
     var anchor = document.createElement('a');
     anchor.href = url;
     if (!anchor.host) {
+        // eslint-disable-next-line no-self-assign
         anchor.href = anchor.href; // IE: load the host and protocol
     }
     var pathname = anchor.pathname;
@@ -239,6 +236,7 @@ function interceptor(ctx) {
         return this._passthroughCheck('getAllResponseHeaders', arguments);
     };
     if (ctx.pretender._nativeXMLHttpRequest.prototype._passthroughCheck) {
+        // eslint-disable-next-line no-console
         console.warn('You created a second Pretender instance while there was already one running. ' +
             'Running two Pretender servers at once will lead to unexpected results and will ' +
             'be removed entirely in a future major version.' +
@@ -318,7 +316,9 @@ Pretender.prototype = {
                     var note = 'Remember to `return [status, headers, body];` in your route handler.';
                     throw new Error('Nothing returned by handler for ' + path + '. ' + note);
                 }
-                var status = statusHeadersAndBody[0], headers = pretender.prepareHeaders(statusHeadersAndBody[1]), body = pretender.prepareBody(statusHeadersAndBody[2], headers);
+                var status = statusHeadersAndBody[0];
+                var headers = pretender.prepareHeaders(statusHeadersAndBody[1]);
+                var body = pretender.prepareBody(statusHeadersAndBody[2], headers);
                 pretender.handleResponse(request, async, function () {
                     request.respond(status, headers, body);
                     pretender.handledRequest(verb, path, request);
@@ -423,4 +423,4 @@ Pretender.parseURL = parseURL;
 Pretender.Hosts = Hosts;
 Pretender.Registry = Registry;
 
-module.exports = Pretender;
+export default Pretender;

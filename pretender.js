@@ -33,6 +33,7 @@ var Pretender = (function (self, RouteRecognizer, FakeXMLHttpRequest, FakeFetch)
       var anchor = document.createElement('a');
       anchor.href = url;
       if (!anchor.host) {
+          // eslint-disable-next-line no-self-assign
           anchor.href = anchor.href; // IE: load the host and protocol
       }
       var pathname = anchor.pathname;
@@ -243,6 +244,7 @@ var Pretender = (function (self, RouteRecognizer, FakeXMLHttpRequest, FakeFetch)
           return this._passthroughCheck('getAllResponseHeaders', arguments);
       };
       if (ctx.pretender._nativeXMLHttpRequest.prototype._passthroughCheck) {
+          // eslint-disable-next-line no-console
           console.warn('You created a second Pretender instance while there was already one running. ' +
               'Running two Pretender servers at once will lead to unexpected results and will ' +
               'be removed entirely in a future major version.' +
@@ -322,7 +324,9 @@ var Pretender = (function (self, RouteRecognizer, FakeXMLHttpRequest, FakeFetch)
                       var note = 'Remember to `return [status, headers, body];` in your route handler.';
                       throw new Error('Nothing returned by handler for ' + path + '. ' + note);
                   }
-                  var status = statusHeadersAndBody[0], headers = pretender.prepareHeaders(statusHeadersAndBody[1]), body = pretender.prepareBody(statusHeadersAndBody[2], headers);
+                  var status = statusHeadersAndBody[0];
+                  var headers = pretender.prepareHeaders(statusHeadersAndBody[1]);
+                  var body = pretender.prepareBody(statusHeadersAndBody[2], headers);
                   pretender.handleResponse(request, async, function () {
                       request.respond(status, headers, body);
                       pretender.handledRequest(verb, path, request);

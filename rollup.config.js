@@ -30,11 +30,11 @@ module.exports = {
               'var RouteRecognizer = self.RouteRecognizer;\n',
     },
     {
-      file: 'pretender.es.js',
+      file: 'src/pretender.es.js',
       format: 'es'
     },
     {
-      file: 'pretender.cjs.js',
+      file: 'src/pretender.cjs.js',
       format: 'cjs'
     },
   ],
