@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@babel/plugin-external-helpers": "^7.2.0",
-    "@xg-wang/whatwg-fetch": "^3.0.0",
+    "whatwg-fetch": "^3.0.0",
     "fake-xml-http-request": "^2.0.0",
     "route-recognizer": "^0.3.3"
   },
@@ -59,7 +59,7 @@
         "deps": [
           "route-recognizer",
           "fake-xml-http-request",
-          "@xg-wang/whatwg-fetch"
+          "whatwg-fetch"
         ],
         "exports": "Pretender"
       }

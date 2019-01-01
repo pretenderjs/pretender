@@ -9,7 +9,6 @@ var Pretender = (function (self, RouteRecognizer, FakeXMLHttpRequest, FakeFetch)
   self = self && self.hasOwnProperty('default') ? self['default'] : self;
   RouteRecognizer = RouteRecognizer && RouteRecognizer.hasOwnProperty('default') ? RouteRecognizer['default'] : RouteRecognizer;
   FakeXMLHttpRequest = FakeXMLHttpRequest && FakeXMLHttpRequest.hasOwnProperty('default') ? FakeXMLHttpRequest['default'] : FakeXMLHttpRequest;
-  FakeFetch = FakeFetch && FakeFetch.hasOwnProperty('default') ? FakeFetch['default'] : FakeFetch;
 
   /**
    * parseURL - decompose a URL into its parts

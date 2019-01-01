@@ -47,11 +47,6 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.18.tgz#1d3ca764718915584fcd9f6344621b7672665c67"
   integrity sha512-fh+pAqt4xRzPfqA6eh3Z2y6fyZavRIumvjhaCL753+TVkGKGhpPeyrJG2JftD0T9q4GF00KjefsQ+PQNDdWQaQ==
 
-"@xg-wang/whatwg-fetch@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@xg-wang/whatwg-fetch/-/whatwg-fetch-3.0.0.tgz#f7b222c012a238e7d6e89ed3d72a1e0edb58453d"
-  integrity sha512-ULtqA6L75RLzTNW68IiOja0XYv4Ebc3OGMzfia1xxSEMpD0mk/pMvkQX0vbCFyQmKc5xGp80Ms2WiSlXLh8hbA==
-
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -4478,6 +4473,11 @@ walker@1.x:
   integrity sha1-L3+bj9ENZ3JisYqITijRlhjgKPs=
   dependencies:
     makeerror "1.0.x"
+
+whatwg-fetch@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.0.0.tgz#fc804e458cc460009b1a2b966bc8817d2578aefb"
+  integrity sha512-9GSJUgz1D4MfyKU7KRqwOjXCXTqWdFNvEr7eUBYchQiVc744mqK/MzXPNR2WsPkmkOa4ywfg8C2n8h+13Bey1Q==
 
 which@^1.1.1, which@^1.2.1, which@^1.2.10:
   version "1.3.0"

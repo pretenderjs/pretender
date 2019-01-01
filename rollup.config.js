@@ -9,7 +9,7 @@ module.exports = {
   input: 'src/index.ts',
   external: [
     selfId,
-    '@xg-wang/whatwg-fetch',
+    'whatwg-fetch',
     'fake-xml-http-request',
     'route-recognizer',
   ],
@@ -20,7 +20,7 @@ module.exports = {
       format: 'iife',
       globals: {
         [selfId]: 'self',
-        '@xg-wang/whatwg-fetch': 'FakeFetch',
+        'whatwg-fetch': 'FakeFetch',
         'fake-xml-http-request': 'FakeXMLHttpRequest',
         'route-recognizer': 'RouteRecognizer',
       },
@@ -32,10 +32,6 @@ module.exports = {
     {
       file: 'src/pretender.es.js',
       format: 'es'
-    },
-    {
-      file: 'src/pretender.cjs.js',
-      format: 'cjs'
     },
   ],
   plugins: [

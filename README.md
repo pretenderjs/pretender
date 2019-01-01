@@ -40,7 +40,16 @@ $.get('/photos/12', {success() => { ... }})
 
 ## Usage examples
 
+You can import Pretender as a module or use it directly in the browser.
 
+```javascript
+import Pretender from 'pretender';
+const server = new Pretender(function() {});
+```
+
+```javascript
+<script src="pretender.js"></script>
+```
 
 ## The Server DSL
 The server DSL is inspired by express/sinatra. Pass a function to the Pretender constructor

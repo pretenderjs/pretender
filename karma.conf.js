@@ -21,7 +21,7 @@ module.exports = function(config) {
       'bower_components/jquery/dist/jquery.js',
       'node_modules/es6-promise/dist/es6-promise.auto.js',
       'node_modules/abortcontroller-polyfill/dist/abortcontroller-polyfill-only.js',
-      'node_modules/@xg-wang/whatwg-fetch/dist/fetch.umd.js',
+      'node_modules/whatwg-fetch/dist/fetch.umd.js',
       'pretender.js',
       'test/**/*.js'
     ],

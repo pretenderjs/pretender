@@ -1,10 +1,7 @@
 import self from './iife-self-placeholder';
 import RouteRecognizer from 'route-recognizer';
 import FakeXMLHttpRequest from 'fake-xml-http-request';
-
-// fetch related ponyfills
-// TODO: use whatwg-fetch once new version release
-import FakeFetch from '@xg-wang/whatwg-fetch';
+import * as FakeFetch from 'whatwg-fetch';
 
 /**
  * parseURL - decompose a URL into its parts
