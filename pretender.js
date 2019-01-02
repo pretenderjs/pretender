@@ -15,8 +15,7 @@ var FakeXMLHttpRequest = appearsBrowserified ? getModuleDefault(require('fake-xm
   self.FakeXMLHttpRequest;
 
 // fetch related ponyfills
-// TODO: use whatwg-fetch once new version release
-var FakeFetch = appearsBrowserified ? getModuleDefault(require('@xg-wang/whatwg-fetch')) : self.WHATWGFetch;
+var FakeFetch = appearsBrowserified ? getModuleDefault(require('whatwg-fetch')) : self.WHATWGFetch;
 
 /**
  * parseURL - decompose a URL into its parts
@@ -145,7 +144,7 @@ function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   self.XMLHttpRequest = interceptor(ctx);
 
   // polyfill fetch when xhr is ready
-  this._fetchProps = ['fetch', 'Headers', 'Request', 'Response'];
+  this._fetchProps = FakeFetch ? ['fetch', 'Headers', 'Request', 'Response'] : [];
   this._fetchProps.forEach(function(name) {
     this['_native' + name] = self[name];
     self[name] = FakeFetch[name];
