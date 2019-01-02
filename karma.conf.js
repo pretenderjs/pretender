@@ -1,5 +1,6 @@
 // Karma configuration
 // Generated on Thu Oct 06 2016 14:24:14 GMT+0800 (PHT)
+const typescript = require('rollup-plugin-typescript');
 
 module.exports = function(config) {
   config.set({
@@ -23,7 +24,11 @@ module.exports = function(config) {
       'node_modules/abortcontroller-polyfill/dist/abortcontroller-polyfill-only.js',
       'node_modules/whatwg-fetch/dist/fetch.umd.js',
       'pretender.js',
-      'test/**/*.js'
+      /**
+			 * Make sure to disable Karma’s file watcher
+			 * because the preprocessor will use its own.
+			 */
+			{ pattern: 'test/**/*_test.[j|t]s', watched: false }
     ],
 
     // list of files to exclude
@@ -35,8 +40,27 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        'pretender.js': ['coverage']
+        'pretender.js': ['coverage'],
+        'test/**/*_test.[j|t]s': ['rollup'],
     },
+    rollupPreprocessor: {
+			/**
+			 * This is just a normal Rollup config object,
+			 * except that `input` is handled for you.
+			 */
+      external: ['QUnit'],
+			plugins: [
+        typescript()
+			],
+			output: {
+				format: 'iife',            // Helps prevent naming collisions.
+				name: 'pretendertests',    // Required for 'iife' format.
+        sourcemap: 'inline',       // Sensible for testing.
+        globals: [
+          'Qunit',
+        ],
+			},
+		},
 
     coverageReporter: {
         type: 'lcov',

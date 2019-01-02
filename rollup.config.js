@@ -1,7 +1,7 @@
-const path = require('path');
-const typescript = require('rollup-plugin-typescript');
 const commonjs = require('rollup-plugin-commonjs');
+const path = require('path');
 const resolve = require('rollup-plugin-node-resolve');
+const typescript = require('rollup-plugin-typescript');
 
 const selfId = path.resolve(__dirname, 'src/iife-self-placeholder.ts');
 
@@ -35,8 +35,8 @@ module.exports = {
     },
   ],
   plugins: [
-    resolve(),
     commonjs(),
+    resolve(),
     typescript()
   ],
 };
