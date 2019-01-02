@@ -16,7 +16,7 @@ module.exports = {
   output: [
     {
       name: 'Pretender',
-      file: 'pretender.js',
+      file: 'dist/pretender.js',
       format: 'iife',
       globals: {
         [selfId]: 'self',

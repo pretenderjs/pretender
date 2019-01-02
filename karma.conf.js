@@ -22,7 +22,7 @@ module.exports = function(config) {
       'node_modules/es6-promise/dist/es6-promise.auto.js',
       'node_modules/abortcontroller-polyfill/dist/abortcontroller-polyfill-only.js',
       'node_modules/whatwg-fetch/dist/fetch.umd.js',
-      'pretender.js',
+      'dist/pretender.js',
       'test/**/*.js'
     ],
 
@@ -35,7 +35,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        'pretender.js': ['coverage']
+        'dist/pretender.js': ['coverage']
     },
 
     coverageReporter: {

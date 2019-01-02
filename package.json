@@ -1,7 +1,7 @@
 {
   "name": "pretender",
   "version": "2.1.0",
-  "main": "./pretender.js",
+  "main": "./dist/pretender.js",
   "module": "./src/pretender.es.js",
   "description": "Pretender is a mock server library for XMLHttpRequest and Fetch, that comes with an express/sinatra style syntax for defining routes and their handlers.",
   "license": "MIT",
@@ -9,10 +9,11 @@
     "node": "6.* || 8.* || 10.* || >= 11.*"
   },
   "scripts": {
-    "build": "rollup --config",
+    "prepublishOnly": "npm run build && npm run tests-only",
     "pretest": "bower install",
+    "build": "rollup --config",
     "test": "npm run lint && npm run jscs && npm run tests-only",
-    "test-ci": "npm run pretest && npm run lint && npm run jscs && npm run tests-only-ci",
+    "test-ci": "npm run pretest && npm run build && npm run lint && npm run jscs && npm run tests-only-ci",
     "tests-only": "karma start --single-run",
     "tests-only-ci": "karma start --single-run --browsers PhantomJS",
     "lint": "jshint test",
