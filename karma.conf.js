@@ -25,10 +25,10 @@ module.exports = function(config) {
       'node_modules/whatwg-fetch/dist/fetch.umd.js',
       'pretender.js',
       /**
-			 * Make sure to disable Karma’s file watcher
-			 * because the preprocessor will use its own.
-			 */
-			{ pattern: 'test/**/*_test.[j|t]s', watched: false }
+       * Make sure to disable Karma’s file watcher
+       * because the preprocessor will use its own.
+       */
+      { pattern: 'test/**/*_test.[j|t]s', watched: false }
     ],
 
     // list of files to exclude
@@ -44,23 +44,23 @@ module.exports = function(config) {
         'test/**/*_test.[j|t]s': ['rollup'],
     },
     rollupPreprocessor: {
-			/**
-			 * This is just a normal Rollup config object,
-			 * except that `input` is handled for you.
-			 */
+      /**
+       * This is just a normal Rollup config object,
+       * except that `input` is handled for you.
+       */
       external: ['QUnit'],
-			plugins: [
+      plugins: [
         typescript()
-			],
-			output: {
-				format: 'iife',            // Helps prevent naming collisions.
-				name: 'pretendertests',    // Required for 'iife' format.
+      ],
+      output: {
+        format: 'iife',            // Helps prevent naming collisions.
+        name: 'pretendertests',    // Required for 'iife' format.
         sourcemap: 'inline',       // Sensible for testing.
         globals: [
           'Qunit',
         ],
-			},
-		},
+      },
+    },
 
     coverageReporter: {
         type: 'lcov',
