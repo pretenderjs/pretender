@@ -3,6 +3,7 @@
   "version": "2.1.0",
   "main": "./dist/pretender.js",
   "module": "./src/pretender.es.js",
+  "types": "index.d.ts",
   "description": "Pretender is a mock server library for XMLHttpRequest and Fetch, that comes with an express/sinatra style syntax for defining routes and their handlers.",
   "license": "MIT",
   "engines": {
@@ -49,9 +50,9 @@
     "typescript": "~3.1.1"
   },
   "dependencies": {
+    "whatwg-fetch": "^3.0.0",
     "fake-xml-http-request": "^2.0.0",
-    "route-recognizer": "^0.3.3",
-    "whatwg-fetch": "^3.0.0"
+    "route-recognizer": "^0.3.3"
   },
   "jspm": {
     "shim": {
