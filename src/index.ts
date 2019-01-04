@@ -1,21 +1,7 @@
-(function(self) {
-'use strict';
-
-function getModuleDefault(module) {
-  return module.default || module;
-}
-
-var appearsBrowserified = typeof self !== 'undefined' &&
-                          typeof process !== 'undefined' &&
-                          (Object.prototype.toString.call(process) === '[object Object]' ||
-                           Object.prototype.toString.call(process) === '[object process]');
-
-var RouteRecognizer = appearsBrowserified ? getModuleDefault(require('route-recognizer')) : self.RouteRecognizer;
-var FakeXMLHttpRequest = appearsBrowserified ? getModuleDefault(require('fake-xml-http-request')) :
-  self.FakeXMLHttpRequest;
-
-// fetch related ponyfills
-var FakeFetch = appearsBrowserified ? getModuleDefault(require('whatwg-fetch')) : self.WHATWGFetch;
+import self from './iife-self-placeholder';
+import RouteRecognizer from 'route-recognizer';
+import FakeXMLHttpRequest from 'fake-xml-http-request';
+import * as FakeFetch from 'whatwg-fetch';
 
 /**
  * parseURL - decompose a URL into its parts
@@ -495,12 +481,4 @@ Pretender.parseURL = parseURL;
 Pretender.Hosts = Hosts;
 Pretender.Registry = Registry;
 
-if (typeof module === 'object') {
-  module.exports = Pretender;
-} else if (typeof define !== 'undefined') {
-  define('pretender', [], function() {
-    return Pretender;
-  });
-}
-self.Pretender = Pretender;
-}(self));
+export default Pretender;

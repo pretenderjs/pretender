@@ -40,6 +40,27 @@ const server = new Pretender(function() {
 $.get('/photos/12', {success() => { ... }})
 ```
 
+## Usage
+
+```
+yard add -D pretender
+# or
+npm install --save-dev pretender
+```
+
+You can load Pretender directly in the browser.
+
+```javascript
+<script src="pretender.js"></script>
+```
+
+Or as a module.
+
+```javascript
+import Pretender from 'pretender';
+const server = new Pretender(function() {});
+```
+
 ## The Server DSL
 The server DSL is inspired by express/sinatra. Pass a function to the Pretender constructor
 that will be invoked with the Pretender instance as its context. Available methods are

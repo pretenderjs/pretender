@@ -1,20 +1,24 @@
 {
   "name": "pretender",
   "version": "2.1.0",
-  "main": "./pretender.js",
+  "main": "./dist/pretender.js",
+  "module": "./src/pretender.es.js",
+  "types": "index.d.ts",
   "description": "Pretender is a mock server library for XMLHttpRequest and Fetch, that comes with an express/sinatra style syntax for defining routes and their handlers.",
   "license": "MIT",
   "engines": {
     "node": "6.* || 8.* || 10.* || >= 11.*"
   },
   "scripts": {
+    "prepublishOnly": "npm run build && npm run tests-only",
     "pretest": "bower install",
+    "build": "rollup --config",
     "test": "npm run lint && npm run jscs && npm run tests-only",
-    "test-ci": "npm run pretest && npm run lint && npm run jscs && npm run tests-only-ci",
+    "test-ci": "npm run pretest && npm run build && npm run lint && npm run jscs && npm run tests-only-ci",
     "tests-only": "karma start --single-run",
     "tests-only-ci": "karma start --single-run --browsers PhantomJS",
-    "lint": "jshint pretender.js test",
-    "jscs": "jscs pretender.js test",
+    "lint": "jshint test",
+    "jscs": "jscs test",
     "test:server": "karma start --no-single-run"
   },
   "repository": {
@@ -36,7 +40,14 @@
     "karma-sinon": "^1.0.5",
     "phantomjs": "^2.1.7",
     "qunit": "^2.6.1",
-    "sinon": "^3.2.1"
+    "rollup": "0.68.2",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-multi-entry": "^2.1.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-typescript": "^1.0.0",
+    "sinon": "^3.2.1",
+    "tslib": "^1.9.3",
+    "typescript": "~3.1.1"
   },
   "dependencies": {
     "whatwg-fetch": "^3.0.0",
