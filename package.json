@@ -37,6 +37,7 @@
     "karma-coverage": "^1.1.1",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-qunit": "^2.1.0",
+    "karma-rollup-preprocessor": "^6.1.2",
     "karma-sinon": "^1.0.5",
     "phantomjs": "^2.1.7",
     "qunit": "^2.6.1",
@@ -50,9 +51,9 @@
     "typescript": "~3.1.1"
   },
   "dependencies": {
-    "whatwg-fetch": "^3.0.0",
     "fake-xml-http-request": "^2.0.0",
-    "route-recognizer": "^0.3.3"
+    "route-recognizer": "^0.3.3",
+    "whatwg-fetch": "^3.0.0"
   },
   "jspm": {
     "shim": {
