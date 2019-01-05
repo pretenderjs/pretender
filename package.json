@@ -13,12 +13,12 @@
     "prepublishOnly": "npm run build && npm run tests-only",
     "pretest": "bower install",
     "build": "rollup --config",
-    "test": "npm run lint && npm run jscs && npm run tests-only",
-    "test-ci": "npm run pretest && npm run build && npm run lint && npm run jscs && npm run tests-only-ci",
+    "test": "npm run lint && npm run eslint && npm run tests-only",
+    "test-ci": "npm run pretest && npm run build && npm run lint && npm run eslint && npm run tests-only-ci",
     "tests-only": "karma start --single-run",
     "tests-only-ci": "karma start --single-run --browsers PhantomJS",
     "lint": "jshint test",
-    "jscs": "jscs test",
+    "eslint": "eslint src/**/*.ts test",
     "test:server": "karma start --no-single-run"
   },
   "repository": {
@@ -30,7 +30,7 @@
     "bower": "^1.8.2",
     "coveralls": "^2.11.3",
     "es6-promise": "^4.0.5",
-    "jscs": "^3.0.7",
+    "eslint": "^5.12.0",
     "jshint": "^2.8.0",
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -47,7 +47,8 @@
     "rollup-plugin-typescript": "^1.0.0",
     "sinon": "^3.2.1",
     "tslib": "^1.9.3",
-    "typescript": "~3.1.1"
+    "typescript": "~3.1.1",
+    "typescript-eslint-parser": "^21.0.2"
   },
   "dependencies": {
     "fake-xml-http-request": "^2.0.0",

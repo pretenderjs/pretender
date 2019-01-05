@@ -136,9 +136,7 @@ describe('pretender invoking', function(config) {
   });
 
   it('adds requests to the list of handled requests', function(assert) {
-    var params;
-    this.pretender.get('/some/path', function(request) {
-      params = request.queryParams;
+    this.pretender.get('/some/path', function(/*request*/) {
     });
 
     $.ajax({ url: '/some/path' });
@@ -147,8 +145,8 @@ describe('pretender invoking', function(config) {
     assert.equal(req.url, '/some/path');
   });
 
-  it("increments the handler's request count", function(assert) {
-    var handler = function(req) {};
+  it('increments the handler\'s request count', function(assert) {
+    var handler = function(/*req*/) {};
 
     this.pretender.get('/some/path', handler);
 
@@ -161,7 +159,7 @@ describe('pretender invoking', function(config) {
     var done = assert.async();
 
     var json = '{foo: "bar"}';
-    this.pretender.get('/some/path', function(req) {
+    this.pretender.get('/some/path', function(/*req*/) {
       return [200, {}, json];
     });
 
@@ -182,7 +180,7 @@ describe('pretender invoking', function(config) {
 
     var obj = { foo: 'bar' };
     this.pretender.prepareBody = JSON.stringify;
-    this.pretender.get('/some/path', function(req) {
+    this.pretender.get('/some/path', function(/*req*/) {
       return [200, {}, obj];
     });
 
@@ -203,7 +201,7 @@ describe('pretender invoking', function(config) {
       return headers;
     };
 
-    this.pretender.get('/some/path', function(req) {
+    this.pretender.get('/some/path', function(/*req*/) {
       return [200, {}, ''];
     });
 
@@ -220,10 +218,10 @@ describe('pretender invoking', function(config) {
     assert.expect(1);
 
     var latestHandlerWasCalled = false;
-    this.pretender.get('/some/path', function(request) {
+    this.pretender.get('/some/path', function(/*request*/) {
       assert.ok(false);
     });
-    this.pretender.get('/some/path', function(request) {
+    this.pretender.get('/some/path', function(/*request*/) {
       latestHandlerWasCalled = true;
     });
     $.ajax({ url: '/some/path' });
@@ -235,7 +233,7 @@ describe('pretender invoking', function(config) {
   ) {
     var pretender = this.pretender;
 
-    pretender.get('/some/path', function(request) {
+    pretender.get('/some/path', function(/*request*/) {
       return [200, {}, ''];
     });
 
@@ -248,7 +246,7 @@ describe('pretender invoking', function(config) {
     var done = assert.async();
     var val = 'unset';
 
-    this.pretender.get('/some/path', function(request) {
+    this.pretender.get('/some/path', function(/*request*/) {
       return [200, {}, ''];
     });
 
@@ -269,7 +267,7 @@ describe('pretender invoking', function(config) {
 
     this.pretender.get(
       '/some/path',
-      function(request) {
+      function(/*request*/) {
         return [200, {}, ''];
       },
       false
@@ -296,7 +294,7 @@ describe('pretender invoking', function(config) {
 
     this.pretender.get(
       '/some/path',
-      function(request) {
+      function(/*request*/) {
         return [200, {}, ''];
       },
       function() {
@@ -336,7 +334,7 @@ describe('pretender invoking', function(config) {
 
     this.pretender.get(
       '/some/path',
-      function(request) {
+      function(/*request*/) {
         return [200, {}, ''];
       },
       100
@@ -362,7 +360,7 @@ describe('pretender invoking', function(config) {
 
     this.pretender.get(
       '/some/path',
-      function(request) {
+      function(/*request*/) {
         return [200, {}, ''];
       },
       true
@@ -391,7 +389,7 @@ describe('pretender invoking', function(config) {
   it('requiresManualResolution returns true for endpoints configured with `true` for async', function(
     assert
   ) {
-    this.pretender.get('/some/path', function(request) {}, true);
+    this.pretender.get('/some/path', function(/*request*/) {}, true);
     this.pretender.get('/some/other/path', function() {});
 
     assert.ok(this.pretender.requiresManualResolution('get', '/some/path'));
@@ -408,7 +406,7 @@ describe('pretender invoking', function(config) {
       var progressEventCount = 0;
       this.pretender.post(
         '/uploads',
-        function(request) {
+        function(/*request*/) {
           return [200, {}, ''];
         },
         300
@@ -416,7 +414,7 @@ describe('pretender invoking', function(config) {
 
       var xhr = new window.XMLHttpRequest();
       xhr.open('POST', '/uploads');
-      xhr.upload.onprogress = function(e) {
+      xhr.upload.onprogress = function(/*e*/) {
         progressEventCount++;
       };
       xhr.onload = function() {
@@ -431,14 +429,14 @@ describe('pretender invoking', function(config) {
     }
   );
 
-  it("`onprogress` upload events don't keep firing once the request has ended", function(
+  it('`onprogress` upload events don\'t keep firing once the request has ended', function(
     assert
   ) {
     clock = sinon.useFakeTimers();
     var progressEventCount = 0;
     this.pretender.post(
       '/uploads',
-      function(request) {
+      function(/*request*/) {
         return [200, {}, ''];
       },
       210
@@ -446,7 +444,7 @@ describe('pretender invoking', function(config) {
 
     var xhr = new window.XMLHttpRequest();
     xhr.open('POST', '/uploads');
-    xhr.upload.onprogress = function(e) {
+    xhr.upload.onprogress = function(/*e*/) {
       progressEventCount++;
     };
     xhr.send('some data');
@@ -467,7 +465,7 @@ describe('pretender invoking', function(config) {
 
     this.pretender.post(
       '/uploads',
-      function(request) {
+      function(/*request*/) {
         return [200, {}, ''];
       },
       210
@@ -475,7 +473,7 @@ describe('pretender invoking', function(config) {
 
     var xhr = new window.XMLHttpRequest();
     xhr.open('POST', '/uploads');
-    xhr.upload.onprogress = function(e) {
+    xhr.upload.onprogress = function(/*e*/) {
       progressEventCount++;
     };
     xhr.send('some data');
@@ -497,7 +495,7 @@ describe('pretender invoking', function(config) {
     var progressEventCount = 0;
     this.pretender.get(
       '/downloads',
-      function(request) {
+      function(/*request*/) {
         return [200, {}, ''];
       },
       300
@@ -505,7 +503,7 @@ describe('pretender invoking', function(config) {
 
     var xhr = new window.XMLHttpRequest();
     xhr.open('GET', '/downloads');
-    xhr.onprogress = function(e) {
+    xhr.onprogress = function(/*e*/) {
       progressEventCount++;
     };
     xhr.onload = function() {
@@ -519,14 +517,14 @@ describe('pretender invoking', function(config) {
     xhr.send('some data');
   });
 
-  it("`onprogress` download events don't keep firing once the request has ended", function(
+  it('`onprogress` download events don\'t keep firing once the request has ended', function(
     assert
   ) {
     clock = sinon.useFakeTimers();
     var progressEventCount = 0;
     this.pretender.get(
       '/downloads',
-      function(request) {
+      function(/*request*/) {
         return [200, {}, ''];
       },
       210
@@ -534,7 +532,7 @@ describe('pretender invoking', function(config) {
 
     var xhr = new window.XMLHttpRequest();
     xhr.open('GET', '/downloads');
-    xhr.onprogress = function(e) {
+    xhr.onprogress = function(/*e*/) {
       progressEventCount++;
     };
     xhr.send('some data');
@@ -553,7 +551,7 @@ describe('pretender invoking', function(config) {
     clock = sinon.useFakeTimers();
     this.pretender.get(
       '/downloads',
-      function(request) {
+      function(/*request*/) {
         return [200, {}, ''];
       },
       210
@@ -561,7 +559,7 @@ describe('pretender invoking', function(config) {
 
     var xhr = new window.XMLHttpRequest();
     xhr.open('GET', '/downloads');
-    xhr.onprogress = function(e) {
+    xhr.onprogress = function(/*e*/) {
       progressEventCount++;
     };
     xhr.send('some data');
@@ -594,7 +592,7 @@ describe('pretender invoking', function(config) {
 
     var json = '{foo: "bar"}';
 
-    this.pretender.get('/some/path', function(req) {
+    this.pretender.get('/some/path', function(/*req*/) {
       return new Promise(function(resolve) {
         resolve([200, {}, json]);
       });

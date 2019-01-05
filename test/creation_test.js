@@ -11,12 +11,10 @@ describe('pretender creation', function(config) {
   });
 
   it('a mapping function is optional', function(assert) {
-    var result = false;
     try {
       pretender = new Pretender();
-      result = true;
     } catch (e) {
-      // fail
+      assert.ok(false);
     }
 
     assert.ok(true, 'does not raise');
