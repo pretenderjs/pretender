@@ -1,4 +1,4 @@
-src/index.ts
+src
 test
 rollup.config.js
 karma.conf.js

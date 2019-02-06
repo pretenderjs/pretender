@@ -1,4 +1,3 @@
-import self from './iife-self-placeholder';
 import RouteRecognizer from 'route-recognizer';
 import FakeXMLHttpRequest from 'fake-xml-http-request';
 import * as FakeFetch from 'whatwg-fetch';
