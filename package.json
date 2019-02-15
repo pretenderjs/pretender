@@ -54,6 +54,10 @@
     "route-recognizer": "^0.3.3",
     "whatwg-fetch": "^3.0.0"
   },
+  "files": [
+    "dist",
+    "index.d.ts"
+  ],
   "jspm": {
     "shim": {
       "pretender": {
