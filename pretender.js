@@ -176,15 +176,13 @@ function interceptor(pretender, nativeRequest) {
     }
 
     // use onload if the browser supports it
-    // TODO: not loading on blob is questioned in the PR, https://github.com/pretenderjs/pretender/pull/157/files
-    //       test the suite with it on/off and remove if it makes no difference - Joe
-    if ('onload' in xhr && fakeXHR.responseType !== 'blob') {
+    if ('onload' in xhr) {
       evts.push('load');
     }
 
     // add progress event for async calls
     // avoid using progress events for sync calls, they will hang https://bugs.webkit.org/show_bug.cgi?id=40996.
-    if (fakeXHR.async && !isResponseTypeArrayBufferOrBlob) {
+    if (fakeXHR.async && fakeXHR.responseType !== 'arraybuffer') {
       evts.push('progress');
       uploadEvents.push('progress');
     }
