@@ -186,7 +186,9 @@ function interceptor(ctx) {
     var xhr = fakeXHR._passthroughRequest = new ctx.pretender._nativeXMLHttpRequest();
     xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
 
-    if (fakeXHR.responseType === 'arraybuffer') {
+    var arraybufferOrBlob = fakeXHR.responseType === 'arraybuffer' || fakeXHR.responseType === 'blob';
+
+    if (arraybufferOrBlob) {
       lifecycleProps = ['readyState', 'response', 'status', 'statusText'];
       xhr.responseType = fakeXHR.responseType;
     }
