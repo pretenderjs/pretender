@@ -22,7 +22,7 @@ export class Server {
 export type RequestHandler = (
   urlExpression: string,
   response: ResponseHandler,
-  async?: boolean
+  async?: boolean | number
 ) => void;
 
 export type ResponseData = [number, { [k: string]: string }, string];
