@@ -1,6 +1,0 @@
-src
-test
-rollup.config.js
-karma.conf.js
-*.md
-yarn.lock
