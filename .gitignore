@@ -2,4 +2,4 @@ bower_components
 node_modules
 coverage*
 dist
-src/pretender.es.js
+dist/pretender.es.js
