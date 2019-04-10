@@ -43,7 +43,7 @@ $.get('/photos/12', {success() => { ... }})
 ## Usage
 
 ```
-yard add -D pretender
+yarn add -D pretender
 # or
 npm install --save-dev pretender
 ```
