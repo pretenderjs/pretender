@@ -1,5 +1,19 @@
 # Pretender Changelog
 
+## 3.0.0
+
+#### :boom: Breaking Change
+  * [241](https://github.com/pretenderjs/pretender/pull/241) Drop Node 4 and 5; add Node 10, 11
+
+#### :rocket: Enhancement
+  * [243](https://github.com/pretenderjs/pretender/pull/243) Add build step and TS support. Pretender now exports both iife and es module.
+  * [235](https://github.com/pretenderjs/pretender/pull/235) Switch back to offical whatwg-fetch
+  * [234](https://github.com/pretenderjs/pretender/pull/234) Enable Abortable fetch
+
+#### :bug: Bug Fix
+  * [255](https://github.com/pretenderjs/pretender/pull/255) iife is 100% backwards compatible
+  * [254](https://github.com/pretenderjs/pretender/pull/254) Type changes, Allow RequestHandler async param be number, this.passthrough
+
 ## 2.1.1
   * cleanup readme and package.json
 
