@@ -1,6 +1,6 @@
 {
   "name": "pretender",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "main": "./dist/pretender.js",
   "module": "./dist/pretender.es.js",
   "types": "index.d.ts",
