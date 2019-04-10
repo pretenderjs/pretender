@@ -1,11 +1,15 @@
-import FakeXMLHttpRequest from "fake-xml-http-request";
-import { Params, QueryParams } from "route-recognizer";
+import FakeXMLHttpRequest from 'fake-xml-http-request';
+import { Params, QueryParams } from 'route-recognizer';
+
 type SetupCallback = (this: Server) => void;
 interface SetupConfig {
   forcePassthrough: boolean;
 }
 export type Config = SetupCallback | SetupConfig;
 export class Server {
+  public passthrough: RequestHandler;
+
+  constructor(config?: Config);
   // HTTP request verbs
   public get: RequestHandler;
   public put: RequestHandler;
@@ -14,7 +18,6 @@ export class Server {
   public delete: RequestHandler;
   public options: RequestHandler;
   public head: RequestHandler;
-  constructor(setup?: SetupCallback);
 
   public shutdown(): void;
 }
@@ -22,7 +25,7 @@ export class Server {
 export type RequestHandler = (
   urlExpression: string,
   response: ResponseHandler,
-  async?: boolean
+  asyncOrDelay?: boolean | number
 ) => void;
 
 export type ResponseData = [number, { [k: string]: string }, string];
