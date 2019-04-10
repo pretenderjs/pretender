@@ -1,6 +1,6 @@
 # Pretender Changelog
 
-## 3.0.0
+## 3.0.1
 
 #### :boom: Breaking Change
   * [241](https://github.com/pretenderjs/pretender/pull/241) Drop Node 4 and 5; add Node 10, 11
