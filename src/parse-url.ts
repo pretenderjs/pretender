@@ -21,6 +21,7 @@ export default function parseURL(url: string) {
   anchor.href = url;
 
   if (!anchor.host) {
+    // eslint-disable-next-line no-self-assign
     anchor.href = anchor.href; // IE: load the host and protocol
   }
 

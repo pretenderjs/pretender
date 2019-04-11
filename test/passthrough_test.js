@@ -56,8 +56,8 @@ describe('passthrough requests', function(config) {
       url: '/some/path',
       error: function(xhr) {
         assert.equal(xhr.status, 404);
-        jQuery = $ = jQuery2;
-        assert.ok(/^2/.test(jQuery.fn.jquery));
+        var _jQuery = jQuery2;
+        assert.ok(/^2/.test(_jQuery.fn.jquery));
         done();
       },
     });
@@ -77,7 +77,7 @@ describe('passthrough requests', function(config) {
         this.upload = {};
         this.send = {
           pretender: pretender,
-          apply: function(xhr, argument) {
+          apply: function(xhr/*, argument*/) {
             assert.ok('timeout' in xhr);
             assert.ok('withCredentials' in xhr);
             assert.ok('onprogress' in xhr);
@@ -113,7 +113,7 @@ describe('passthrough requests', function(config) {
         this.responseType = '';
         this.send = {
           pretender: pretender,
-          apply: function(xhr, argument) {
+          apply: function(xhr/*, argument*/) {
             assert.equal(xhr.responseType, 'arraybuffer');
             this.pretender.resolve(xhr);
             done();
@@ -143,7 +143,7 @@ describe('passthrough requests', function(config) {
       this.upload = {};
       this.send = {
         pretender: pretender,
-        apply: function(xhr, argument) {
+        apply: function(xhr/*, argument*/) {
           assert.ok(!('timeout' in xhr));
           assert.ok(!('withCredentials' in xhr));
           assert.ok(!('onprogress' in xhr));
@@ -311,7 +311,7 @@ describe('passthrough requests', function(config) {
       this.onload = true;
       this.send = {
         pretender: pretender,
-        apply: function(xhr, argument) {
+        apply: function(xhr/*, argument*/) {
           xhr.onload({ target: xhr, type: 'load' });
         },
       };

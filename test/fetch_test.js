@@ -67,7 +67,7 @@ describe('pretender invoking by fetch', function(config) {
     assert.expect(1);
     this.pretender.get(
       '/downloads',
-      function(request) {
+      function(/*request*/) {
         return [200, {}, 'FAIL'];
       },
       200
