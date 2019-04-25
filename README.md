@@ -28,7 +28,7 @@ const PHOTOS = {
 
 const server = new Pretender(function() {
   this.get('/photos', request => {
-    let all =  JSON.stringify(Object.keys(PHOTOS).map(k => PHOTOS[k]);
+    let all =  JSON.stringify(Object.keys(PHOTOS).map(k => PHOTOS[k]));
     return [200, {"Content-Type": "application/json"}, all]
   });
 
