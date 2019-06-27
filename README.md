@@ -312,7 +312,7 @@ const server = new Pretender(function() {
 });
 
 server.passthroughRequest = function(verb, path, request) {
-  console.log('request ' + path + ' sucessfully sent for passthrough');
+  console.log('request ' + path + ' successfully sent for passthrough');
 }
 ```
 
