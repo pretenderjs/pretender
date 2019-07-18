@@ -7,7 +7,7 @@ interface SetupConfig {
 }
 export type Config = SetupCallback | SetupConfig;
 export class Server {
-  public passthrough: RequestHandler;
+  public passthrough: ResponseHandler;
 
   constructor(config?: Config);
   // HTTP request verbs
