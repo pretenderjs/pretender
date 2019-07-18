@@ -1,5 +1,12 @@
 # Pretender Changelog
 
+## 3.0.2
+
+#### :bug: Bug Fix
+  * [262](https://github.com/pretenderjs/pretender/pull/262) Fix ResponseHandler args type
+  * [264](https://github.com/pretenderjs/pretender/pull/264) Fix missing responseURL property
+  * [265](https://github.com/pretenderjs/pretender/pull/265) Fix passthrough type
+
 ## 3.0.1
 
 #### :boom: Breaking Change
