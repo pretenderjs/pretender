@@ -1,5 +1,6 @@
 # Pretender
 
+[![npm version](https://badge.fury.io/js/pretender.svg)](https://badge.fury.io/js/pretender)
 [![Build Status](https://travis-ci.org/pretenderjs/pretender.svg)](https://travis-ci.org/pretenderjs/pretender)
 [![Coverage Status](https://coveralls.io/repos/pretenderjs/pretender/badge.svg?branch=master&service=github)](https://coveralls.io/github/pretenderjs/pretender?branch=master)
 [![Dependency Status](https://david-dm.org/pretenderjs/pretender.svg)](https://david-dm.org/pretenderjs/pretender)
