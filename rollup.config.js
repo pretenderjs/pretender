@@ -6,15 +6,16 @@ const fs = require('fs');
 const globals = {
   'whatwg-fetch': 'FakeFetch',
   'fake-xml-http-request': 'FakeXMLHttpRequest',
-  'route-recognizer': 'RouteRecognizer'
+  'route-recognizer': 'RouteRecognizer',
+  'url-parse': 'ParsedUrl'
 };
 
 const rollupTemplate = fs.readFileSync('./iife-wrapper.js').toString();
 const [ banner, footer ] = rollupTemplate.split('/*==ROLLUP_CONTENT==*/');
-
 module.exports = {
   input: 'src/index.ts',
-  external: Object.keys(pkg.dependencies),
+  // don't exclude url-parse because it does *not* provide a UMD bundle and needs to be included
+  external: Object.keys(pkg.dependencies).filter(x => x !== 'url-parse'),
   output: [
     {
       name: 'Pretender',

@@ -1,3 +1,5 @@
+import { default as ParsedUrl } from 'url-parse';
+
 /**
  * parseURL - decompose a URL into its parts
  * @param  {String} url a URL
@@ -16,32 +18,30 @@
  * }
  */
 export default function parseURL(url: string) {
-  // TODO: something for when document isn't present... #yolo
-  var anchor = document.createElement('a');
-  anchor.href = url;
+  var parsedUrl = new ParsedUrl(url);
 
-  if (!anchor.host) {
+  if (!parsedUrl.host) {
     // eslint-disable-next-line no-self-assign
-    anchor.href = anchor.href; // IE: load the host and protocol
+    parsedUrl.href = parsedUrl.href; // IE: load the host and protocol
   }
 
-  var pathname = anchor.pathname;
+  var pathname = parsedUrl.pathname;
   if (pathname.charAt(0) !== '/') {
     pathname = '/' + pathname; // IE: prepend leading slash
   }
 
-  var host = anchor.host;
-  if (anchor.port === '80' || anchor.port === '443') {
-    host = anchor.hostname; // IE: remove default port
+  var host = parsedUrl.host;
+  if (parsedUrl.port === '80' || parsedUrl.port === '443') {
+    host = parsedUrl.hostname; // IE: remove default port
   }
 
   return {
     host: host,
-    protocol: anchor.protocol,
-    search: anchor.search,
-    hash: anchor.hash,
-    href: anchor.href,
+    protocol: parsedUrl.protocol,
+    search: parsedUrl.query,
+    hash: parsedUrl.hash,
+    href: parsedUrl.href,
     pathname: pathname,
-    fullpath: pathname + (anchor.search || '') + (anchor.hash || '')
+    fullpath: pathname + (parsedUrl.query || '') + (parsedUrl.hash || '')
   };
 }
