@@ -15,8 +15,9 @@
     "build": "rollup --config",
     "test": "npm run lint && npm run eslint && npm run tests-only",
     "test-ci": "npm run pretest && npm run build && npm run lint && npm run eslint && npm run tests-only-ci",
-    "tests-only": "karma start --single-run",
-    "tests-only-ci": "karma start --single-run --browsers PhantomJS",
+    "tests-only": "karma start --single-run && npm run tests-node",
+    "tests-only-ci": "karma start --single-run --browsers PhantomJS && npm run tests-node",
+    "tests-node": "qunit test-node/**",
     "lint": "jshint test",
     "eslint": "eslint src/**/*.ts test",
     "test:server": "karma start --no-single-run"
