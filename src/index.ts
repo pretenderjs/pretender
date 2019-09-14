@@ -1,5 +1,5 @@
 import FakeXMLHttpRequest from 'fake-xml-http-request';
-import * as FakeFetch from 'cross-fetch';
+import * as FakeFetch from 'whatwg-fetch';
 import parseURL from './parse-url';
 import Registry from './registry';
 

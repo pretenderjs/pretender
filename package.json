@@ -17,8 +17,9 @@
     "test-ci": "npm run pretest && npm run build && npm run lint && npm run eslint && npm run tests-only-ci",
     "tests-only": "karma start --single-run && npm run tests-node",
     "tests-only-ci": "karma start --single-run --browsers PhantomJS && npm run tests-node",
-    "tests-node": "npm run tests-iife",
+    "tests-node": "npm run tests-iife && npm run tests-es",
     "tests-iife": "qunit test-iife/**",
+    "tests-es": "jest",
     "lint": "jshint test",
     "eslint": "eslint src/**/*.ts test",
     "test:server": "karma start --no-single-run"
