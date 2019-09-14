@@ -14,7 +14,7 @@ const [ banner, footer ] = rollupTemplate.split('/*==ROLLUP_CONTENT==*/');
 
 module.exports = {
   input: 'src/index.ts',
-  external: Object.keys(pkg.dependencies),
+  external: ['fake-xml-http-request', 'route-recognizer', 'whatwg-fetch'],
   output: [
     {
       name: 'Pretender',
