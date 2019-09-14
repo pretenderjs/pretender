@@ -3,6 +3,8 @@ var Pretender = (function(self) {
     return module.default || module;
   }
 
+  var isBrowserLikeEnvironment = typeof window !== 'undefined';
+
   var appearsBrowserified =
     typeof self !== 'undefined' &&
     typeof process !== 'undefined' &&
@@ -17,10 +19,23 @@ var Pretender = (function(self) {
     ? getModuleDefault(require('fake-xml-http-request'))
     : self.FakeXMLHttpRequest;
 
-  // fetch related ponyfills
-  var FakeFetch = appearsBrowserified
-    ? getModuleDefault(require('whatwg-fetch'))
-    : self.WHATWGFetch;
+  /*
+    The whatwg-fetch package is not importable in node because it accesses window.
+
+    To keep the iife build of Pretender importable in node, we don't include
+    whatwg-fetch if we're in a a non-browser-like enviroment. (Note: it's not
+    enough to check if we're running in node, because Pretender works fine in a
+    browser-like node enviroment, e.g. Jest.)
+
+    The ES build of Pretender uses cross-fetch instead of whatwg-fetch, which
+    works in both environments but doesn't provide a UMD build.
+  */
+  if (isBrowserLikeEnvironment) {
+    // fetch related ponyfills
+    var FakeFetch = appearsBrowserified
+      ? getModuleDefault(require('whatwg-fetch'))
+      : self.WHATWGFetch;
+  }
 
   /*==ROLLUP_CONTENT==*/
 
