@@ -17,7 +17,8 @@
     "test-ci": "npm run pretest && npm run build && npm run lint && npm run eslint && npm run tests-only-ci",
     "tests-only": "karma start --single-run && npm run tests-node",
     "tests-only-ci": "karma start --single-run --browsers PhantomJS && npm run tests-node",
-    "tests-node": "qunit test-node/**",
+    "tests-node": "npm run tests-iife",
+    "tests-iife": "qunit test-iife/**",
     "lint": "jshint test",
     "eslint": "eslint src/**/*.ts test",
     "test:server": "karma start --no-single-run"
@@ -27,11 +28,15 @@
     "url": "https://github.com/pretenderjs/pretender.git"
   },
   "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
     "abortcontroller-polyfill": "^1.1.9",
+    "babel-jest": "^24.9.0",
     "bower": "^1.8.2",
     "coveralls": "^2.11.3",
     "es6-promise": "^4.0.5",
     "eslint": "^5.12.0",
+    "jest": "^24.9.0",
     "jshint": "^2.8.0",
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.2.0",
