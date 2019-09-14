@@ -3,8 +3,6 @@ import * as FakeFetch from 'cross-fetch';
 import parseURL from './parse-url';
 import Registry from './registry';
 
-console.log(FakeFetch)
-
 /**
  * Hosts
  *
