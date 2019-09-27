@@ -16,9 +16,13 @@
  * }
  */
 export default function parseURL(url: string) {
-  // TODO: something for when document isn't present... #yolo
-  var anchor = document.createElement('a');
-  anchor.href = url;
+  var anchor;
+  if (typeof window.URL !== 'undefined') {
+    anchor = new window.URL(url);
+  } else {
+    anchor = document.createElement('a');
+    anchor.href = url;
+  }
 
   if (!anchor.host) {
     // eslint-disable-next-line no-self-assign
