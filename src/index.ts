@@ -224,13 +224,17 @@ function verbify(verb) {
   };
 }
 
-function scheduleProgressEvent(request, startTime, totalTime) {
+// Creates fake progress events every 50ms until the request is complete
+function scheduleProgressEvent(request) {
   setTimeout(function() {
     if (!request.aborted && !request.status) {
-      var ellapsedTime = new Date().getTime() - startTime.getTime();
-      request.upload._progress(true, ellapsedTime, totalTime);
-      request._progress(true, ellapsedTime, totalTime);
-      scheduleProgressEvent(request, startTime, totalTime);
+      if (request && request.requestBody && request.requestBody.size) {
+        var size = request.requestBody.size;
+        request.upload._progress(true, size, size);
+      }
+      var length = (request.responseText && request.responseText.length) || 0;
+      request._progress(true, length, length);
+      scheduleProgressEvent(request);
     }
   }, 50);
 }
