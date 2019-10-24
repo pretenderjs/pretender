@@ -396,9 +396,9 @@ boom@2.x.x:
     hoek "2.x.x"
 
 bower@^1.8.2:
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/bower/-/bower-1.8.4.tgz#e7876a076deb8137f7d06525dc5e8c66db82f28a"
-  integrity sha1-54dqB23rgTf30GUl3F6MZtuC8oo=
+  version "1.8.8"
+  resolved "https://registry.yarnpkg.com/bower/-/bower-1.8.8.tgz#82544be34a33aeae7efb8bdf9905247b2cffa985"
+  integrity sha512-1SrJnXnkP9soITHptSO+ahx3QKp3cVzn8poI6ujqc5SeOkg5iqM1pK9H+DSc2OQ8SnO0jC/NG4Ur/UIwy7574A==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
