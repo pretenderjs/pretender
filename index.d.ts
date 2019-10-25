@@ -20,6 +20,16 @@ export class Server {
   public head: RequestHandler;
 
   public shutdown(): void;
+
+  public map(maps: Function): void;
+
+  public handledRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData): void;
+  public undhandledRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData): void;
+  public passtroughRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData): void;
+  public erroredRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData, error: Error): void;
+
+  public prepareBody(body: string): string;
+  public prepareHeaders(headers: {[k: string]: string}): {[k: string]: string};
 }
 
 export type RequestHandler = (
