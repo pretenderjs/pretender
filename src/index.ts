@@ -227,9 +227,21 @@ function verbify(verb) {
 function scheduleProgressEvent(request, startTime, totalTime) {
   setTimeout(function() {
     if (!request.aborted && !request.status) {
-      var ellapsedTime = new Date().getTime() - startTime.getTime();
-      request.upload._progress(true, ellapsedTime, totalTime);
-      request._progress(true, ellapsedTime, totalTime);
+      var elapsedTime = new Date().getTime() - startTime.getTime();
+      var progressTotal;
+      var body = request.requestBody;
+      if (!body) {
+        progressTotal = 0;
+      } else {
+        // Support Blob, BufferSource, USVString, ArrayBufferView
+        progressTotal = body.byteLength || body.size || body.length || 0;
+      }
+      var progressTransmitted =
+        totalTime <= 0 ? 0 : (elapsedTime / totalTime) * progressTotal;
+      // ProgressEvent expects loaded, total
+      // https://xhr.spec.whatwg.org/#interface-progressevent
+      request.upload._progress(true, progressTransmitted, progressTotal);
+      request._progress(true, progressTransmitted, progressTotal);
       scheduleProgressEvent(request, startTime, totalTime);
     }
   }, 50);
