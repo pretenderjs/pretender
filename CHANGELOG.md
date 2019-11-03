@@ -1,5 +1,15 @@
 # Pretender Changelog
 
+## 3.0.3 (2019-11-03)
+
+#### :bug: Bug Fix
+* [#278](https://github.com/pretenderjs/pretender/pull/278) Add missing type definitions in index.d.ts ([@ohcibi](https://github.com/ohcibi))
+* [#276](https://github.com/pretenderjs/pretender/pull/276) fix: progress event expects byte size not time ([@xg-wang](https://github.com/xg-wang))
+
+#### Committers: 2
+- Thomas Wang ([@xg-wang](https://github.com/xg-wang))
+- Tobias Witt ([@ohcibi](https://github.com/ohcibi))
+
 ## 3.0.2
 
 #### :bug: Bug Fix
