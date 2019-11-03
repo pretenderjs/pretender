@@ -240,6 +240,30 @@ means the route will use the default behavior.
 When the time is right, you can set `externalState` to `"OH NO DOS ATTACK"` which will make all
 future requests take 15 seconds to respond.
 
+#### Scheduling ProgressEvent
+If the timing parameter is resolved as async, then a [`ProgressEvent`](https://xhr.spec.whatwg.org/#interface-progressevent)
+will be scheduled every 50ms until the reqeust has a respond or is aborted.
+
+To listen to the progress, you can define `onprogress` on the `XMLHttpRequest` object or
+its [`upload` attribute](https://xhr.spec.whatwg.org/#the-upload-attribute).
+
+```javascript
+let xhr = new window.XMLHttpRequest();
+xhr.open('POST', '/uploads');
+// https://fetch.spec.whatwg.org/#concept-request-body
+// https://xhr.spec.whatwg.org/#the-send()-method
+let postBody = new ArrayBuffer(8);
+xhr.upload.onprogress = function(event) {
+  // event.lengthComputable === true
+  // event.total === 8
+  // event.loaded will be incremented every ~50ms
+};
+xhr.onprogress = function(event) {
+  // xhr onprogress will also be triggered
+};
+xhr.send(postBody);
+```
+
 ## Sharing routes
 You can call `map` multiple times on a Pretender instance. This is a great way to share and reuse
 sets of routes between tests:

@@ -414,7 +414,14 @@ describe('pretender invoking', function(config) {
 
       var xhr = new window.XMLHttpRequest();
       xhr.open('POST', '/uploads');
-      xhr.upload.onprogress = function(/*e*/) {
+      var lastLoaded = 0;
+      var postBody = 'some data';
+      xhr.upload.onprogress = function(event) {
+        var loaded = event.loaded;
+        var total = event.total;
+        assert.equal(total, postBody.length, 'ProgressEvent has total of requestBody byte size');
+        assert.ok(loaded > lastLoaded, 'making progress');
+        assert.ok(loaded <= total, 'loaded should always not exceed total');
         progressEventCount++;
       };
       xhr.onload = function() {
@@ -425,7 +432,7 @@ describe('pretender invoking', function(config) {
         );
         done();
       };
-      xhr.send('some data');
+      xhr.send(postBody);
     }
   );
 
@@ -444,10 +451,17 @@ describe('pretender invoking', function(config) {
 
     var xhr = new window.XMLHttpRequest();
     xhr.open('POST', '/uploads');
-    xhr.upload.onprogress = function(/*e*/) {
+    var lastLoaded = 0;
+    var postBody = new Blob(['some data']);
+    xhr.upload.onprogress = function(event) {
+      var loaded = event.loaded;
+      var total = event.total;
+      assert.equal(total, postBody.size, 'ProgressEvent has total of requestBody byte size');
+      assert.ok(loaded > lastLoaded, 'making progress');
+      assert.ok(loaded <= total, 'loaded should always not exceed total');
       progressEventCount++;
     };
-    xhr.send('some data');
+    xhr.send(postBody);
     clock.tick(510);
     assert.equal(
       progressEventCount,
@@ -473,10 +487,16 @@ describe('pretender invoking', function(config) {
 
     var xhr = new window.XMLHttpRequest();
     xhr.open('POST', '/uploads');
-    xhr.upload.onprogress = function(/*e*/) {
+    var postBody = new ArrayBuffer(8);
+    xhr.upload.onprogress = function(event) {
+      var loaded = event.loaded;
+      var total = event.total;
+      assert.equal(total, postBody.byteLength, 'ProgressEvent has total of requestBody byte size');
+      assert.ok(loaded > 0, 'making progress');
+      assert.ok(loaded <= total, 'loaded should always not exceed total');
       progressEventCount++;
     };
-    xhr.send('some data');
+    xhr.send(postBody);
 
     clock.tick(90);
     xhr.abort();
@@ -503,7 +523,9 @@ describe('pretender invoking', function(config) {
 
     var xhr = new window.XMLHttpRequest();
     xhr.open('GET', '/downloads');
-    xhr.onprogress = function(/*e*/) {
+    xhr.onprogress = function(event) {
+      assert.equal(event.total, 0, 'GET request has no requestBody');
+      assert.equal(event.loaded, event.total);
       progressEventCount++;
     };
     xhr.onload = function() {
