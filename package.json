@@ -6,9 +6,6 @@
   "types": "index.d.ts",
   "description": "Pretender is a mock server library for XMLHttpRequest and Fetch, that comes with an express/sinatra style syntax for defining routes and their handlers.",
   "license": "MIT",
-  "engines": {
-    "node": "6.* || 8.* || 10.* || >= 11.*"
-  },
   "scripts": {
     "prepublishOnly": "npm run build && npm run tests-only",
     "pretest": "bower install",
