@@ -1,5 +1,13 @@
 # Pretender Changelog
 
+## 3.0.4 (2019-11-04)
+
+#### :bug: Bug Fix
+* [#279](https://github.com/pretenderjs/pretender/pull/279) fix: remove node engine constraint ([@xg-wang](https://github.com/xg-wang))
+
+#### Committers: 1
+- Thomas Wang ([@xg-wang](https://github.com/xg-wang))
+
 ## 3.0.3 (2019-11-03)
 
 #### :bug: Bug Fix
