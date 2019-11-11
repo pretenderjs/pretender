@@ -15,8 +15,8 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'bower_components/FakeXMLHttpRequest/fake_xml_http_request.js',
-      'bower_components/route-recognizer/dist/route-recognizer.js',
+      'node_modules/fake-xml-http-request/fake_xml_http_request.js',
+      'node_modules/route-recognizer/dist/route-recognizer.js',
       'bower_components/jquery-1/index.js',
       'bower_components/jquery/dist/jquery.js',
       'node_modules/es6-promise/dist/es6-promise.auto.js',
