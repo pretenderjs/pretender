@@ -308,6 +308,7 @@ describe('passthrough requests', function(config) {
       this.open = function() {};
       this.setRequestHeader = function() {};
       this.responseText = '';
+      this.response = '';
       this.onload = true;
       this.send = {
         pretender: pretender,
@@ -327,6 +328,11 @@ describe('passthrough requests', function(config) {
         xhr.responseText,
         event.target.responseText,
         'responseText for real and fake xhr are both blank strings'
+      );
+      assert.equal(
+        xhr.response,
+        event.target.response,
+        'response for real and fake xhr are both blank strings'
       );
       done();
     });

@@ -168,6 +168,7 @@ describe('pretender invoking', function(config) {
       assert.equal(verb, 'GET');
       assert.equal(path, '/some/path');
       assert.equal(request.responseText, json);
+      assert.equal(request.response, json);
       assert.equal(request.status, '200');
       done();
     };
@@ -625,6 +626,7 @@ describe('pretender invoking', function(config) {
       assert.equal(verb, 'GET');
       assert.equal(path, '/some/path');
       assert.equal(request.responseText, json);
+      assert.equal(request.response, json);
       assert.equal(request.status, '200');
       done();
     };

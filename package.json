@@ -48,7 +48,7 @@
     "typescript-eslint-parser": "^21.0.2"
   },
   "dependencies": {
-    "fake-xml-http-request": "^2.0.0",
+    "fake-xml-http-request": "^2.1.1",
     "route-recognizer": "^0.3.3",
     "whatwg-fetch": "^3.0.0"
   },
