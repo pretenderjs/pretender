@@ -1,5 +1,13 @@
 # Pretender Changelog
 
+## 3.1.4 (2019-11-28)
+
+#### :rocket: Enhancement
+* [#280](https://github.com/pretenderjs/pretender/pull/280) support FakeXMLHttpRequest response property ([@kellyselden](https://github.com/kellyselden))
+
+#### Committers: 1
+- Kelly Selden ([@kellyselden](https://github.com/kellyselden))
+
 ## 3.0.4 (2019-11-04)
 
 #### :bug: Bug Fix
