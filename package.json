@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@xg-wang/whatwg-fetch": "^3.0.0",
-    "fake-xml-http-request": "^2.0.0",
+    "fake-xml-http-request": "~2.0.0",
     "route-recognizer": "^0.3.3"
   },
   "jspm": {
