@@ -1,5 +1,8 @@
 # Pretender Changelog
 
+## 2.1.2
+  * restrict fake-xml-http-request to ~2.0.0
+
 ## 2.1.1
   * cleanup readme and package.json
 
