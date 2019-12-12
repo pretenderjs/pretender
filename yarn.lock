@@ -1483,10 +1483,10 @@ extsprintf@^1.2.0:
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
-fake-xml-http-request@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/fake-xml-http-request/-/fake-xml-http-request-2.0.0.tgz#41a92f0ca539477700cb1dafd2df251d55dac8ff"
-  integrity sha512-UjNnynb6eLAB0lyh2PlTEkjRJORnNsVF1hbzU+PQv89/cyBV9GDRCy7JAcLQgeCLYT+3kaumWWZKEJvbaK74eQ==
+fake-xml-http-request@~2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/fake-xml-http-request/-/fake-xml-http-request-2.0.1.tgz#e4a7f256af055d8059deb23c9d7ae721d28cf078"
+  integrity sha512-KzT+G4aLM1Btg25QRGxB6yGLGOVZXXzrH8I4OG3KHwsdoqFclyW3alieqh5NaYGcmbQvNOn/ldGO1rGKf7CNdA==
 
 fast-deep-equal@^2.0.1:
   version "2.0.1"
