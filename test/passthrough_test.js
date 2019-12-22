@@ -339,4 +339,56 @@ describe('passthrough requests', function(config) {
 
     xhr.send();
   });
+
+  describe('the `.passthrough()` property', function () {
+    it('allows a passthrough on an unhandledRequest', function(assert) {
+      var done = assert.async();
+      
+      this.pretender.unhandledRequest = function(_verb, _path, request) {
+        request.passthrough();
+      };
+
+      $.ajax({
+        url: '/some/path',
+        error: function(xhr) {
+          assert.equal(xhr.status, 404);
+          done();
+        }
+      });
+    });
+
+    it('returns a native xhr', function(assert) {
+      var done = assert.async();
+
+      var pretender = this.pretender;
+
+      function testXHR() {
+        this.pretender = pretender;
+        this.open = function() {};
+        this.setRequestHeader = function() {};
+        this.responseText = '';
+        this.response = '';
+        this.onload = true;
+        this.send = {
+          pretender: pretender,
+          apply: function(xhr/*, argument*/) {
+            xhr.onload({ target: xhr, type: 'load' });
+          },
+        };
+      }
+      pretender._nativeXMLHttpRequest = testXHR;
+  
+      var xhr = new window.XMLHttpRequest();
+      xhr.open('GET', '/some/path');
+      
+      this.pretender.unhandledRequest = function(_verb, _path, request) {
+        var referencedXhr = request.passthrough();
+        assert.ok(referencedXhr instanceof testXHR);
+        done();
+      };
+      
+      xhr.send();
+    });
+    
+  });
 });
