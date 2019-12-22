@@ -1,5 +1,13 @@
 # Pretender Changelog
 
+## 3.2.0 (2019-12-22)
+
+#### :rocket: Enhancement
+* [#238](https://github.com/pretenderjs/pretender/pull/238) Expose a way to passthrough after the request is found to be unhandled ([@happycollision](https://github.com/happycollision))
+
+#### Committers: 1
+- Don Denton ([@happycollision](https://github.com/happycollision))
+
 ## 3.1.0 (2019-11-28)
 
 #### :rocket: Enhancement
