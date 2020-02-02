@@ -6,11 +6,12 @@ const fs = require('fs');
 const globals = {
   'whatwg-fetch': 'FakeFetch',
   'fake-xml-http-request': 'FakeXMLHttpRequest',
-  'route-recognizer': 'RouteRecognizer'
+  'route-recognizer': 'RouteRecognizer',
+  'url-parse': 'urlParse'
 };
 
 const rollupTemplate = fs.readFileSync('./iife-wrapper.js').toString();
-const [ banner, footer ] = rollupTemplate.split('/*==ROLLUP_CONTENT==*/');
+const [banner, footer] = rollupTemplate.split('/*==ROLLUP_CONTENT==*/');
 
 module.exports = {
   input: 'src/index.ts',
