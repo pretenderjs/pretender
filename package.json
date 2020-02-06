@@ -7,6 +7,7 @@
   "description": "Pretender is a mock server library for XMLHttpRequest and Fetch, that comes with an express/sinatra style syntax for defining routes and their handlers.",
   "license": "MIT",
   "scripts": {
+    "release": "release-it",
     "prepublishOnly": "npm run build && npm run tests-only",
     "pretest": "bower install",
     "build": "rollup --config",
@@ -21,6 +22,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/pretenderjs/pretender.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
     "abortcontroller-polyfill": "^1.1.9",
@@ -37,6 +41,8 @@
     "karma-sinon": "^1.0.5",
     "phantomjs": "^2.1.7",
     "qunit": "^2.6.1",
+    "release-it": "^12.4.3",
+    "release-it-lerna-changelog": "^1.0.3",
     "rollup": "^1.1.2",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-multi-entry": "^2.1.0",
