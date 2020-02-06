@@ -15,6 +15,9 @@ var Pretender = (function(self) {
   var FakeXMLHttpRequest = appearsBrowserified
     ? getModuleDefault(require('fake-xml-http-request'))
     : self.FakeXMLHttpRequest;
+  var urlParse = appearsBrowserified
+    ? getModuleDefault(require('url-parse'))
+    : self.urlParse;
 
   // fetch related ponyfills
   var FakeFetch = appearsBrowserified
