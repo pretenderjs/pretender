@@ -1,5 +1,3 @@
-# Pretender Changelog
-
 ## 3.2.0 (2019-12-22)
 
 #### :rocket: Enhancement
