@@ -1,3 +1,12 @@
+## v3.3.0 (2020-02-07)
+
+#### :rocket: Enhancement
+* [#288](https://github.com/pretenderjs/pretender/pull/288) Adds url parse and removes the usage of anchor ([@eluciano11](https://github.com/eluciano11))
+
+#### Committers: 2
+- Emmanuel Luciano ([@eluciano11](https://github.com/eluciano11))
+- Thomas Wang ([@xg-wang](https://github.com/xg-wang))
+
 ## 3.2.0 (2019-12-22)
 
 #### :rocket: Enhancement
