@@ -5,7 +5,7 @@
 
 #### Committers: 2
 - Emmanuel Luciano ([@eluciano11](https://github.com/eluciano11))
-- Thomas Wang ([@xg-wang](https://github.com/xg-wang))
+- Ryan Stelly ([@FLGMwt](https://github.com/FLGMwt))
 
 ## 3.2.0 (2019-12-22)
 
