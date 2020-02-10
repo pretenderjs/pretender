@@ -1,3 +1,13 @@
+## v3.3.1 (2020-02-09)
+
+#### :bug: Bug Fix
+* [#291](https://github.com/pretenderjs/pretender/pull/291) Fix typo in type defs ([@mfeckie](https://github.com/mfeckie))
+* [#290](https://github.com/pretenderjs/pretender/pull/290) Removes unnecessary url-parse required from iife-wrapper ([@eluciano11](https://github.com/eluciano11))
+
+#### Committers: 2
+- Emmanuel Luciano ([@eluciano11](https://github.com/eluciano11))
+- Martin Feckie ([@mfeckie](https://github.com/mfeckie))
+
 ## v3.3.0 (2020-02-07)
 
 #### :rocket: Enhancement
