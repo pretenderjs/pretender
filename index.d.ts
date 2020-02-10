@@ -24,7 +24,7 @@ export class Server {
   public map(maps: Function): void;
 
   public handledRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData): void;
-  public undhandledRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData): void;
+  public unhandledRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData): void;
   public passtroughRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData): void;
   public erroredRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData, error: Error): void;
 
