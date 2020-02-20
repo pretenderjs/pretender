@@ -9,7 +9,6 @@
   "scripts": {
     "release": "release-it",
     "prepublishOnly": "npm run build && npm run tests-only",
-    "pretest": "bower install",
     "build": "rollup --config",
     "test": "npm run lint && npm run eslint && npm run tests-only",
     "test-ci": "npm run pretest && npm run build && npm run lint && npm run eslint && npm run tests-only-ci",
@@ -29,13 +28,11 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
-    "@rollup/plugin-typescript": "^3.0.0",
-    "@typescript-eslint/parser": "^2.20.0",
+    "rollup-plugin-typescript": "^1.0.0",
     "abortcontroller-polyfill": "^1.1.9",
-    "bower": "^1.8.2",
     "coveralls": "^3.0.9",
     "es6-promise": "^4.0.5",
-    "eslint": "^6.8.0",
+    "eslint": "^5.12.0",
     "jshint": "^2.8.0",
     "karma": "^4.4.1",
     "karma-chrome-launcher": "^3.1.0",
@@ -51,6 +48,7 @@
     "sinon": "^9.0.0",
     "tslib": "^1.9.3",
     "typescript": "~3.1.1",
+    "typescript-eslint-parser": "^21.0.2",
     "url-parse": "^1.4.7"
   },
   "dependencies": {
