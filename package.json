@@ -11,7 +11,7 @@
     "prepublishOnly": "npm run build && npm run tests-only",
     "build": "rollup --config",
     "test": "npm run lint && npm run eslint && npm run tests-only",
-    "test-ci": "npm run pretest && npm run build && npm run lint && npm run eslint && npm run tests-only-ci",
+    "test-ci": "npm run build && npm run lint && npm run eslint && npm run tests-only-ci",
     "tests-only": "karma start --single-run",
     "tests-only-ci": "karma start --single-run --browsers PhantomJS",
     "lint": "jshint test",
