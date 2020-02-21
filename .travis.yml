@@ -1,21 +1,11 @@
-sudo: false
 language: node_js
 node_js:
   - "12"
 
-before_install:
-  - "npm config set spin false"
-  # if npm version is less than 3.0.0, upgrade to 3
-  - if [[ $(npm -v | cut -d '.' -f 1) -lt 3 ]]; then npm i -g npm@^3; fi
-  - "npm config set spin false"
+addons:
+  chrome: stable
 
-script: npm run test-ci
-install:
-  - node --version
-  - npm --version
-  - git --version
-  - npm install
-
+script: yarn run test-ci
 
 after_script:
-  - find ./coverage/Phantom* -name "lcov.info" -exec cat {} \; | coveralls
+  - find ./coverage/HeadlessChrome* -name "lcov.info" -exec cat {} \; | coveralls
