@@ -20,7 +20,5 @@
     "route-recognizer": "^0.2.3"
   },
   "devDependencies": {
-    "jquery": "~2.1.0",
-    "jquery-1": "https://code.jquery.com/jquery-1.11.3.min.js"
   }
 }

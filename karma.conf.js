@@ -7,30 +7,22 @@ module.exports = function(config) {
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
 
+    plugins: ['karma-jquery', 'karma-qunit', 'karma-coverage', 'karma-sinon', 'karma-chrome-launcher'],
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['qunit', 'sinon'],
-
+    frameworks: ['qunit', 'sinon', 'jquery-3.4.0'],
 
     // list of files / patterns to load in the browser
     files: [
       'node_modules/fake-xml-http-request/fake_xml_http_request.js',
       'node_modules/route-recognizer/dist/route-recognizer.js',
-      'bower_components/jquery-1/index.js',
-      'bower_components/jquery/dist/jquery.js',
       'node_modules/es6-promise/dist/es6-promise.auto.js',
       'node_modules/abortcontroller-polyfill/dist/abortcontroller-polyfill-only.js',
       'node_modules/whatwg-fetch/dist/fetch.umd.js',
       'dist/pretender.js',
       'test/**/*.js'
     ],
-
-    // list of files to exclude
-    exclude: [
-
-    ],
-
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -69,8 +61,15 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome', 'PhantomJS'],
+    browsers: ['Chrome', 'ChromeHeadless', 'ChromeHeadlessNoSandbox'],
 
+    // you can define custom flags
+    customLaunchers: {
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      }
+    },
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits

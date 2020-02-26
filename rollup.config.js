@@ -1,5 +1,5 @@
-const commonjs = require('rollup-plugin-commonjs');
-const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
+const resolve = require('@rollup/plugin-node-resolve');
 const typescript = require('rollup-plugin-typescript');
 const pkg = require('./package.json');
 const fs = require('fs');

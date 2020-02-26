@@ -44,25 +44,6 @@ describe('passthrough requests', function(config) {
     });
   });
 
-  it('passthrough request calls jQuery v1 handler', function(assert) {
-    var pretender = this.pretender;
-    var done = assert.async();
-
-    var jQuery2 = jQuery.noConflict(true);
-    pretender.get('/some/:route', pretender.passthrough);
-
-    assert.ok(/^1/.test(jQuery.fn.jquery));
-    jQuery.ajax({
-      url: '/some/path',
-      error: function(xhr) {
-        assert.equal(xhr.status, 404);
-        var _jQuery = jQuery2;
-        assert.ok(/^2/.test(_jQuery.fn.jquery));
-        done();
-      },
-    });
-  });
-
   it(
     'asynchronous request with pass-through has timeout,' +
       'withCredentials and onprogress event',
@@ -343,7 +324,7 @@ describe('passthrough requests', function(config) {
   describe('the `.passthrough()` property', function () {
     it('allows a passthrough on an unhandledRequest', function(assert) {
       var done = assert.async();
-      
+
       this.pretender.unhandledRequest = function(_verb, _path, request) {
         request.passthrough();
       };
@@ -377,18 +358,18 @@ describe('passthrough requests', function(config) {
         };
       }
       pretender._nativeXMLHttpRequest = testXHR;
-  
+
       var xhr = new window.XMLHttpRequest();
       xhr.open('GET', '/some/path');
-      
+
       this.pretender.unhandledRequest = function(_verb, _path, request) {
         var referencedXhr = request.passthrough();
         assert.ok(referencedXhr instanceof testXHR);
         done();
       };
-      
+
       xhr.send();
     });
-    
+
   });
 });
