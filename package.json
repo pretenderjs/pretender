@@ -53,8 +53,7 @@
   },
   "dependencies": {
     "fake-xml-http-request": "^2.1.1",
-    "route-recognizer": "^0.3.3",
-    "whatwg-fetch": "^3.0.0"
+    "route-recognizer": "^0.3.3"
   },
   "files": [
     "dist",
@@ -65,8 +64,7 @@
       "pretender": {
         "deps": [
           "route-recognizer",
-          "fake-xml-http-request",
-          "whatwg-fetch"
+          "fake-xml-http-request"
         ],
         "exports": "Pretender"
       }

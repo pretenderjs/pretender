@@ -19,7 +19,6 @@ module.exports = function(config) {
       'node_modules/route-recognizer/dist/route-recognizer.js',
       'node_modules/es6-promise/dist/es6-promise.auto.js',
       'node_modules/abortcontroller-polyfill/dist/abortcontroller-polyfill-only.js',
-      'node_modules/whatwg-fetch/dist/fetch.umd.js',
       'dist/pretender.js',
       'test/**/*.js'
     ],
