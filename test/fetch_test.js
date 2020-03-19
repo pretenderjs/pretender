@@ -1,7 +1,7 @@
 var describe = QUnit.module;
 var it = QUnit.test;
 
-describe('pretender invoking by fetch', function(config) {
+describe("pretender invoking by fetch", function(config) {
   config.beforeEach(function() {
     this.pretender = new Pretender();
   });
@@ -10,65 +10,65 @@ describe('pretender invoking by fetch', function(config) {
     this.pretender.shutdown();
   });
 
-  it('fetch triggers pretender', function(assert) {
+  it("fetch triggers pretender", function(assert) {
     assert.expect(1);
     var wasCalled;
 
-    this.pretender.get('/some/path', function() {
+    this.pretender.get("/some/path", function() {
       wasCalled = true;
-      return [200, {}, ''];
+      return [200, {}, ""];
     });
 
-    var wait = fetch('/some/path');
+    var wait = fetch("/some/path");
     assert.ok(wasCalled);
     return wait;
   });
 
-  it('is resolved asynchronously', function(assert) {
+  it("is resolved asynchronously", function(assert) {
     assert.expect(2);
-    var val = 'unset';
+    var val = "unset";
 
-    this.pretender.get('/some/path', function() {
-      return [200, {}, ''];
+    this.pretender.get("/some/path", function() {
+      return [200, {}, ""];
     });
 
-    var wait = fetch('/some/path').then(function() {
-      assert.equal(val, 'set');
+    var wait = fetch("/some/path").then(function() {
+      assert.equal(val, "set");
     });
 
-    assert.equal(val, 'unset');
-    val = 'set';
+    assert.equal(val, "unset");
+    val = "set";
 
     return wait;
   });
 
-  it('can NOT be resolved synchronously', function(assert) {
+  it("can NOT be resolved synchronously", function(assert) {
     assert.expect(2);
-    var val = 'unset';
+    var val = "unset";
 
     this.pretender.get(
-      '/some/path',
+      "/some/path",
       function() {
-        return [200, {}, ''];
+        return [200, {}, ""];
       },
       false
     );
 
     // This is async even we specified pretender get to be synchronised
-    var wait = fetch('/some/path').then(function() {
-      assert.equal(val, 'set');
+    var wait = fetch("/some/path").then(function() {
+      assert.equal(val, "set");
     });
-    assert.equal(val, 'unset');
-    val = 'set';
+    assert.equal(val, "unset");
+    val = "set";
     return wait;
   });
 
-  it('has Abortable fetch', function(assert) {
+  it("has Abortable fetch", function(assert) {
     assert.expect(1);
     this.pretender.get(
-      '/downloads',
+      "/downloads",
       function(/*request*/) {
-        return [200, {}, 'FAIL'];
+        return [200, {}, "FAIL"];
       },
       200
     );
@@ -79,9 +79,8 @@ describe('pretender invoking by fetch', function(config) {
       controller.abort();
     }, 10);
 
-    return fetch('/downloads', { signal: signal })
-      .catch(function(err) {
-        assert.equal(err.name, 'AbortError');
-      });
+    return fetch("/downloads", { signal: signal }).catch(function(err) {
+      assert.equal(err.name, "AbortError");
+    });
   });
 });

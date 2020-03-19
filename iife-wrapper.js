@@ -4,29 +4,29 @@ var Pretender = (function(self) {
   }
 
   var appearsBrowserified =
-    typeof self !== 'undefined' &&
-    typeof process !== 'undefined' &&
-    (Object.prototype.toString.call(process) === '[object Object]' ||
-      Object.prototype.toString.call(process) === '[object process]');
+    typeof self !== "undefined" &&
+    typeof process !== "undefined" &&
+    (Object.prototype.toString.call(process) === "[object Object]" ||
+      Object.prototype.toString.call(process) === "[object process]");
 
   var RouteRecognizer = appearsBrowserified
-    ? getModuleDefault(require('route-recognizer'))
+    ? getModuleDefault(require("route-recognizer"))
     : self.RouteRecognizer;
   var FakeXMLHttpRequest = appearsBrowserified
-    ? getModuleDefault(require('fake-xml-http-request'))
+    ? getModuleDefault(require("fake-xml-http-request"))
     : self.FakeXMLHttpRequest;
 
   // fetch related ponyfills
   var FakeFetch = appearsBrowserified
-    ? getModuleDefault(require('whatwg-fetch'))
+    ? getModuleDefault(require("whatwg-fetch"))
     : self.WHATWGFetch;
 
   /*==ROLLUP_CONTENT==*/
 
-  if (typeof module === 'object') {
+  if (typeof module === "object") {
     module.exports = Pretender;
-  } else if (typeof define !== 'undefined') {
-    define('pretender', [], function() {
+  } else if (typeof define !== "undefined") {
+    define("pretender", [], function() {
       return Pretender;
     });
   }

@@ -1,7 +1,7 @@
 var describe = QUnit.module;
 var it = QUnit.test;
 
-describe('pretender', function(config) {
+describe("pretender", function(config) {
   config.beforeEach(function() {
     this.pretender = new Pretender({ trackRequests: false });
   });
@@ -10,14 +10,14 @@ describe('pretender', function(config) {
     this.pretender.shutdown();
   });
 
-  it('does not track handled requests', function(assert) {
+  it("does not track handled requests", function(assert) {
     var wasCalled;
 
-    this.pretender.get('/some/path', function() {
+    this.pretender.get("/some/path", function() {
       wasCalled = true;
     });
 
-    $.ajax({ url: '/some/path' });
+    $.ajax({ url: "/some/path" });
 
     assert.ok(wasCalled);
     assert.equal(this.pretender.handledRequests.length, 0);
@@ -25,14 +25,14 @@ describe('pretender', function(config) {
     assert.equal(this.pretender.passthroughRequests.length, 0);
   });
 
-  it('does not track unhandled requests requests', function(assert) {
+  it("does not track unhandled requests requests", function(assert) {
     var wasCalled;
 
-    this.pretender.get('/some/path', function() {
+    this.pretender.get("/some/path", function() {
       wasCalled = true;
     });
 
-    $.ajax({ url: '/very/good' });
+    $.ajax({ url: "/very/good" });
 
     assert.notOk(wasCalled);
     assert.equal(this.pretender.handledRequests.length, 0);
@@ -40,16 +40,16 @@ describe('pretender', function(config) {
     assert.equal(this.pretender.passthroughRequests.length, 0);
   });
 
-  it('does not track passthrough requests requests', function(assert) {
+  it("does not track passthrough requests requests", function(assert) {
     var wasCalled;
 
     this.pretender.passthrough = function() {
       wasCalled = true;
     };
 
-    this.pretender.get('/some/path', this.pretender.passthrough);
+    this.pretender.get("/some/path", this.pretender.passthrough);
 
-    $.ajax({ url: '/some/path' });
+    $.ajax({ url: "/some/path" });
 
     assert.ok(wasCalled);
     assert.equal(this.pretender.handledRequests.length, 0);
@@ -58,7 +58,7 @@ describe('pretender', function(config) {
   });
 });
 
-describe('pretender', function(config) {
+describe("pretender", function(config) {
   config.beforeEach(function() {
     this.pretender = new Pretender();
   });
@@ -67,14 +67,14 @@ describe('pretender', function(config) {
     this.pretender.shutdown();
   });
 
-  it('tracks handled requests', function(assert) {
+  it("tracks handled requests", function(assert) {
     var wasCalled;
 
-    this.pretender.get('/some/path', function() {
+    this.pretender.get("/some/path", function() {
       wasCalled = true;
     });
 
-    $.ajax({ url: '/some/path' });
+    $.ajax({ url: "/some/path" });
 
     assert.ok(wasCalled);
     assert.equal(this.pretender.handledRequests.length, 1);
@@ -82,14 +82,14 @@ describe('pretender', function(config) {
     assert.equal(this.pretender.passthroughRequests.length, 0);
   });
 
-  it('tracks unhandled requests requests', function(assert) {
+  it("tracks unhandled requests requests", function(assert) {
     var wasCalled;
 
-    this.pretender.get('/some/path', function() {
+    this.pretender.get("/some/path", function() {
       wasCalled = true;
     });
 
-    $.ajax({ url: '/very/good' });
+    $.ajax({ url: "/very/good" });
 
     assert.notOk(wasCalled);
     assert.equal(this.pretender.handledRequests.length, 0);
@@ -97,16 +97,16 @@ describe('pretender', function(config) {
     assert.equal(this.pretender.passthroughRequests.length, 0);
   });
 
-  it('tracks passthrough requests requests', function(assert) {
+  it("tracks passthrough requests requests", function(assert) {
     var wasCalled;
 
     this.pretender.passthroughRequest = function() {
       wasCalled = true;
     };
 
-    this.pretender.get('/some/path', this.pretender.passthrough);
+    this.pretender.get("/some/path", this.pretender.passthrough);
 
-    $.ajax({ url: '/some/path' });
+    $.ajax({ url: "/some/path" });
 
     assert.ok(wasCalled);
     assert.equal(this.pretender.handledRequests.length, 0);

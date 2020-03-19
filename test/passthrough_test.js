@@ -2,7 +2,7 @@ var originalXMLHttpRequest;
 var describe = QUnit.module;
 var it = QUnit.test;
 
-describe('passthrough requests', function(config) {
+describe("passthrough requests", function(config) {
   config.beforeEach(function() {
     originalXMLHttpRequest = window.XMLHttpRequest;
     this.pretender = new Pretender();
@@ -13,40 +13,40 @@ describe('passthrough requests', function(config) {
     window.XMLHttpRequest = originalXMLHttpRequest;
   });
 
-  it('allows matched paths to be pass-through', function(assert) {
+  it("allows matched paths to be pass-through", function(assert) {
     var pretender = this.pretender;
     var done = assert.async();
 
-    pretender.post('/some/:route', pretender.passthrough);
+    pretender.post("/some/:route", pretender.passthrough);
 
     var passthroughInvoked = false;
     pretender.passthroughRequest = function(verb, path, request) {
       passthroughInvoked = true;
-      assert.equal(verb, 'POST');
-      assert.equal(path, '/some/path');
-      assert.equal(request.requestBody, 'some=data');
+      assert.equal(verb, "POST");
+      assert.equal(path, "/some/path");
+      assert.equal(request.requestBody, "some=data");
     };
 
     $.ajax({
-      url: '/some/path',
-      method: 'POST',
+      url: "/some/path",
+      method: "POST",
       headers: {
-        'test-header': 'value',
+        "test-header": "value"
       },
       data: {
-        some: 'data',
+        some: "data"
       },
       error: function(xhr) {
         assert.equal(xhr.status, 404);
         assert.ok(passthroughInvoked);
         done();
-      },
+      }
     });
   });
 
   it(
-    'asynchronous request with pass-through has timeout,' +
-      'withCredentials and onprogress event',
+    "asynchronous request with pass-through has timeout," +
+      "withCredentials and onprogress event",
     function(assert) {
       var pretender = this.pretender;
       var done = assert.async();
@@ -58,30 +58,30 @@ describe('passthrough requests', function(config) {
         this.upload = {};
         this.send = {
           pretender: pretender,
-          apply: function(xhr/*, argument*/) {
-            assert.ok('timeout' in xhr);
-            assert.ok('withCredentials' in xhr);
-            assert.ok('onprogress' in xhr);
+          apply: function(xhr /*, argument*/) {
+            assert.ok("timeout" in xhr);
+            assert.ok("withCredentials" in xhr);
+            assert.ok("onprogress" in xhr);
             this.pretender.resolve(xhr);
             done();
-          },
+          }
         };
       }
       pretender._nativeXMLHttpRequest = testXHR;
 
-      pretender.post('/some/path', pretender.passthrough);
+      pretender.post("/some/path", pretender.passthrough);
 
       var xhr = new window.XMLHttpRequest();
-      xhr.open('POST', '/some/path');
+      xhr.open("POST", "/some/path");
       xhr.timeout = 1000;
       xhr.withCredentials = true;
-      xhr.send('some data');
+      xhr.send("some data");
     }
   );
 
   it(
-    'asynchronous request with pass-through and ' +
-      'arraybuffer as responseType',
+    "asynchronous request with pass-through and " +
+      "arraybuffer as responseType",
     function(assert) {
       var pretender = this.pretender;
       var done = assert.async();
@@ -91,30 +91,28 @@ describe('passthrough requests', function(config) {
         this.open = function() {};
         this.setRequestHeader = function() {};
         this.upload = {};
-        this.responseType = '';
+        this.responseType = "";
         this.send = {
           pretender: pretender,
-          apply: function(xhr/*, argument*/) {
-            assert.equal(xhr.responseType, 'arraybuffer');
+          apply: function(xhr /*, argument*/) {
+            assert.equal(xhr.responseType, "arraybuffer");
             this.pretender.resolve(xhr);
             done();
-          },
+          }
         };
       }
       pretender._nativeXMLHttpRequest = testXHR;
 
-      pretender.get('/some/path', pretender.passthrough);
+      pretender.get("/some/path", pretender.passthrough);
 
       var xhr = new window.XMLHttpRequest();
-      xhr.open('GET', '/some/path');
-      xhr.responseType = 'arraybuffer';
+      xhr.open("GET", "/some/path");
+      xhr.responseType = "arraybuffer";
       xhr.send();
     }
   );
 
-  it('synchronous request does not have timeout, withCredentials and onprogress event', function(
-    assert
-  ) {
+  it("synchronous request does not have timeout, withCredentials and onprogress event", function(assert) {
     var pretender = this.pretender;
     var done = assert.async();
 
@@ -124,49 +122,49 @@ describe('passthrough requests', function(config) {
       this.upload = {};
       this.send = {
         pretender: pretender,
-        apply: function(xhr/*, argument*/) {
-          assert.ok(!('timeout' in xhr));
-          assert.ok(!('withCredentials' in xhr));
-          assert.ok(!('onprogress' in xhr));
+        apply: function(xhr /*, argument*/) {
+          assert.ok(!("timeout" in xhr));
+          assert.ok(!("withCredentials" in xhr));
+          assert.ok(!("onprogress" in xhr));
           this.pretender.resolve(xhr);
           done();
-        },
+        }
       };
     }
     pretender._nativeXMLHttpRequest = testXHR;
 
-    pretender.post('/some/path', pretender.passthrough);
+    pretender.post("/some/path", pretender.passthrough);
 
     var xhr = new window.XMLHttpRequest();
-    xhr.open('POST', '/some/path', false);
+    xhr.open("POST", "/some/path", false);
     xhr.timeout = 1000;
     xhr.withCredentials = true;
-    xhr.send('some data');
+    xhr.send("some data");
   });
 
-  it('asynchronous request fires events', function(assert) {
+  it("asynchronous request fires events", function(assert) {
     assert.expect(6);
 
     var pretender = this.pretender;
     var done = assert.async();
 
-    pretender.post('/some/:route', pretender.passthrough);
+    pretender.post("/some/:route", pretender.passthrough);
 
     var onEvents = {
       load: false,
       progress: false,
-      readystatechange: false,
+      readystatechange: false
     };
     var listenerEvents = {
       load: false,
       progress: false,
-      readystatechange: false,
+      readystatechange: false
     };
 
     var xhr = new window.XMLHttpRequest();
-    xhr.open('POST', '/some/otherpath');
+    xhr.open("POST", "/some/otherpath");
 
-    xhr.addEventListener('progress', function _progress() {
+    xhr.addEventListener("progress", function _progress() {
       listenerEvents.progress = true;
     });
 
@@ -174,7 +172,7 @@ describe('passthrough requests', function(config) {
       onEvents.progress = true;
     };
 
-    xhr.addEventListener('load', function _load() {
+    xhr.addEventListener("load", function _load() {
       listenerEvents.load = true;
       finishNext();
     });
@@ -184,7 +182,7 @@ describe('passthrough requests', function(config) {
       finishNext();
     };
 
-    xhr.addEventListener('readystatechange', function _load() {
+    xhr.addEventListener("readystatechange", function _load() {
       if (xhr.readyState == 4) {
         listenerEvents.readystatechange = true;
         finishNext();
@@ -211,15 +209,15 @@ describe('passthrough requests', function(config) {
       if (!finished) {
         finished = true;
 
-        assert.ok(onEvents.load, 'onload called');
-        assert.ok(onEvents.progress, 'onprogress called');
-        assert.ok(onEvents.readystatechange, 'onreadystate called');
+        assert.ok(onEvents.load, "onload called");
+        assert.ok(onEvents.progress, "onprogress called");
+        assert.ok(onEvents.readystatechange, "onreadystate called");
 
-        assert.ok(listenerEvents.load, 'load listener called');
-        assert.ok(listenerEvents.progress, 'progress listener called');
+        assert.ok(listenerEvents.load, "load listener called");
+        assert.ok(listenerEvents.progress, "progress listener called");
         assert.ok(
           listenerEvents.readystatechange,
-          'readystate listener called'
+          "readystate listener called"
         );
 
         done();
@@ -227,25 +225,25 @@ describe('passthrough requests', function(config) {
     }
   });
 
-  it('asynchronous request fires upload progress events', function(assert) {
+  it("asynchronous request fires upload progress events", function(assert) {
     assert.expect(2);
 
     var pretender = this.pretender;
     var done = assert.async();
 
-    pretender.post('/some/:route', pretender.passthrough);
+    pretender.post("/some/:route", pretender.passthrough);
 
     var onEvents = {
-      progress: false,
+      progress: false
     };
     var listenerEvents = {
-      progress: false,
+      progress: false
     };
 
     var xhr = new window.XMLHttpRequest();
-    xhr.open('POST', '/some/otherpath');
+    xhr.open("POST", "/some/otherpath");
 
-    xhr.upload.addEventListener('progress', function _progress() {
+    xhr.upload.addEventListener("progress", function _progress() {
       listenerEvents.progress = true;
     });
 
@@ -257,11 +255,11 @@ describe('passthrough requests', function(config) {
       setTimeout(finish, 1);
     };
 
-    xhr.send('some data');
+    xhr.send("some data");
 
     // ensure the test ends
     var failTimer = setTimeout(function() {
-      assert.ok(false, 'test timed out');
+      assert.ok(false, "test timed out");
       done();
     }, 500);
 
@@ -270,17 +268,15 @@ describe('passthrough requests', function(config) {
       if (!finished) {
         finished = true;
         clearTimeout(failTimer);
-        assert.ok(onEvents.progress, 'onprogress called');
-        assert.ok(listenerEvents.progress, 'progress listener called');
+        assert.ok(onEvents.progress, "onprogress called");
+        assert.ok(listenerEvents.progress, "progress listener called");
 
         done();
       }
     }
   });
 
-  it('asynchronous request with pass-through and empty response', function(
-    assert
-  ) {
+  it("asynchronous request with pass-through and empty response", function(assert) {
     var done = assert.async();
     var pretender = this.pretender;
 
@@ -288,32 +284,32 @@ describe('passthrough requests', function(config) {
       this.pretender = pretender;
       this.open = function() {};
       this.setRequestHeader = function() {};
-      this.responseText = '';
-      this.response = '';
+      this.responseText = "";
+      this.response = "";
       this.onload = true;
       this.send = {
         pretender: pretender,
-        apply: function(xhr/*, argument*/) {
-          xhr.onload({ target: xhr, type: 'load' });
-        },
+        apply: function(xhr /*, argument*/) {
+          xhr.onload({ target: xhr, type: "load" });
+        }
       };
     }
     pretender._nativeXMLHttpRequest = testXHR;
 
-    pretender.get('/some/path', pretender.passthrough);
+    pretender.get("/some/path", pretender.passthrough);
 
     var xhr = new window.XMLHttpRequest();
-    xhr.open('GET', '/some/path');
-    xhr.addEventListener('load', function _onload(event) {
+    xhr.open("GET", "/some/path");
+    xhr.addEventListener("load", function _onload(event) {
       assert.equal(
         xhr.responseText,
         event.target.responseText,
-        'responseText for real and fake xhr are both blank strings'
+        "responseText for real and fake xhr are both blank strings"
       );
       assert.equal(
         xhr.response,
         event.target.response,
-        'response for real and fake xhr are both blank strings'
+        "response for real and fake xhr are both blank strings"
       );
       done();
     });
@@ -321,8 +317,8 @@ describe('passthrough requests', function(config) {
     xhr.send();
   });
 
-  describe('the `.passthrough()` property', function () {
-    it('allows a passthrough on an unhandledRequest', function(assert) {
+  describe("the `.passthrough()` property", function() {
+    it("allows a passthrough on an unhandledRequest", function(assert) {
       var done = assert.async();
 
       this.pretender.unhandledRequest = function(_verb, _path, request) {
@@ -330,7 +326,7 @@ describe('passthrough requests', function(config) {
       };
 
       $.ajax({
-        url: '/some/path',
+        url: "/some/path",
         error: function(xhr) {
           assert.equal(xhr.status, 404);
           done();
@@ -338,7 +334,7 @@ describe('passthrough requests', function(config) {
       });
     });
 
-    it('returns a native xhr', function(assert) {
+    it("returns a native xhr", function(assert) {
       var done = assert.async();
 
       var pretender = this.pretender;
@@ -347,20 +343,20 @@ describe('passthrough requests', function(config) {
         this.pretender = pretender;
         this.open = function() {};
         this.setRequestHeader = function() {};
-        this.responseText = '';
-        this.response = '';
+        this.responseText = "";
+        this.response = "";
         this.onload = true;
         this.send = {
           pretender: pretender,
-          apply: function(xhr/*, argument*/) {
-            xhr.onload({ target: xhr, type: 'load' });
-          },
+          apply: function(xhr /*, argument*/) {
+            xhr.onload({ target: xhr, type: "load" });
+          }
         };
       }
       pretender._nativeXMLHttpRequest = testXHR;
 
       var xhr = new window.XMLHttpRequest();
-      xhr.open('GET', '/some/path');
+      xhr.open("GET", "/some/path");
 
       this.pretender.unhandledRequest = function(_verb, _path, request) {
         var referencedXhr = request.passthrough();
@@ -370,6 +366,5 @@ describe('passthrough requests', function(config) {
 
       xhr.send();
     });
-
   });
 });
