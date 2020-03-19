@@ -1,7 +1,7 @@
 var describe = QUnit.module;
 var it = QUnit.test;
 
-describe('passthrough requests', function(config) {
+describe("passthrough requests", function(config) {
   config.beforeEach(function() {
     this.pretender = new Pretender({ forcePassthrough: true });
   });
@@ -10,18 +10,18 @@ describe('passthrough requests', function(config) {
     this.pretender.shutdown();
   });
 
-  it('passthrough request when forcePassthrough is true', function(assert) {
+  it("passthrough request when forcePassthrough is true", function(assert) {
     var done = assert.async();
 
     var passthroughInvoked = false;
-    this.pretender.passthroughRequest = function(verb, path/*, request*/) {
+    this.pretender.passthroughRequest = function(verb, path /*, request*/) {
       passthroughInvoked = true;
-      assert.equal(verb, 'GET');
-      assert.equal(path, '/some/path');
+      assert.equal(verb, "GET");
+      assert.equal(path, "/some/path");
     };
 
     $.ajax({
-      url: '/some/path',
+      url: "/some/path",
       error: function(xhr) {
         assert.equal(xhr.status, 404);
         assert.ok(passthroughInvoked);
@@ -30,15 +30,15 @@ describe('passthrough requests', function(config) {
     });
   });
 
-  it('unhandle request when forcePassthrough is false', function(assert) {
+  it("unhandle request when forcePassthrough is false", function(assert) {
     var pretender = this.pretender;
     pretender.forcePassthrough = false;
 
-    this.pretender.unhandledRequest = function(verb, path/*, request*/) {
-      assert.equal(verb, 'GET');
-      assert.equal(path, '/some/path');
+    this.pretender.unhandledRequest = function(verb, path /*, request*/) {
+      assert.equal(verb, "GET");
+      assert.equal(path, "/some/path");
     };
 
-    $.ajax({ url: '/some/path' });
+    $.ajax({ url: "/some/path" });
   });
 });
