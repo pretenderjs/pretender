@@ -16,11 +16,6 @@ var Pretender = (function(self) {
     ? getModuleDefault(require('fake-xml-http-request'))
     : self.FakeXMLHttpRequest;
 
-  // fetch related ponyfills
-  var FakeFetch = appearsBrowserified
-    ? getModuleDefault(require('whatwg-fetch'))
-    : self.WHATWGFetch;
-
   /*==ROLLUP_CONTENT==*/
 
   if (typeof module === 'object') {
