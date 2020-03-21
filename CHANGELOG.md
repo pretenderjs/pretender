@@ -1,3 +1,15 @@
+## v3.4.0 (2020-03-21)
+
+#### :rocket: Enhancement
+* [#296](https://github.com/pretenderjs/pretender/pull/296) Vendor whatwg-fetch using rollup+devDep ([@ryanto](https://github.com/ryanto))
+
+#### :house: Internal
+* [#294](https://github.com/pretenderjs/pretender/pull/294) Upgrade devDependencies and CI ([@xg-wang](https://github.com/xg-wang))
+
+#### Committers: 2
+- Ryan T ([@ryanto](https://github.com/ryanto))
+- Thomas Wang ([@xg-wang](https://github.com/xg-wang))
+
 ## v3.3.1 (2020-02-09)
 
 #### :bug: Bug Fix
