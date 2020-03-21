@@ -28,7 +28,6 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
-    "rollup-plugin-typescript": "^1.0.0",
     "abortcontroller-polyfill": "^1.1.9",
     "coveralls": "^3.0.9",
     "es6-promise": "^4.0.5",
@@ -45,16 +44,17 @@
     "release-it": "^12.4.3",
     "release-it-lerna-changelog": "^1.0.3",
     "rollup": "^1.1.2",
+    "rollup-plugin-typescript": "^1.0.0",
     "sinon": "^9.0.0",
     "tslib": "^1.9.3",
     "typescript": "~3.1.1",
     "typescript-eslint-parser": "^21.0.2",
-    "url-parse": "^1.4.7"
+    "url-parse": "^1.4.7",
+    "whatwg-fetch": "^3.0.0"
   },
   "dependencies": {
     "fake-xml-http-request": "^2.1.1",
-    "route-recognizer": "^0.3.3",
-    "whatwg-fetch": "^3.0.0"
+    "route-recognizer": "^0.3.3"
   },
   "files": [
     "dist",
@@ -65,8 +65,7 @@
       "pretender": {
         "deps": [
           "route-recognizer",
-          "fake-xml-http-request",
-          "whatwg-fetch"
+          "fake-xml-http-request"
         ],
         "exports": "Pretender"
       }

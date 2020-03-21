@@ -4,7 +4,6 @@ const typescript = require('rollup-plugin-typescript');
 const pkg = require('./package.json');
 const fs = require('fs');
 const globals = {
-  'whatwg-fetch': 'FakeFetch',
   'fake-xml-http-request': 'FakeXMLHttpRequest',
   'route-recognizer': 'RouteRecognizer',
   'url-parse': 'urlParse'
