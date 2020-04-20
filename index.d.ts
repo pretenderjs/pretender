@@ -25,7 +25,7 @@ export class Server {
 
   public handledRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData): void;
   public unhandledRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData): void;
-  public passtroughRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData): void;
+  public passthroughRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData): void;
   public erroredRequest(verb: string, path: string, request: FakeXMLHttpRequest & ExtraRequestData, error: Error): void;
 
   public prepareBody(body: string): string;
