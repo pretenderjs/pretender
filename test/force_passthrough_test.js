@@ -1,7 +1,7 @@
 var describe = QUnit.module;
 var it = QUnit.test;
 
-describe('passthrough requests', function(config) {
+describe('force passthrough requests', function(config) {
   config.beforeEach(function() {
     this.pretender = new Pretender({ forcePassthrough: true });
   });
