@@ -2,45 +2,15 @@ import FakeXMLHttpRequest from 'fake-xml-http-request';
 import * as FakeFetch from 'whatwg-fetch';
 import parseURL from './parse-url';
 import Registry from './registry';
-
-/**
- * Hosts
- *
- * a map of hosts to Registries, ultimately allowing
- * a per-host-and-port, per HTTP verb lookup of RouteRecognizers
- */
-function Hosts() {
-  this._registries = {};
-}
-
-/**
- * Hosts#forURL - retrieve a map of HTTP verbs to RouteRecognizers
- *                for a given URL
- *
- * @param  {String} url a URL
- * @return {Registry}   a map of HTTP verbs to RouteRecognizers
- *                      corresponding to the provided URL's
- *                      hostname and port
- */
-Hosts.prototype.forURL = function(url) {
-  var host = parseURL(url).host;
-  var registry = this._registries[host];
-
-  if (registry === undefined) {
-    registry = (this._registries[host] = new Registry(host));
-  }
-
-  return registry.verbs;
-};
-
+import Hosts from './hosts';
 
 function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   this.hosts = new Hosts();
 
-  var lastArg = arguments[arguments.length - 1];
-  var options = typeof lastArg === 'object' ? lastArg : null;
-  var shouldNotTrack = options && (options.trackRequests === false);
-  var noopArray = { push: function() {}, length: 0 };
+  let lastArg = arguments[arguments.length - 1];
+  let options = typeof lastArg === 'object' ? lastArg : null;
+  let shouldNotTrack = options && (options.trackRequests === false);
+  let noopArray = { push: function() {}, length: 0 };
 
   this.handlers = [];
   this.handledRequests = shouldNotTrack ? noopArray: [];
@@ -54,7 +24,7 @@ function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   // it can be restored later
   this._nativeXMLHttpRequest = self.XMLHttpRequest;
   this.running = false;
-  var ctx = { pretender: this };
+  let ctx = { pretender: this };
   this.ctx = ctx;
 
   // capture xhr requests, channeling them into
@@ -72,8 +42,8 @@ function Pretender(/* routeMap1, routeMap2, ..., options*/) {
   this.running = true;
 
   // trigger the route map DSL.
-  var argLength = options ? arguments.length - 1 : arguments.length;
-  for (var i = 0; i < argLength; i++) {
+  let argLength = options ? arguments.length - 1 : arguments.length;
+  for (let i = 0; i < argLength; i++) {
     this.map(arguments[i]);
   }
 }
@@ -109,7 +79,7 @@ function interceptor(ctx) {
       throw new Error('You attempted to passthrough a FakeRequest that was never sent. ' +
             'Call `.send()` on the original request first');
     }
-    var xhr = createPassthrough(this);
+    let xhr = createPassthrough(this);
     xhr.send.apply(xhr, this.sendArguments);
     return xhr;
   };
@@ -117,15 +87,15 @@ function interceptor(ctx) {
 
   function createPassthrough(fakeXHR) {
     // event types to handle on the xhr
-    var evts = ['error', 'timeout', 'abort', 'readystatechange'];
+    let evts = ['error', 'timeout', 'abort', 'readystatechange'];
 
     // event types to handle on the xhr.upload
-    var uploadEvents = [];
+    let uploadEvents = [];
 
     // properties to copy from the native xhr to fake xhr
-    var lifecycleProps = ['readyState', 'responseText', 'response', 'responseXML', 'responseURL', 'status', 'statusText'];
+    let lifecycleProps = ['readyState', 'responseText', 'response', 'responseXML', 'responseURL', 'status', 'statusText'];
 
-    var xhr = fakeXHR._passthroughRequest = new ctx.pretender._nativeXMLHttpRequest();
+    let xhr = fakeXHR._passthroughRequest = new ctx.pretender._nativeXMLHttpRequest();
     xhr.open(fakeXHR.method, fakeXHR.url, fakeXHR.async, fakeXHR.username, fakeXHR.password);
 
     if (fakeXHR.responseType === 'arraybuffer') {
@@ -147,8 +117,8 @@ function interceptor(ctx) {
 
     // update `propertyNames` properties from `fromXHR` to `toXHR`
     function copyLifecycleProperties(propertyNames, fromXHR, toXHR) {
-      for (var i = 0; i < propertyNames.length; i++) {
-        var prop = propertyNames[i];
+      for (let i = 0; i < propertyNames.length; i++) {
+        let prop = propertyNames[i];
         if (prop in fromXHR) {
           toXHR[prop] = fromXHR[prop];
         }
@@ -181,7 +151,7 @@ function interceptor(ctx) {
       }
     }
 
-    var i;
+    let i;
     for (i = 0; i < evts.length; i++) {
       createHandler(evts[i]);
     }
@@ -193,7 +163,7 @@ function interceptor(ctx) {
       xhr.timeout = fakeXHR.timeout;
       xhr.withCredentials = fakeXHR.withCredentials;
     }
-    for (var h in fakeXHR.requestHeaders) {
+    for (let h in fakeXHR.requestHeaders) {
       xhr.setRequestHeader(h, fakeXHR.requestHeaders[h]);
     }
     return xhr;
@@ -237,16 +207,16 @@ function verbify(verb) {
 function scheduleProgressEvent(request, startTime, totalTime) {
   setTimeout(function() {
     if (!request.aborted && !request.status) {
-      var elapsedTime = new Date().getTime() - startTime.getTime();
-      var progressTotal;
-      var body = request.requestBody;
+      let elapsedTime = new Date().getTime() - startTime.getTime();
+      let progressTotal;
+      let body = request.requestBody;
       if (!body) {
         progressTotal = 0;
       } else {
         // Support Blob, BufferSource, USVString, ArrayBufferView
         progressTotal = body.byteLength || body.size || body.length || 0;
       }
-      var progressTransmitted =
+      let progressTransmitted =
         totalTime <= 0 ? 0 : (elapsedTime / totalTime) * progressTotal;
       // ProgressEvent expects loaded, total
       // https://xhr.spec.whatwg.org/#interface-progressevent
@@ -261,7 +231,7 @@ function isArray(array) {
   return Object.prototype.toString.call(array) === '[object Array]';
 }
 
-var PASSTHROUGH = {};
+let PASSTHROUGH = {};
 
 Pretender.prototype = {
   get: verbify('GET'),
@@ -284,7 +254,7 @@ Pretender.prototype = {
     handler.async = async;
     this.handlers.push(handler);
 
-    var registry = this.hosts.forURL(url)[verb];
+    let registry = this.hosts.forURL(url)[verb];
 
     registry.add([{
       path: parseURL(url).fullpath,
@@ -295,10 +265,10 @@ Pretender.prototype = {
   },
   passthrough: PASSTHROUGH,
   checkPassthrough: function checkPassthrough(request) {
-    var verb = request.method.toUpperCase();
-    var path = parseURL(request.url).fullpath;
-    var recognized = this.hosts.forURL(request.url)[verb].recognize(path);
-    var match = recognized && recognized[0];
+    let verb = request.method.toUpperCase();
+    let path = parseURL(request.url).fullpath;
+    let recognized = this.hosts.forURL(request.url)[verb].recognize(path);
+    let match = recognized && recognized[0];
 
     if ((match && match.handler === PASSTHROUGH) || this.forcePassthrough)  {
       this.passthroughRequests.push(request);
@@ -309,27 +279,27 @@ Pretender.prototype = {
     return false;
   },
   handleRequest: function handleRequest(request) {
-    var verb = request.method.toUpperCase();
-    var path = request.url;
+    let verb = request.method.toUpperCase();
+    let path = request.url;
 
-    var handler = this._handlerFor(verb, path, request);
+    let handler = this._handlerFor(verb, path, request);
 
     if (handler) {
       handler.handler.numberOfCalls++;
-      var async = handler.handler.async;
+      let async = handler.handler.async;
       this.handledRequests.push(request);
 
-      var pretender = this;
+      let pretender = this;
 
-      var _handleRequest = function(statusHeadersAndBody) {
+      let _handleRequest = function(statusHeadersAndBody) {
         if (!isArray(statusHeadersAndBody)) {
-          var note = 'Remember to `return [status, headers, body];` in your route handler.';
+          let note = 'Remember to `return [status, headers, body];` in your route handler.';
           throw new Error('Nothing returned by handler for ' + path + '. ' + note);
         }
 
-        var status = statusHeadersAndBody[0];
-        var headers = pretender.prepareHeaders(statusHeadersAndBody[1]);
-        var body = pretender.prepareBody(statusHeadersAndBody[2], headers);
+        let status = statusHeadersAndBody[0];
+        let headers = pretender.prepareHeaders(statusHeadersAndBody[1]);
+        let body = pretender.prepareBody(statusHeadersAndBody[2], headers);
 
         pretender.handleResponse(request, async, function() {
           request.respond(status, headers, body);
@@ -338,7 +308,7 @@ Pretender.prototype = {
       };
 
       try {
-        var result = handler.handler(request);
+        let result = handler.handler(request);
         if (result && typeof result.then === 'function') {
           // `result` is a promise, resolve it
           result.then(function(resolvedResult) {
@@ -359,13 +329,13 @@ Pretender.prototype = {
     }
   },
   handleResponse: function handleResponse(request, strategy, callback) {
-    var delay = typeof strategy === 'function' ? strategy() : strategy;
+    let delay = typeof strategy === 'function' ? strategy() : strategy;
     delay = typeof delay === 'boolean' || typeof delay === 'number' ? delay : 0;
 
     if (delay === false) {
       callback();
     } else {
-      var pretender = this;
+      let pretender = this;
       pretender.requestReferences.push({
         request: request,
         callback: callback
@@ -380,8 +350,8 @@ Pretender.prototype = {
     }
   },
   resolve: function resolve(request) {
-    for (var i = 0, len = this.requestReferences.length; i < len; i++) {
-      var res = this.requestReferences[i];
+    for (let i = 0, len = this.requestReferences.length; i < len; i++) {
+      let res = this.requestReferences[i];
       if (res.request === request) {
         res.callback();
         this.requestReferences.splice(i, 1);
@@ -390,10 +360,10 @@ Pretender.prototype = {
     }
   },
   requiresManualResolution: function(verb, path) {
-    var handler = this._handlerFor(verb.toUpperCase(), path, {});
+    let handler = this._handlerFor(verb.toUpperCase(), path, {});
     if (!handler) { return false; }
 
-    var async = handler.handler.async;
+    let async = handler.handler.async;
     return typeof async === 'function' ? async() === true : async === true;
   },
   prepareBody: function(body) { return body; },
@@ -410,10 +380,10 @@ Pretender.prototype = {
     throw error;
   },
   _handlerFor: function(verb, url, request) {
-    var registry = this.hosts.forURL(url)[verb];
-    var matches = registry.recognize(parseURL(url).fullpath);
+    let registry = this.hosts.forURL(url)[verb];
+    let matches = registry.recognize(parseURL(url).fullpath);
 
-    var match = matches ? matches[0] : null;
+    let match = matches ? matches[0] : null;
     if (match) {
       request.params = match.params;
       request.queryParams = matches.queryParams;
