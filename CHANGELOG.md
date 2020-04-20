@@ -1,3 +1,16 @@
+## v3.4.1 (2020-04-20)
+
+#### :bug: Bug Fix
+* [#299](https://github.com/pretenderjs/pretender/pull/299) fix: passThroughRequest typo ([@mattrothenberg](https://github.com/mattrothenberg))
+
+#### :house: Internal
+* [#257](https://github.com/pretenderjs/pretender/pull/257) refactor: extract create-passthrough & interceptor ([@givanse](https://github.com/givanse))
+* [#256](https://github.com/pretenderjs/pretender/pull/256) refactor: extract hosts ([@givanse](https://github.com/givanse))
+
+#### Committers: 2
+- Gastón I. Silva ([@givanse](https://github.com/givanse))
+- Matt Rothenberg ([@mattrothenberg](https://github.com/mattrothenberg))
+
 ## v3.4.0 (2020-03-21)
 
 #### :rocket: Enhancement
