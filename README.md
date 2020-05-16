@@ -52,10 +52,10 @@ npm install --save-dev pretender
 You can load Pretender directly in the browser.
 
 ```javascript
-<script src="pretender.js"></script>
+<script src="node_modules/pretender/dist/pretender.bundle.js"></script>
 ```
 
-Or as a module.
+Or as a module:
 
 ```javascript
 import Pretender from 'pretender';
@@ -118,7 +118,7 @@ const server = new Pretender(function() {
 
 // typical jQuery-style uses you've probably seen.
 // queryParams.sortOrder will be 'asc' for both styles.
-$.get({url: '/api/songs', data: { sortOrder: 'asc' });
+$.get({url: '/api/songs', data: { sortOrder: 'asc' }});
 $.get('/api/songs?sortOrder=asc');
 
 ```
@@ -476,8 +476,8 @@ server.shutdown(); // all done.
 
 ## Running tests
 
-* `npm test` runs tests once
-* `npm run test:server` runs and reruns on changes
+* `yarn test` runs tests once
+* `yarn test:server` runs and reruns on changes
 
 ## Code of Conduct
 
