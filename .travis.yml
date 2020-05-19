@@ -1,11 +1,13 @@
 language: node_js
 node_js:
-  - "12"
+  - "14"
 
 addons:
   chrome: stable
 
-script: yarn run test-ci
+script: 
+  - yarn run test-ci
+  - NO_BUNDLE=true yarn run test-ci
 
 after_script:
   - find ./coverage/HeadlessChrome* -name "lcov.info" -exec cat {} \; | coveralls
