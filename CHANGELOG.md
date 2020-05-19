@@ -1,3 +1,12 @@
+## v3.4.2 (2020-05-19)
+
+#### :bug: Bug Fix
+* [#304](https://github.com/pretenderjs/pretender/pull/304) Don't attach upload handler if they do not exist on the originating request ([@ryanto](https://github.com/ryanto))
+
+#### Committers: 2
+- Ryan T ([@ryanto](https://github.com/ryanto))
+
+
 ## v3.4.1 (2020-04-20)
 
 #### :bug: Bug Fix
