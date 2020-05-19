@@ -71,7 +71,7 @@ export function createPassthrough(fakeXHR, nativeXMLHttpRequest) {
   // set the on- handler on the native xhr's `upload` property for
   // the given eventType
   function createUploadHandler(eventType) {
-    if (xhr.upload) {
+    if (xhr.upload && fakeXHR.upload && fakeXHR.upload['on' + eventType]) {
       xhr.upload['on' + eventType] = function (event) {
         dispatchEvent(fakeXHR.upload, eventType, event);
       };
