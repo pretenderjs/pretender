@@ -1,3 +1,12 @@
+## v3.4.3 (2020-05-19)
+
+#### :memo: Documentation
+* [#302](https://github.com/pretenderjs/pretender/pull/302) Publish pretender.bundle.js bundling dependencies ([@xg-wang](https://github.com/xg-wang))
+
+#### Committers: 1
+- Thomas Wang ([@xg-wang](https://github.com/xg-wang))
+
+
 ## v3.4.2 (2020-05-19)
 
 #### :bug: Bug Fix
