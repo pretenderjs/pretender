@@ -132,7 +132,7 @@ Pretender.prototype = {
     let verb = request.method.toUpperCase();
     let path = request.url;
 
-    let handler = this._handlerFor(verb, path, request);
+    let handler = this.handlerFor(verb, path, request);
 
     if (handler) {
       handler.handler.numberOfCalls++;
@@ -210,7 +210,7 @@ Pretender.prototype = {
     }
   },
   requiresManualResolution: function(verb, path) {
-    let handler = this._handlerFor(verb.toUpperCase(), path, {});
+    let handler = this.handlerFor(verb.toUpperCase(), path, {});
     if (!handler) { return false; }
 
     let async = handler.handler.async;
@@ -229,7 +229,7 @@ Pretender.prototype = {
       path + ' but encountered an error: ' + error.message;
     throw error;
   },
-  _handlerFor: function(verb, url, request) {
+  handlerFor: function(verb, url, request) {
     let registry = this.hosts.forURL(url)[verb];
     let matches = registry.recognize(parseURL(url).fullpath);
 
