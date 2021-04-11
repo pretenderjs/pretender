@@ -507,4 +507,3 @@ In order to have a more open and welcoming community this project adheres to a [
 Please adhere to this code of conduct in any interactions you have with this
 project's community. If you encounter someone violating these terms, please let
 a maintainer (@trek) know and we will address it as soon as possible.
-
