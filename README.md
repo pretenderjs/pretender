@@ -86,7 +86,7 @@ const server = new Pretender(photoMaps, adminMaps);
 ```
 
 ```javascript
-//testing/maps/photos
+// testing/maps/photos
 
 const PHOTOS = {
   "58": {
