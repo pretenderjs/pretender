@@ -65,7 +65,7 @@ const server = new Pretender(function() {});
 ## The Server DSL
 The server DSL is inspired by express/sinatra. Pass a function to the Pretender constructor
 that will be invoked with the Pretender instance as its context. Available methods are
-`get`, `put`, `post`, `'delete'`, `patch`, and `head`. Each of these methods takes a path pattern,
+`get`, `put`, `post`, `delete`, `patch`, and `head`. Each of these methods takes a path pattern,
 a callback, and an optional [timing parameter](#timing-parameter). The callback will be invoked with a
 single argument (the XMLHttpRequest instance that triggered this request) and must return an array
 containing the HTTP status code, headers object, and body as a string.
@@ -85,6 +85,27 @@ import photoMaps from "testing/maps/photos";
 const server = new Pretender(photoMaps, adminMaps);
 ```
 
+```javascript
+// testing/maps/photos
+
+const PHOTOS = {
+  "58": {
+    id: 58,
+    src: 'https://media.giphy.com/media/65TpAhHZ7A9nuf3GIu/giphy.gif'
+  },
+  "99": {
+    id: 99,
+    src: 'https://media.giphy.com/media/4Zd5qAcFv759xnegdo/giphy.gif'
+  }
+};
+
+export default function() {
+  this.get('/photos/:id', () => 
+   [200, {"Content-Type": "application/json"}, JSON.stringify(PHOTOS[request.params.id])]
+  );
+}
+```
+
 The HTTP verb methods can also be called on an instance individually:
 
 ```javascript
@@ -95,7 +116,7 @@ server.put('/api/songs/99', request => [404, {}, ""]);
 ### Paths
 Paths can either be hard-coded (`this.get('/api/songs/12')`) or contain dynamic segments
 (`this.get('/api/songs/:song_id'`). If there were dynamic segments of the path,
-these well be attached to the request object as a `params` property with keys matching
+these will be attached to the request object as a `params` property with keys matching
 the dynamic portion and values with the matching value from the path.
 
 ```javascript
@@ -108,7 +129,7 @@ $.get('/api/songs/871') // params.song_id will be '871'
 ```
 
 ### Query Parameters
-If there were query parameters in the request, these well be attached to the request object as a `queryParams`
+If there were query parameters in the request, these will be attached to the request object as a `queryParams`
 property.
 
 ```javascript
@@ -168,7 +189,7 @@ const server = new Pretender(function() {
 });
 ```
 
-In some case, you will need to force pretender to passthough, just start your server with the `forcePassthrough` option.
+In some cases, you will need to force pretender to passthough, just start your server with the `forcePassthrough` option.
 
 ```javascript
 const server = new Pretender({ forcePassthrough: true })
@@ -271,7 +292,7 @@ future requests take 15 seconds to respond.
 
 #### Scheduling ProgressEvent
 If the timing parameter is resolved as async, then a [`ProgressEvent`](https://xhr.spec.whatwg.org/#interface-progressevent)
-will be scheduled every 50ms until the request has a respond or is aborted.
+will be scheduled every 50ms until the request has a response or is aborted.
 
 To listen to the progress, you can define `onprogress` on the `XMLHttpRequest` object or
 its [`upload` attribute](https://xhr.spec.whatwg.org/#the-upload-attribute).
@@ -486,4 +507,3 @@ In order to have a more open and welcoming community this project adheres to a [
 Please adhere to this code of conduct in any interactions you have with this
 project's community. If you encounter someone violating these terms, please let
 a maintainer (@trek) know and we will address it as soon as possible.
-
