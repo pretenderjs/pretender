@@ -68,6 +68,9 @@
       }
     }
   },
+  "prettier": {
+    "singleQuoute": true
+  },
   "volta": {
     "node": "14.2.0",
     "yarn": "1.22.4"
