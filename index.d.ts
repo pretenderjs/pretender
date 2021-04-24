@@ -43,8 +43,12 @@ interface ExtraRequestData {
   params: Params;
   queryParams: QueryParams;
 }
-export type ResponseHandler = (
-  request: FakeXMLHttpRequest & ExtraRequestData
-) => ResponseData | PromiseLike<ResponseData>;
+export type ResponseHandler = {
+  (request: FakeXMLHttpRequest & ExtraRequestData):
+    | ResponseData
+    | PromiseLike<ResponseData>;
+  async: boolean;
+  numberOfCalls: number;
+};
 
 export default Server;
