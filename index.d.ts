@@ -47,8 +47,11 @@ export type ResponseHandler = {
   (request: FakeXMLHttpRequest & ExtraRequestData):
     | ResponseData
     | PromiseLike<ResponseData>;
+};
+
+export type ResponseHandlerInstance = ResponseHandler & { 
   async: boolean;
   numberOfCalls: number;
-};
+}
 
 export default Server;
