@@ -466,9 +466,10 @@ describe('pretender invoking', function(config) {
     clock.tick(510);
     assert.equal(
       progressEventCount,
-      4,
+      5,
       'No `onprogress` events are fired after the the request finalizes'
     );
+    assert.equal(lastLoaded, totalSize, 'Final progress event should match total body size');
   });
 
   it('`onprogress` upload events don\'t keep firing once the request has ended', function(
@@ -495,14 +496,16 @@ describe('pretender invoking', function(config) {
       assert.ok(loaded > lastLoaded, 'making progress');
       assert.ok(loaded <= total, 'loaded should always not exceed total');
       progressEventCount++;
+      lastLoaded = loaded;
     };
     xhr.send(postBody);
     clock.tick(510);
     assert.equal(
       progressEventCount,
-      4,
+      5,
       'No `onprogress` events are fired after the the request finalizes'
     );
+    assert.equal(lastLoaded, postBody.size, 'Final progress event should match total body size');
   });
 
   it('no progress upload events are fired after the request is aborted', function(
@@ -596,7 +599,7 @@ describe('pretender invoking', function(config) {
     clock.tick(510);
     assert.equal(
       progressEventCount,
-      4,
+      5,
       'No `onprogress` events are fired after the the request finalizes'
     );
   });
