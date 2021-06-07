@@ -36,7 +36,7 @@ export type RequestHandler = (
   urlExpression: string,
   response: ResponseHandler,
   asyncOrDelay?: boolean | number
-) => void;
+) => ResponseHandlerInstance;
 
 export type ResponseData = [number, { [k: string]: string }, string];
 interface ExtraRequestData {
