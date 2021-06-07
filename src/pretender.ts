@@ -28,13 +28,21 @@ function scheduleProgressEvent(request, startTime, totalTime) {
   setTimeout(function () {
     if (!request.aborted && !request.status) {
       let elapsedTime = new Date().getTime() - startTime.getTime();
-      let progressTotal;
+      let progressTotal = 0;
       let body = request.requestBody;
-      if (!body) {
-        progressTotal = 0;
-      } else {
-        // Support Blob, BufferSource, USVString, ArrayBufferView
-        progressTotal = body.byteLength || body.size || body.length || 0;
+      if (body) {
+        if (body instanceof FormData) {
+          body.forEach((value) => {
+            if (value instanceof File) {
+              progressTotal += value.size;
+            } else {
+              progressTotal += value.length;
+            }
+          });
+        } else {
+          // Support Blob, BufferSource, USVString, ArrayBufferView
+          progressTotal = body.byteLength || body.size || body.length || 0;
+        }
       }
       let progressTransmitted =
         totalTime <= 0 ? 0 : (elapsedTime / totalTime) * progressTotal;
