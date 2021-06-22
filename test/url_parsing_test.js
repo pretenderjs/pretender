@@ -48,7 +48,7 @@ describe('parseURL', function() {
     testUrl('/mock/my/request?test=abc#def', {
       protocol: 'http:',
       pathname: '/mock/my/request',
-      host: window.location.host,
+      host: '127.0.0.1:9876',
       search: '?test=abc',
       hash: '#def',
       fullpath: '/mock/my/request?test=abc#def',
@@ -64,7 +64,7 @@ describe('parseURL', function() {
       {
         protocol: window.location.protocol,
         pathname: '/mock/my/request',
-        host: window.location.host,
+        host: '127.0.0.1:9876',
         search: '?test=abc',
         hash: '#def',
         fullpath: '/mock/my/request?test=abc#def',
@@ -77,6 +77,17 @@ describe('parseURL', function() {
       protocol: 'https:',
       pathname: '/mock/my/request',
       host: 'www.yahoo.com',
+      search: '?test=abc',
+      hash: '',
+      fullpath: '/mock/my/request?test=abc',
+    });
+  });
+  
+  describe('localhost HTTP URLs', function() {
+    testUrl('https://localhost:8080/mock/my/request?test=abc', {
+      protocol: 'https:',
+      pathname: '/mock/my/request',
+      host: '127.0.0.1:8080',
       search: '?test=abc',
       hash: '',
       fullpath: '/mock/my/request?test=abc',
