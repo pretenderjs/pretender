@@ -90,6 +90,9 @@ export function createPassthrough(fakeXHR, nativeXMLHttpRequest) {
     xhr.timeout = fakeXHR.timeout;
     xhr.withCredentials = fakeXHR.withCredentials;
   }
+  if (!xhr.timeout) {
+    xhr.timeout = 0; // default XMLHttpRequest timeout
+  }
   for (var h in fakeXHR.requestHeaders) {
     xhr.setRequestHeader(h, fakeXHR.requestHeaders[h]);
   }
