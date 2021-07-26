@@ -25,24 +25,36 @@ class NoopArray {
 }
 
 function scheduleProgressEvent(request, startTime, totalTime) {
+  let totalSize = 0;
+  const body = request.requestBody;
+  if (body) {
+    if (body instanceof FormData) {
+      body.forEach((value) => {
+        if (value instanceof File) {
+          totalSize += value.size;
+        } else {
+          totalSize += value.length;
+        }
+      });
+    } else {
+      // Support Blob, BufferSource, USVString, ArrayBufferView
+      totalSize = body.byteLength || body.size || body.length || 0;
+    }
+  }
   setTimeout(function () {
     if (!request.aborted && !request.status) {
       let elapsedTime = new Date().getTime() - startTime.getTime();
-      let progressTotal;
-      let body = request.requestBody;
-      if (!body) {
-        progressTotal = 0;
-      } else {
-        // Support Blob, BufferSource, USVString, ArrayBufferView
-        progressTotal = body.byteLength || body.size || body.length || 0;
-      }
       let progressTransmitted =
-        totalTime <= 0 ? 0 : (elapsedTime / totalTime) * progressTotal;
+        totalTime <= 0 ? 0 : (elapsedTime / totalTime) * totalSize;
       // ProgressEvent expects loaded, total
       // https://xhr.spec.whatwg.org/#interface-progressevent
-      request.upload._progress(true, progressTransmitted, progressTotal);
-      request._progress(true, progressTransmitted, progressTotal);
+      request.upload._progress(true, progressTransmitted, totalSize);
+      request._progress(true, progressTransmitted, totalSize);
       scheduleProgressEvent(request, startTime, totalTime);
+    } else if (request.status) {
+      // we're done, send a final progress event with loaded === total
+      request.upload._progress(true, totalSize, totalSize);
+      request._progress(true, totalSize, totalSize);
     }
   }, 50);
 }
