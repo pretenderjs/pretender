@@ -90,6 +90,12 @@ export function createPassthrough(fakeXHR, nativeXMLHttpRequest) {
     xhr.timeout = fakeXHR.timeout;
     xhr.withCredentials = fakeXHR.withCredentials;
   }
+  // XMLHttpRequest.timeout default initializes to 0, and is not allowed to be used for
+  // synchronous XMLHttpRequests requests in a document environment. However, when a XHR
+  // polyfill does not sets the timeout value, it will throw in React Native environment.
+  // TODO:
+  // synchronous XHR is deprecated, make async the default as XMLHttpRequest.open(),
+  // and throw error if sync XHR has timeout not 0
   if (!xhr.timeout) {
     xhr.timeout = 0; // default XMLHttpRequest timeout
   }
