@@ -403,7 +403,7 @@ describe('pretender invoking', function(config) {
     'async requests with `onprogress` upload events in the upload ' +
       ' trigger a progress event each 50ms',
     function(assert) {
-      var done = assert.async();
+      clock = sinon.useFakeTimers();
       var progressEventCount = 0;
       this.pretender.post(
         '/uploads',
@@ -425,15 +425,13 @@ describe('pretender invoking', function(config) {
         assert.ok(loaded <= total, 'loaded should always not exceed total');
         progressEventCount++;
       };
-      xhr.onload = function() {
-        assert.equal(
-          progressEventCount,
-          5,
-          'In a request of 300ms the progress event has been fired 5 times'
-        );
-        done();
-      };
       xhr.send(postBody);
+      clock.tick(310);
+      assert.equal(
+        progressEventCount,
+        6,
+        'In a request of 300ms the progress event has been fired 5 times'
+      );
     }
   );
 
@@ -549,7 +547,7 @@ describe('pretender invoking', function(config) {
   it('async requests with `onprogress` events trigger a progress event each 50ms', function(
     assert
   ) {
-    var done = assert.async();
+    clock = sinon.useFakeTimers();
     var progressEventCount = 0;
     this.pretender.get(
       '/downloads',
@@ -566,15 +564,13 @@ describe('pretender invoking', function(config) {
       assert.equal(event.loaded, event.total);
       progressEventCount++;
     };
-    xhr.onload = function() {
-      assert.equal(
-        progressEventCount,
-        5,
-        'In a request of 300ms the progress event has been fired 5 times'
-      );
-      done();
-    };
     xhr.send('some data');
+    clock.tick(310);
+    assert.equal(
+      progressEventCount,
+      6,
+      'In a request of 300ms the progress event has been fired 5 times'
+    );
   });
 
   it('`onprogress` download events don\'t keep firing once the request has ended', function(
