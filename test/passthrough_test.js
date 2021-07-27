@@ -112,7 +112,7 @@ describe('passthrough requests', function(config) {
     }
   );
 
-  it('synchronous request does not have timeout, withCredentials and onprogress event', function(
+  it('synchronous request has timeout=0, withCredentials and onprogress event', function(
     assert
   ) {
     var pretender = this.pretender;
@@ -125,7 +125,7 @@ describe('passthrough requests', function(config) {
       this.send = {
         pretender: pretender,
         apply: function(xhr/*, argument*/) {
-          assert.ok(!('timeout' in xhr));
+          assert.equal(xhr.timeout, 0);
           assert.ok(!('withCredentials' in xhr));
           assert.ok(!('onprogress' in xhr));
           this.pretender.resolve(xhr);
@@ -139,7 +139,6 @@ describe('passthrough requests', function(config) {
 
     var xhr = new window.XMLHttpRequest();
     xhr.open('POST', '/some/path', false);
-    xhr.timeout = 1000;
     xhr.withCredentials = true;
     xhr.send('some data');
   });
