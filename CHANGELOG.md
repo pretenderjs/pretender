@@ -1,3 +1,23 @@
+## v3.4.4 (2021-07-27)
+
+#### :bug: Bug Fix
+* [#326](https://github.com/pretenderjs/pretender/pull/326) Fix - Add default timeout to XMLHttpRequest ([@bombillazo](https://github.com/bombillazo))
+* [#320](https://github.com/pretenderjs/pretender/pull/320) Handle progress events for FormData request body properly ([@mrijke](https://github.com/mrijke))
+
+#### :memo: Documentation
+* [#315](https://github.com/pretenderjs/pretender/pull/315) README update ([@ledleds](https://github.com/ledleds))
+
+#### :house: Internal
+* [#317](https://github.com/pretenderjs/pretender/pull/317) Rewrite pretender to typescript ([@xg-wang](https://github.com/xg-wang))
+
+#### Committers: 5
+- Hector Ayala ([@bombillazo](https://github.com/bombillazo))
+- Maarten Rijke ([@mrijke](https://github.com/mrijke))
+- Robert Jackson ([@rwjblue](https://github.com/rwjblue))
+- Thomas Wang ([@xg-wang](https://github.com/xg-wang))
+- Vicky Ledsom ([@ledleds](https://github.com/ledleds))
+
+
 ## v3.4.3 (2020-05-19)
 
 #### :memo: Documentation
