@@ -1,3 +1,12 @@
+## v3.4.5 (2021-07-27)
+
+#### :house: Internal
+* [#328](https://github.com/pretenderjs/pretender/pull/328) Upgrade runtime deps ([@xg-wang](https://github.com/xg-wang))
+
+#### Committers: 1
+- Thomas Wang ([@xg-wang](https://github.com/xg-wang))
+
+
 ## v3.4.4 (2021-07-27)
 
 #### :bug: Bug Fix
