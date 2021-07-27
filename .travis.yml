@@ -3,7 +3,7 @@ node_js:
   - "14"
 
 addons:
-  chrome: stable
+  chrome: beta
 
 script: 
   - yarn run test-ci
