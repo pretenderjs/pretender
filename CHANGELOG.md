@@ -1,3 +1,12 @@
+## v3.4.6 (2021-07-30)
+
+#### :bug: Bug Fix
+* [#322](https://github.com/pretenderjs/pretender/pull/322) Closes [#321](https://github.com/pretenderjs/pretender/issues/321): improve ResponseHandler types ([@mrijke](https://github.com/mrijke))
+
+#### Committers: 1
+- Maarten Rijke ([@mrijke](https://github.com/mrijke))
+
+
 ## v3.4.5 (2021-07-27)
 
 #### :house: Internal
