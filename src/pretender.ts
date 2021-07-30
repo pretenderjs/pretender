@@ -1,7 +1,7 @@
 import * as FakeFetch from 'whatwg-fetch';
 import FakeXMLHttpRequest from 'fake-xml-http-request';
 import { Params, QueryParams } from 'route-recognizer';
-import { ResponseHandler } from '../index.d';
+import { ResponseHandler, ResponseHandlerInstance } from '../index.d';
 import Hosts from './hosts';
 import parseURL from './parse-url';
 import Registry from './registry';
@@ -155,7 +155,7 @@ export default class Pretender {
     url: string,
     handler: ResponseHandler,
     async: boolean
-  ): ResponseHandler {
+  ): ResponseHandlerInstance {
     if (!handler) {
       throw new Error(
         'The function you tried passing to Pretender to handle ' +
@@ -166,20 +166,22 @@ export default class Pretender {
       );
     }
 
-    handler.numberOfCalls = 0;
-    handler.async = async;
-    this.handlers.push(handler);
+    const handlerInstance = handler as ResponseHandlerInstance;
+
+    handlerInstance.numberOfCalls = 0;
+    handlerInstance.async = async;
+    this.handlers.push(handlerInstance);
 
     let registry = this.hosts.forURL(url)[verb];
 
     registry.add([
       {
         path: parseURL(url).fullpath,
-        handler: handler,
+        handler: handlerInstance,
       },
     ]);
 
-    return handler;
+    return handlerInstance;
   }
 
   passthrough = PASSTHROUGH;
