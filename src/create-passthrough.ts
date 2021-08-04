@@ -96,7 +96,7 @@ export function createPassthrough(fakeXHR, nativeXMLHttpRequest) {
   // TODO:
   // synchronous XHR is deprecated, make async the default as XMLHttpRequest.open(),
   // and throw error if sync XHR has timeout not 0
-  if (!xhr.timeout) {
+  if (!xhr.timeout && xhr.timeout !== 0) {
     xhr.timeout = 0; // default XMLHttpRequest timeout
   }
   for (var h in fakeXHR.requestHeaders) {
