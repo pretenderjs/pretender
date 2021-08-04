@@ -1,3 +1,12 @@
+## v3.4.7 (2021-08-04)
+
+#### :bug: Bug Fix
+* [#331](https://github.com/pretenderjs/pretender/pull/331) Fix setting timeout to sync XHR ([@xg-wang](https://github.com/xg-wang))
+
+#### Committers: 1
+- Thomas Wang ([@xg-wang](https://github.com/xg-wang))
+
+
 ## v3.4.6 (2021-07-30)
 
 #### :bug: Bug Fix
