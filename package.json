@@ -10,7 +10,7 @@
     "release": "release-it",
     "prepublishOnly": "npm run build && npm run tests-only",
     "build": "rollup --config",
-    "test": "npm run eslint && npm run tests-only",
+    "test": "npm run build && npm run eslint && npm run tests-only",
     "test-ci": "npm run build && npm run eslint && npm run tests-only-ci",
     "tests-only": "karma start --single-run",
     "tests-only-ci": "karma start --single-run --browsers ChromeHeadlessNoSandbox",

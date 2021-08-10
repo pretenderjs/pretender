@@ -497,7 +497,7 @@ server.shutdown(); // all done.
 
 ## Running tests
 
-* `yarn build` builds pretender so it can be loaded by the tests
+* `yarn build` builds pretender
 * `yarn test` runs tests once
 * `yarn test:server` runs and reruns on changes
 
