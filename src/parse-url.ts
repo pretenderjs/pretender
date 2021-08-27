@@ -29,13 +29,18 @@ export default function parseURL(url: string) {
     pathname = '/' + pathname; // IE: prepend leading slash
   }
 
-  var host = parsedUrl.host;
-  if (parsedUrl.port === '80' || parsedUrl.port === '443') {
-    host = parsedUrl.hostname; // IE: remove default port
+  var hostname = parsedUrl.hostname;
+  if (hostname === 'localhost') {
+    hostname = '127.0.0.1';
+  }
+  
+  var port = '';
+  if (parsedUrl.port && parsedUrl.port !== '80' && parsedUrl.port !== '443') {
+    port = ':' + parsedUrl.port; // IE: include only non-default ports
   }
 
   return {
-    host: host,
+    host: hostname + port,
     protocol: parsedUrl.protocol,
     search: parsedUrl.query,
     hash: parsedUrl.hash,
