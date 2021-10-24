@@ -202,7 +202,7 @@ export default class Pretender {
   }
 
   handleRequest(request: FakeRequest) {
-    let verb = request.method.toUpperCase();
+    let verb = request.method.toUpperCase() as Verb;
     let path = request.url;
 
     let handler = this._handlerFor(verb, path, request);
@@ -289,7 +289,7 @@ export default class Pretender {
   }
 
   requiresManualResolution(verb: string, path: string) {
-    let handler = this._handlerFor(verb.toUpperCase(), path, {});
+    let handler = this._handlerFor(verb.toUpperCase() as Verb, path, {} as FakeRequest);
     if (!handler) {
       return false;
     }

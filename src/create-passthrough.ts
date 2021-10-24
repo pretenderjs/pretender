@@ -3,7 +3,7 @@ export function createPassthrough(fakeXHR, nativeXMLHttpRequest) {
   var evts = ['error', 'timeout', 'abort', 'readystatechange'];
 
   // event types to handle on the xhr.upload
-  var uploadEvents = [];
+  var uploadEvents: string[] = [];
 
   // properties to copy from the native xhr to fake xhr
   var lifecycleProps = [

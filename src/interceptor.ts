@@ -2,7 +2,7 @@ import FakeXMLHttpRequest from 'fake-xml-http-request';
 import { createPassthrough } from './create-passthrough';
 
 export function interceptor(ctx) {
-  function FakeRequest() {
+  function FakeRequest(this: any) {
     // super()
     FakeXMLHttpRequest.call(this);
   }

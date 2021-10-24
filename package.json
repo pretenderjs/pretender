@@ -3,7 +3,7 @@
   "version": "3.4.7",
   "main": "./dist/pretender.js",
   "module": "./dist/pretender.es.js",
-  "types": "index.d.ts",
+  "types": "./dist/index.d.ts",
   "description": "Pretender is a mock server library for XMLHttpRequest and Fetch, that comes with an express/sinatra style syntax for defining routes and their handlers.",
   "license": "MIT",
   "scripts": {
@@ -42,6 +42,7 @@
     "release-it-lerna-changelog": "^2.3.0",
     "rollup": "^2.10.2",
     "rollup-plugin-typescript": "^1.0.0",
+    "rollup-plugin-typescript2": "^0.30.0",
     "sinon": "^9.0.2",
     "tslib": "^1.9.3",
     "typescript": "~3.1.1",
