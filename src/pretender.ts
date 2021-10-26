@@ -1,7 +1,13 @@
 import * as FakeFetch from 'whatwg-fetch';
 import FakeXMLHttpRequest from 'fake-xml-http-request';
 import { Params, QueryParams } from 'route-recognizer';
-import { ResponseHandler, ResponseHandlerInstance } from '../index.d';
+import {
+  Server as ServerDeprecated,
+  ResponseHandler,
+  ResponseHandlerInstance,
+  ResponseData as _ResponseData,
+  RequestHandler as _RequestHandler,
+} from '../index.d';
 import Hosts from './hosts';
 import parseURL from './parse-url';
 import Registry from './registry';
@@ -16,6 +22,10 @@ interface ExtraRequestData {
 type FakeRequest = FakeXMLHttpRequest & ExtraRequestData;
 
 type Verb = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS';
+
+export type Server = ServerDeprecated;
+export type ResponseData = _ResponseData;
+export type RequestHandler = _RequestHandler;
 
 class NoopArray {
   length = 0;
@@ -244,7 +254,7 @@ export default class Pretender {
           _handleRequest(result);
         }
       } catch (error) {
-        this.erroredRequest(verb, path, request, error);
+        this.erroredRequest(verb, path, request, error as Error);
         this.resolve(request);
       }
     } else {
@@ -289,7 +299,11 @@ export default class Pretender {
   }
 
   requiresManualResolution(verb: string, path: string) {
-    let handler = this._handlerFor(verb.toUpperCase() as Verb, path, {} as FakeRequest);
+    let handler = this._handlerFor(
+      verb.toUpperCase() as Verb,
+      path,
+      {} as FakeRequest
+    );
     if (!handler) {
       return false;
     }
@@ -297,19 +311,31 @@ export default class Pretender {
     let async = handler.handler.async;
     return typeof async === 'function' ? async() === true : async === true;
   }
-  prepareBody(body, _headers) {
+  prepareBody(body: string, _headers) {
     return body;
   }
-  prepareHeaders(headers) {
+  prepareHeaders(headers: { [k: string]: string }) {
     return headers;
   }
-  handledRequest(_verb, _path, _request) {
+  handledRequest(
+    _verb: string,
+    _path: string,
+    _request: FakeXMLHttpRequest & ExtraRequestData
+  ) {
     /* no-op */
   }
-  passthroughRequest(_verb, _path, _request) {
+  passthroughRequest(
+    _verb: string,
+    _path: string,
+    _request: FakeXMLHttpRequest & ExtraRequestData
+  ) {
     /* no-op */
   }
-  unhandledRequest(verb, path, _request) {
+  unhandledRequest(
+    verb: string,
+    path: string,
+    _request: FakeXMLHttpRequest & ExtraRequestData
+  ) {
     throw new Error(
       'Pretender intercepted ' +
         verb +
@@ -318,7 +344,12 @@ export default class Pretender {
         ' but no handler was defined for this type of request'
     );
   }
-  erroredRequest(verb, path, _request, error) {
+  erroredRequest(
+    verb: string,
+    path: string,
+    _request: FakeXMLHttpRequest & ExtraRequestData,
+    error: Error
+  ) {
     error.message =
       'Pretender intercepted ' +
       verb +
