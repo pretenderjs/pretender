@@ -130,7 +130,6 @@ describe('passthrough requests', function (config) {
           apply: function(xhr, argument) {
             assert.equal(xhr.responseType, 'blob');
             this.pretender.resolve(xhr);
-            QUnit.start();
             done();
           }
         };
