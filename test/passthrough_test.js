@@ -112,6 +112,39 @@ describe('passthrough requests', function (config) {
     }
   );
 
+  it(
+    'asynchronous request with pass-through and ' +
+      'blob as responseType', 
+    function(assert) {
+      var pretender = this.pretender;
+      var done = assert.async();
+
+      function testXHR() {
+        this.pretender = pretender;
+        this.open = function() {};
+        this.setRequestHeader = function() {};
+        this.upload = {};
+        this.responseType = '';
+        this.send = {
+          pretender: pretender,
+          apply: function(xhr, argument) {
+            assert.equal(xhr.responseType, 'blob');
+            this.pretender.resolve(xhr);
+            done();
+          }
+        };
+      }
+      pretender._nativeXMLHttpRequest = testXHR;
+
+      pretender.get('/some/path', pretender.passthrough);
+
+      var xhr = new window.XMLHttpRequest();
+      xhr.open('GET', '/some/path');
+      xhr.responseType = 'blob';
+      xhr.send();
+    }
+  );
+
   it('synchronous request has timeout=0, withCredentials and onprogress event', function (assert) {
     var pretender = this.pretender;
     var done = assert.async();

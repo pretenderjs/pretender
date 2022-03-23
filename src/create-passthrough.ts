@@ -25,7 +25,7 @@ export function createPassthrough(fakeXHR, nativeXMLHttpRequest) {
     fakeXHR.password
   );
 
-  if (fakeXHR.responseType === 'arraybuffer') {
+  if (fakeXHR.responseType === 'arraybuffer' || fakeXHR.responseType === 'blob') {
     lifecycleProps = ['readyState', 'response', 'status', 'statusText'];
     xhr.responseType = fakeXHR.responseType;
   }
