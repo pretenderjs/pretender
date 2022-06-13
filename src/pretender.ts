@@ -1,6 +1,8 @@
 import * as FakeFetch from 'whatwg-fetch';
 import FakeXMLHttpRequest from 'fake-xml-http-request';
 import { Params, QueryParams } from 'route-recognizer';
+import { rest, setupWorker, RequestHandler, SetupWorkerApi } from 'msw';
+
 import { ResponseHandler, ResponseHandlerInstance } from '../index.d';
 import Hosts from './hosts';
 import parseURL from './parse-url';
@@ -84,9 +86,12 @@ export default class Pretender {
   hosts = new Hosts();
   handlers: ResponseHandler[] = [];
   handledRequests: any[] | NoopArray;
+  worker: SetupWorkerApi | undefined;
+  serviceWorkerRequests: RequestHandler[];
   passthroughRequests: any[] | NoopArray;
   unhandledRequests: any[] | NoopArray;
   requestReferences: any[];
+  handleRefernceOutput: any; // todo: fix this
   forcePassthrough: boolean;
   disableUnhandled: boolean;
 
@@ -101,10 +106,12 @@ export default class Pretender {
     let options = typeof lastArg === 'object' ? lastArg : null;
     let shouldNotTrack = options && options.trackRequests === false;
 
+    this.handleRefernceOutput = {};
     this.handledRequests = shouldNotTrack ? new NoopArray() : [];
     this.passthroughRequests = shouldNotTrack ? new NoopArray() : [];
     this.unhandledRequests = shouldNotTrack ? new NoopArray() : [];
     this.requestReferences = [];
+    this.serviceWorkerRequests = [];
     this.forcePassthrough = options && options.forcePassthrough === true;
     this.disableUnhandled = options && options.disableUnhandled === true;
 
@@ -127,6 +134,9 @@ export default class Pretender {
       (<any>this)['_native' + name] = self[name];
       self[name] = FakeFetch[name];
     }, this);
+
+    this.worker = setupWorker()
+    this.worker.start();
 
     // 'start' the server
     this.running = true;
@@ -177,9 +187,34 @@ export default class Pretender {
     registry.add([
       {
         path: parseURL(url).fullpath,
-        handler: handlerInstance,
+        handler: handlerInstance
       },
     ]);
+
+    this.serviceWorkerRequests.push(
+      rest[verb.toLocaleLowerCase()](url, async (req, res) => {
+        const { status, body, headers } = this.handleRefernceOutput[url];
+
+        return res((res) => {
+          res.status = status;
+
+          Object.keys(headers || {}).forEach((headerName) => {
+            res.headers.set(headerName, headers[headerName]);
+          });
+
+          res.body = body;
+
+          // since we handled the request, clean it up
+          delete this.handleRefernceOutput[url];
+
+          return res;
+        });
+      })
+    );
+
+    this.worker?.use(
+      ...this.serviceWorkerRequests
+    );
 
     return handlerInstance;
   }
@@ -214,7 +249,7 @@ export default class Pretender {
 
       let pretender = this;
 
-      let _handleRequest = function (statusHeadersAndBody) {
+      let _handleRequest = (statusHeadersAndBody) => {
         if (!isArray(statusHeadersAndBody)) {
           let note =
             'Remember to `return [status, headers, body];` in your route handler.';
@@ -227,8 +262,15 @@ export default class Pretender {
         let headers = pretender.prepareHeaders(statusHeadersAndBody[1]);
         let body = pretender.prepareBody(statusHeadersAndBody[2], headers);
 
+        this.handleRefernceOutput[path] = {
+          status,
+          headers,
+          body
+        };
+
         pretender.handleResponse(request, async, function () {
-          request.respond(status, headers, body);
+          request.passthrough();
+
           pretender.handledRequest(verb, path, request);
         });
       };

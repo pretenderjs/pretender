@@ -16,17 +16,17 @@ var Pretender = (function(self) {
     ? getModuleDefault(require('fake-xml-http-request'))
     : self.FakeXMLHttpRequest;
 
-  /*==ROLLUP_CONTENT==*/
+  const _Pretender = require('./src/pretender').default;
 
   if (typeof module === 'object') {
-    module.exports = Pretender;
+    module.exports = _Pretender;
   } else if (typeof define !== 'undefined') {
     define('pretender', [], function() {
-      return Pretender;
+      return _Pretender;
     });
   }
 
-  self.Pretender = Pretender;
+  self.Pretender = _Pretender;
 
   return Pretender;
 })(self);

@@ -12,18 +12,24 @@ module.exports = function (config) {
       "karma-coverage",
       "karma-sinon",
       "karma-chrome-launcher",
+      "karma-static-server"
     ],
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ["qunit", "sinon", "jquery-3.4.0"],
 
+    middleware: ['staticServer'],
+    staticServer: {
+      root: __dirname
+    },
+
     // list of files / patterns to load in the browser
     files: (process.env.NO_BUNDLE
       ? [
           "node_modules/fake-xml-http-request/fake_xml_http_request.js",
           "node_modules/route-recognizer/dist/route-recognizer.js",
-          "dist/pretender.js",
+          "dist/pretender.js"
         ]
       : ["dist/pretender.bundle.js"]
     ).concat([

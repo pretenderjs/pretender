@@ -17,9 +17,11 @@ describe('pretender invoking', function(config) {
 
     this.pretender.get('/some/path', function() {
       wasCalled = true;
+
+      return [200, {}, '']
     });
 
-    $.ajax({ url: '/some/path' });
+    $.ajax({ url: '/some/path', async: false });
     assert.ok(wasCalled);
   });
 
@@ -28,6 +30,8 @@ describe('pretender invoking', function(config) {
     function map() {
       this.get('/some/path', function() {
         wasCalled = true;
+
+        return [200, {}, '']
       });
     }
 

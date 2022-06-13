@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pretenderjs</title>
+</head>
+<body>
+  <script src="./dist/pretender.bundle.js"></script>
+  <script>
+    (async function() {
+      let wasCalled = false;
+      const server = new Pretender(function() {
+        this.get('/hello-world', request => {
+          wasCalled = true;
+
+          return [200, {}, "hello world!"]
+        });
+      });
+
+      function map() {
+        this.get('/some/path', function() {
+          return [200, {}, '']
+        });
+      }
+
+      server.map(map);
+
+      server.post('/some/path/1', function(request) {
+        console.log(request.requestHeaders);
+
+        return [200, {}, 'post created'];
+      });
+
+      server.unhandledRequest = function(verb, path, request) {
+        console.log('unhandledRequest', verb, path, request);
+      }
+      
+      setTimeout(async () => {
+        await fetch('/hello-world');
+
+        console.log(wasCalled);
+      }, 100)
+
+      setTimeout(async () => {
+        await fetch('/some/path');
+      }, 150)
+
+      setTimeout(async () => {
+        await fetch('/hello');
+      }, 200)
+
+      setTimeout(async () => {
+        await fetch('/some/path/1', {
+          method: 'POST',
+          headers: {
+            'A-Header': 'value',
+          },
+          body: {}
+        });
+      }, 300)
+
+      setTimeout(() => {
+        console.log(server.handledRequests)
+      }, 400)
+    }())
+  </script>
+</body>
+</html>
