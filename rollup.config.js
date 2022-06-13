@@ -1,5 +1,6 @@
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
+import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript";
 import { readFileSync } from "fs";
 import pkg from "./package.json";
@@ -31,7 +32,9 @@ module.exports = [
         format: "es",
       },
     ],
-    plugins: [commonjs(), resolve(), typescript()],
+    plugins: [commonjs(), resolve({
+      preferBuiltins: false,
+    }), typescript(), json()],
   },
   {
     input: "src/index.ts",
@@ -42,6 +45,8 @@ module.exports = [
         format: "iife",
       }
     ],
-    plugins: [commonjs(), resolve(), typescript()],
+    plugins: [commonjs(), resolve({
+      preferBuiltins: false,
+    }), typescript(), json()],
   },
 ];

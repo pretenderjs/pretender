@@ -10,16 +10,17 @@ describe('pretender invoking by fetch', function(config) {
     this.pretender.shutdown();
   });
 
-  it('fetch triggers pretender', function(assert) {
+  it('fetch triggers pretender', async function(assert) {
     assert.expect(1);
     var wasCalled;
 
     this.pretender.get('/some/path', function() {
       wasCalled = true;
+
       return [200, {}, ''];
     });
 
-    var wait = fetch('/some/path');
+    var wait = await fetch('/some/path');
     assert.ok(wasCalled);
     return wait;
   });

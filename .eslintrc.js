@@ -1,5 +1,6 @@
 module.exports = {
-  'parser': 'typescript-eslint-parser',
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
   'globals': {
     'Pretender': true,
     'sinon': true, // karma-sinon
@@ -11,7 +12,7 @@ module.exports = {
     'jquery': true,
     'qunit': true,
   },
-  'extends': 'eslint:recommended',
+  'extends': ['eslint:recommended', "plugin:@typescript-eslint/recommended"],
   'parserOptions': {
     'ecmaVersion': 2015,
     'sourceType': 'module'
