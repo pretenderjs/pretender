@@ -1,6 +1,6 @@
 export function createPassthrough(fakeXHR, nativeXMLHttpRequest) {
   // event types to handle on the xhr
-  var evts = ['error', 'timeout', 'abort', 'readystatechange'];
+  var evts = ['error', 'timeout', 'abort', 'readystatechange','loadend'];
 
   // event types to handle on the xhr.upload
   var uploadEvents = [];
