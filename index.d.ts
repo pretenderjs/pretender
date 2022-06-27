@@ -9,6 +9,10 @@ export type Config = SetupCallback | SetupConfig;
 export class Server {
   public passthrough: ResponseHandler;
 
+  public handledRequests: (FakeXMLHttpRequest & ExtraRequestData)[];
+  public passthroughRequests: (FakeXMLHttpRequest & ExtraRequestData)[];
+  public unhandledRequests: (FakeXMLHttpRequest & ExtraRequestData)[];
+
   constructor(config?: Config);
   // HTTP request verbs
   public get: RequestHandler;
@@ -49,7 +53,7 @@ export type ResponseHandler = {
     | PromiseLike<ResponseData>;
 };
 
-export type ResponseHandlerInstance = ResponseHandler & { 
+export type ResponseHandlerInstance = ResponseHandler & {
   async: boolean;
   numberOfCalls: number;
 }
