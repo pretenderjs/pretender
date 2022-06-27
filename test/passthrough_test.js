@@ -181,7 +181,7 @@ describe('passthrough requests', function (config) {
   });
 
   it('asynchronous request fires events', function (assert) {
-    assert.expect(6);
+    assert.expect(8);
 
     var pretender = this.pretender;
     var done = assert.async();
@@ -192,11 +192,13 @@ describe('passthrough requests', function (config) {
       load: false,
       progress: false,
       readystatechange: false,
+      loadend: false
     };
     var listenerEvents = {
       load: false,
       progress: false,
       readystatechange: false,
+      loadend: false
     };
 
     var xhr = new window.XMLHttpRequest();
@@ -234,6 +236,15 @@ describe('passthrough requests', function (config) {
       }
     };
 
+    xhr.addEventListener('loadend', function _loadend() {
+      listenerEvents.loadend = true;
+      finishNext();
+    });
+
+    xhr.onloadend = function _onloadend() {
+      onEvents.loadend = true;
+      finishNext();
+    };
     xhr.send();
 
     // call `finish` in next tick to ensure both load event handlers
@@ -250,6 +261,7 @@ describe('passthrough requests', function (config) {
         assert.ok(onEvents.load, 'onload called');
         assert.ok(onEvents.progress, 'onprogress called');
         assert.ok(onEvents.readystatechange, 'onreadystate called');
+        assert.ok(onEvents.loadend, 'loadend called');
 
         assert.ok(listenerEvents.load, 'load listener called');
         assert.ok(listenerEvents.progress, 'progress listener called');
@@ -257,6 +269,7 @@ describe('passthrough requests', function (config) {
           listenerEvents.readystatechange,
           'readystate listener called'
         );
+        assert.ok(listenerEvents.loadend, 'loadend listener called');
 
         done();
       }
