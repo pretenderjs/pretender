@@ -120,13 +120,15 @@ export default class Pretender {
     (<any>self).XMLHttpRequest = interceptor(ctx);
 
     // polyfill fetch when xhr is ready
-    this._fetchProps = FakeFetch
-      ? ['fetch', 'Headers', 'Request', 'Response']
-      : [];
-    this._fetchProps.forEach((name) => {
-      (<any>this)['_native' + name] = self[name];
-      self[name] = FakeFetch[name];
-    }, this);
+    if (!self.fetch) {
+      this._fetchProps = FakeFetch
+        ? ["fetch", "Headers", "Request", "Response"]
+        : [];
+      this._fetchProps.forEach((name) => {
+        (<any>this)["_native" + name] = self[name];
+        self[name] = FakeFetch[name];
+      }, this);
+    }
 
     // 'start' the server
     this.running = true;
