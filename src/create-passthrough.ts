@@ -25,7 +25,10 @@ export function createPassthrough(fakeXHR, nativeXMLHttpRequest) {
     fakeXHR.password
   );
 
-  if (fakeXHR.responseType === 'blob' || fakeXHR.responseType === 'arraybuffer') {
+  if (
+    fakeXHR.responseType === 'blob' ||
+    fakeXHR.responseType === 'arraybuffer'
+  ) {
     lifecycleProps = ['readyState', 'response', 'status', 'statusText'];
     xhr.responseType = fakeXHR.responseType;
   }
@@ -59,7 +62,7 @@ export function createPassthrough(fakeXHR, nativeXMLHttpRequest) {
 
   // set the on- handler on the native xhr for the given eventType
   function createHandler(eventType) {
-    const fakeEventKey = 'on'+eventType;
+    const fakeEventKey = 'on' + eventType;
 
     if (fakeXHR[fakeEventKey]) {
       const fn = fakeXHR[fakeEventKey];
@@ -77,9 +80,9 @@ export function createPassthrough(fakeXHR, nativeXMLHttpRequest) {
   // the given eventType
   function createUploadHandler(eventType) {
     if (xhr.upload && fakeXHR.upload) {
-      const fakeEventKey = 'on'+eventType;
+      const fakeEventKey = 'on' + eventType;
 
-      if(fakeXHR.upload[fakeEventKey]){
+      if (fakeXHR.upload[fakeEventKey]) {
         const fn = fakeXHR.upload[fakeEventKey];
         delete fakeXHR.upload[fakeEventKey];
         fakeXHR.upload.addEventListener(eventType, fn);
